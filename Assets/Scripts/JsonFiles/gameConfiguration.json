@@ -1,0 +1,30 @@
+{
+  "levelDataUrl": "https://cdn.cloudflare.com/game/level_001.json",
+  "layoutId": 2,
+
+  "goalConfig": {
+    "ColumnGoals": {
+      "3": [
+        { "goal": 75, "probability": 80 },
+        { "goal": 70, "probability": 10 },
+        { "goal": 65, "probability": 10 }
+      ],
+      "4": [
+        { "goal": 90, "probability": 60 },
+        { "goal": 80, "probability": 30 },
+        { "goal": 70, "probability": 10 }
+      ],
+      "5": [
+        { "goal": 120, "probability": 70 },
+        { "goal": 110, "probability": 20 },
+        { "goal": 100, "probability": 10 }
+      ]
+    },
+
+    "LevelGoals": [
+      { "level": 1, "goal": 60 },
+      { "level": 7, "goal": 75 },
+      { "level": 13, "goal": 80 }
+    ]
+  }
+}

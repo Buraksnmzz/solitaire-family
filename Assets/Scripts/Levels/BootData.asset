@@ -1,0 +1,188 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8dcb8e685907a4e8fabc5824109249e6, type: 3}
+  m_Name: BootData
+  m_EditorClassIdentifier: 
+  configurationJson: "{\n  \"levelDataUrl\": \"https://cdn.cloudflare.com/game/level_001.json\",\n 
+    \"layoutId\": 2,\n\n  \"goalConfig\": {\n    \"ColumnGoals\": {\n      \"3\":
+    [\n        { \"goal\": 75, \"probability\": 80 },\n        { \"goal\": 70, \"probability\":
+    10 },\n        { \"goal\": 65, \"probability\": 10 }\n      ],\n      \"4\":
+    [\n        { \"goal\": 90, \"probability\": 60 },\n        { \"goal\": 80, \"probability\":
+    30 },\n        { \"goal\": 70, \"probability\": 10 }\n      ],\n      \"5\":
+    [\n        { \"goal\": 120, \"probability\": 70 },\n        { \"goal\": 110,
+    \"probability\": 20 },\n        { \"goal\": 100, \"probability\": 10 }\n     
+    ]\n    },\n\n    \"LevelGoals\": [\n      { \"level\": 1, \"goal\": 60 },\n     
+    { \"level\": 7, \"goal\": 75 },\n      { \"level\": 13, \"goal\": 80 }\n    ]\n 
+    }\n}"
+  levelsJson: "[\n    {\n        \"LevelID\": 1,\n        \"Columns\": 4,\n       
+    \"TotalCategories\": 10,\n        \"Categories\": [\n            {\n               
+    \"TopicName\": \"Dew\",\n                \"TopicType\": \"Text\",\n               
+    \"ContentValues\": [\n                    \"Droplets\",\n                   
+    \"Condense\",\n                    \"Vapor\"\n                ]\n           
+    },\n            {\n                \"TopicName\": \"Charger\",\n               
+    \"TopicType\": \"Text\",\n                \"ContentValues\": [\n                   
+    \"Electric car\",\n                    \"Smartwatch\",\n                    \"Laptop\",\n                   
+    \"Digital camera\",\n                    \"Power bank\",\n                   
+    \"Electric toothbrush\"\n                ]\n            },\n            {\n               
+    \"TopicName\": \"Clones\",\n                \"TopicType\": \"Image\",\n               
+    \"ContentValues\": [\n                    \"Clones1\",\n                    \"Clones2\",\n                   
+    \"Clones3\"\n                ]\n            },\n            {\n               
+    \"TopicName\": \"Hobbies\",\n                \"TopicType\": \"Text\",\n               
+    \"ContentValues\": [\n                    \"Sewing\",\n                    \"Archery\",\n                   
+    \"Cycling\",\n                    \"Climbing\",\n                    \"Skiing\",\n                   
+    \"Diving\",\n                    \"Birding\",\n                    \"Weaving\"\n               
+    ]\n            },\n            {\n                \"TopicName\": \"Down\",\n               
+    \"TopicType\": \"Text\",\n                \"ContentValues\": [\n                   
+    \"Town\",\n                    \"Payment\",\n                    \"Upside\",\n                   
+    \"Knock\",\n                    \"Time\",\n                    \"Pour\",\n                   
+    \"Load\",\n                    \"Shut\"\n                ]\n            },\n           
+    {\n                \"TopicName\": \"Dali\",\n                \"TopicType\": \"Image\",\n               
+    \"ContentValues\": [\n                    \"Dali1\",\n                    \"Dali2\",\n                   
+    \"Dali3\",\n                    \"Dali4\"\n                ]\n            },\n           
+    {\n                \"TopicName\": \"Evidence\",\n                \"TopicType\":
+    \"Text\",\n                \"ContentValues\": [\n                    \"Forensic\",\n                   
+    \"Artifact\",\n                    \"Verdict\",\n                    \"Suspect\"\n               
+    ]\n            },\n            {\n                \"TopicName\": \"Cruise\",\n               
+    \"TopicType\": \"Text\",\n                \"ContentValues\": [\n                   
+    \"Luxury\",\n                    \"Shopping\",\n                    \"Amenity\",\n                   
+    \"Themed\"\n                ]\n            },\n            {\n               
+    \"TopicName\": \"Vices\",\n                \"TopicType\": \"Text\",\n               
+    \"ContentValues\": [\n                    \"Envy\",\n                    \"Greed\",\n                   
+    \"Malice\",\n                    \"Gluttony\",\n                    \"Lust\",\n                   
+    \"Wrath\",\n                    \"Sloth\",\n                    \"Avarice\"\n               
+    ]\n            },\n            {\n                \"TopicName\": \"Tomes\",\n               
+    \"TopicType\": \"Text\",\n                \"ContentValues\": [\n                   
+    \"Grimoire\",\n                    \"Codex\",\n                    \"Volume\",\n                   
+    \"Atlas\",\n                    \"Journal\",\n                    \"Ledger\"\n               
+    ]\n            }\n        ]\n    },\n    {\n        \"LevelID\": 2,\n       
+    \"Columns\": 4,\n        \"TotalCategories\": 10,\n        \"Categories\": [\n           
+    {\n                \"TopicName\": \"Meteors\",\n                \"TopicType\":
+    \"Text\",\n                \"ContentValues\": [\n                    \"Meteor
+    shower\",\n                    \"Meteoroid\",\n                    \"Meteorite\"\n               
+    ]\n            },\n            {\n                \"TopicName\": \"Speedy\",\n               
+    \"TopicType\": \"Text\",\n                \"ContentValues\": [\n                   
+    \"Supercar\",\n                    \"Sailfish\",\n                    \"Gadfly\",\n                   
+    \"Ostrich\",\n                    \"Turbojet\",\n                    \"Kangaroo\"\n               
+    ]\n            },\n            {\n                \"TopicName\": \"Cakes\",\n               
+    \"TopicType\": \"Text\",\n                \"ContentValues\": [\n                   
+    \"Doberge\",\n                    \"Bundt\",\n                    \"Devil\u2019s
+    Food\",\n                    \"Madeira\"\n                ]\n            },\n           
+    {\n                \"TopicName\": \"Moss\",\n                \"TopicType\": \"Text\",\n               
+    \"ContentValues\": [\n                    \"Bryum\",\n                    \"Sphagnum\",\n                   
+    \"Acrocarp\",\n                    \"Funaria\"\n                ]\n           
+    },\n            {\n                \"TopicName\": \"Grandma\",\n               
+    \"TopicType\": \"Image\",\n                \"ContentValues\": [\n                   
+    \"Grandma1\",\n                    \"Grandma2\",\n                    \"Grandma3\"\n               
+    ]\n            },\n            {\n                \"TopicName\": \"Proteins\",\n               
+    \"TopicType\": \"Text\",\n                \"ContentValues\": [\n                   
+    \"Actin\",\n                    \"Myosin\",\n                    \"Titin\",\n                   
+    \"Nebulin\",\n                    \"Kinesin\",\n                    \"Dynein\",\n                   
+    \"Elastin\",\n                    \"Keratin\"\n                ]\n           
+    },\n            {\n                \"TopicName\": \"Doors\",\n               
+    \"TopicType\": \"Text\",\n                \"ContentValues\": [\n                   
+    \"Hinge\",\n                    \"Knob\",\n                    \"Lock\",\n                   
+    \"Panel\",\n                    \"Frame\",\n                    \"Jamb\",\n                   
+    \"Sill\",\n                    \"Latch\"\n                ]\n            },\n           
+    {\n                \"TopicName\": \"Business\",\n                \"TopicType\":
+    \"Text\",\n                \"ContentValues\": [\n                    \"Taxes\",\n                   
+    \"Costs\",\n                    \"Consumer\",\n                    \"Brand\",\n                   
+    \"Profit\",\n                    \"Company\",\n                    \"Finance\",\n                   
+    \"Revenue\"\n                ]\n            },\n            {\n               
+    \"TopicName\": \"Cogwheel\",\n                \"TopicType\": \"Text\",\n               
+    \"ContentValues\": [\n                    \"Gear\",\n                    \"Pinion\",\n                   
+    \"Ratchet\",\n                    \"Sprocket\"\n                ]\n           
+    },\n            {\n                \"TopicName\": \"Hymn\",\n               
+    \"TopicType\": \"Text\",\n                \"ContentValues\": [\n                   
+    \"Chanting\",\n                    \"Epicness\",\n                    \"Psalm\",\n                   
+    \"Divinity\",\n                    \"Canticle\",\n                    \"Liturgy\"\n               
+    ]\n            }\n        ]\n    },\n    {\n        \"LevelID\": 3,\n       
+    \"Columns\": 4,\n        \"TotalCategories\": 10,\n        \"Categories\": [\n           
+    {\n                \"TopicName\": \"Rafters\",\n                \"TopicType\":
+    \"Text\",\n                \"ContentValues\": [\n                    \"Purlin\",\n                   
+    \"Roof truss\",\n                    \"Ledger board\",\n                    \"Joist\",\n                   
+    \"Roof strut\"\n                ]\n            },\n            {\n               
+    \"TopicName\": \"Frames\",\n                \"TopicType\": \"Text\",\n               
+    \"ContentValues\": [\n                    \"Gilded\",\n                    \"Shadow\",\n                   
+    \"Floating\",\n                    \"Matte\",\n                    \"Ornate\",\n                   
+    \"Bevel\",\n                    \"Fillet\",\n                    \"Scoop\"\n               
+    ]\n            },\n            {\n                \"TopicName\": \"Promise\",\n               
+    \"TopicType\": \"Text\",\n                \"ContentValues\": [\n                   
+    \"Oath\",\n                    \"Loyal\",\n                    \"Trust\",\n                   
+    \"Swear\"\n                ]\n            },\n            {\n               
+    \"TopicName\": \"Pot\",\n                \"TopicType\": \"Text\",\n               
+    \"ContentValues\": [\n                    \"Flower\",\n                    \"Basil\",\n                   
+    \"Cilantro\",\n                    \"Rosemary\",\n                    \"Dill\",\n                   
+    \"Thyme\"\n                ]\n            },\n            {\n               
+    \"TopicName\": \"Deter\",\n                \"TopicType\": \"Text\",\n               
+    \"ContentValues\": [\n                    \"Hinder\",\n                    \"Prevent\",\n                   
+    \"Thwart\",\n                    \"Daunt\",\n                    \"Stop\",\n                   
+    \"Dissuade\"\n                ]\n            },\n            {\n               
+    \"TopicName\": \"Shaving\",\n                \"TopicType\": \"Text\",\n               
+    \"ContentValues\": [\n                    \"Razor\",\n                    \"Scissors\",\n                   
+    \"Gel\"\n                ]\n            },\n            {\n                \"TopicName\":
+    \"Dust\",\n                \"TopicType\": \"Text\",\n                \"ContentValues\":
+    [\n                    \"Powder\",\n                    \"Ashes\",\n                   
+    \"Sand\",\n                    \"Silt\"\n                ]\n            },\n           
+    {\n                \"TopicName\": \"Glaze\",\n                \"TopicType\":
+    \"Text\",\n                \"ContentValues\": [\n                    \"Lacquer\",\n                   
+    \"Gloss\",\n                    \"Celadon\",\n                    \"Varnish\",\n                   
+    \"Coating\",\n                    \"Polish\"\n                ]\n           
+    },\n            {\n                \"TopicName\": \"Paradox\",\n               
+    \"TopicType\": \"Text\",\n                \"ContentValues\": [\n                   
+    \"Fallacy\",\n                    \"Opposite\",\n                    \"Antinomy\",\n                   
+    \"Nonsense\",\n                    \"Duality\",\n                    \"Oxymoron\",\n                   
+    \"Absurd\",\n                    \"Reverse\"\n                ]\n           
+    },\n            {\n                \"TopicName\": \"Limb\",\n               
+    \"TopicType\": \"Text\",\n                \"ContentValues\": [\n                   
+    \"Paw\",\n                    \"Arm\",\n                    \"Talon\",\n                   
+    \"Hoof\"\n                ]\n            }\n        ]\n    },\n    {\n       
+    \"LevelID\": 4,\n        \"Columns\": 4,\n        \"TotalCategories\": 10,\n       
+    \"Categories\": [\n            {\n                \"TopicName\": \"Canoes\",\n               
+    \"TopicType\": \"Text\",\n                \"ContentValues\": [\n                   
+    \"Canoe paddle\",\n                    \"Thwart\",\n                    \"Canoe
+    yoke\"\n                ]\n            },\n            {\n                \"TopicName\":
+    \"Hole\",\n                \"TopicType\": \"Text\",\n                \"ContentValues\":
+    [\n                    \"Cheese\",\n                    \"Diamond ring\",\n                   
+    \"Button\",\n                    \"Needle\"\n                ]\n            },\n           
+    {\n                \"TopicName\": \"Repair\",\n                \"TopicType\":
+    \"Text\",\n                \"ContentValues\": [\n                    \"Fix\",\n                   
+    \"Stitch\",\n                    \"Glue\",\n                    \"Caulk\",\n                   
+    \"Connect\",\n                    \"Patch\"\n                ]\n            },\n           
+    {\n                \"TopicName\": \"Hooks\",\n                \"TopicType\":
+    \"Text\",\n                \"ContentValues\": [\n                    \"Ramshorn
+    hook\",\n                    \"Clevis hook\",\n                    \"Swivel hook\",\n                   
+    \"J-hook\"\n                ]\n            },\n            {\n               
+    \"TopicName\": \"Alphabet\",\n                \"TopicType\": \"Text\",\n               
+    \"ContentValues\": [\n                    \"Braille\",\n                    \"Latin\",\n                   
+    \"Cyrillic\",\n                    \"Runic\",\n                    \"Armenian\",\n                   
+    \"Hebrew\",\n                    \"Chinese\",\n                    \"Georgian\"\n               
+    ]\n            },\n            {\n                \"TopicName\": \"Parent\",\n               
+    \"TopicType\": \"Text\",\n                \"ContentValues\": [\n                   
+    \"Son\",\n                    \"Daughter\",\n                    \"Care\",\n                   
+    \"Love\",\n                    \"Raise\",\n                    \"Example\",\n                   
+    \"Father\",\n                    \"Mother\"\n                ]\n            },\n           
+    {\n                \"TopicName\": \"Playroom\",\n                \"TopicType\":
+    \"Text\",\n                \"ContentValues\": [\n                    \"Blocks\",\n                   
+    \"Dolls\",\n                    \"Puzzles\",\n                    \"Mats\",\n                   
+    \"Chalk\",\n                    \"Tent\",\n                    \"Fort\",\n                   
+    \"Plushie\"\n                ]\n            },\n            {\n               
+    \"TopicName\": \"Spell\",\n                \"TopicType\": \"Text\",\n               
+    \"ContentValues\": [\n                    \"Fireball\",\n                   
+    \"Heal\",\n                    \"Shield\",\n                    \"Summon\",\n                   
+    \"Teleport\",\n                    \"Levitate\"\n                ]\n           
+    },\n            {\n                \"TopicName\": \"Accents\",\n               
+    \"TopicType\": \"Text\",\n                \"ContentValues\": [\n                   
+    \"Cockney\",\n                    \"Aussie\",\n                    \"Scottish\"\n               
+    ]\n            },\n            {\n                \"TopicName\": \"Wagon\",\n               
+    \"TopicType\": \"Text\",\n                \"ContentValues\": [\n                   
+    \"Axle\",\n                    \"Wheel\",\n                    \"Hitch\",\n                   
+    \"Wagon tongue\"\n                ]\n            }\n        ]\n    }\n]"

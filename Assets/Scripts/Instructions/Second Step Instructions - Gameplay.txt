@@ -1,0 +1,68 @@
+Second Step Instructions - Gameplay
+
+Gameplay Structure:
+Board: CardView, CardModel ve CardPresenterları oluşturur. 
+
+CardContainer: Kartların bulunduğu container’ları ifade eder. Çeşitleri vardır:
+Dealer: Kartların dağıtıldığı, tüm kartların başta bulunduğu container. Tüm kartlar isFlip false olarak durur burada. 
+OpenDealer: Dealer’a her tıklandığında dealer’dan bir kart buraya gelir. O kartın isFlip değeri true olur. Yeni bir kart daha geldiğinde diğerinin üzerine ama alttaki kartın sağ tarafında biraz alan kalacak şekilde gelir. Yani OpenDealer’daki kartın biraz sol tarafına doğru gelir. Bu durumda alttaki kartın sağ bilgisi açılır. CategoryType text ise rightText aktif olur, image ise rightImage aktif olur. 
+Foundation: Kartların categorilere göre target olarak götürüldüğü ve categori tüm contentleri ile tamamlandığında o kategorinin yok edileceği alan.
+Pile: Kartların dağıtıldıktan sonra dizildiği, hareket ettirilen, aslında oyunun interaction’ının döndüğü alan burası. 
+
+
+Gameplay:
+CardModel: Card’a ait bilgileri tutar:
+CategoryName, ContentValue, ContentType, isFlip fieldları olur. 
+
+CardView: Kartla ilgili tüm görseller burada olur. Monobehaviour. Kartın bir genel prefabını da tutar burası. Category ve Content kartına göre ve durumlara göre farklılıklar gösterir. Tüm durumlar:
+
+CategoryCard: 
+CategoryName yazan bir Text. 
+Kaç content geleceğinin yazdığı text: 0/8 şeklinde. Foundation’da üzerine her kart geldiğinde bir artar bu değer. 
+Bir crown image.
+Bir çerçeve image.
+Üstüne foundation’da kart geldiğinde aktif olan üst Text alanı. Burada yine categoryName yazar.
+Üstüne OpenDealer’da bir kart geldiğinde aktif olan sağ text alanı. Burada categoryName yazar.
+
+ContentCard:
+ContentValue yazan bir Text
+Image: Bu text ve image category type’a göre aktif-pasif olur.
+Bir çerçeve image. 
+Üstüne Pile’da kart geldiğinde aktif olan üst text ve üst image. Yine category type’a göre birisi aktif olur.
+Üstüne OpenDealer’da bir kart geldiğinde aktif olan sağ text ve sağ image alanı. Yine category type’a göre birisi aktif olur.  
+
+
+CardPresenter: CardModel'daki veriyi okur ve CardView'ın görsel durumunu ayarlar. Örnek olarak modelin ContentType'ına göre CardView'da doğru görseli (Text/Image) açıp kapatır, content kartının üzerine kart geldiğinde alt kartın görünmesi gereken y-offsetli View durumunu setler, foundation'daki Category kartının üst metnini açar/kapatır, vs gibi işlemler.
+
+CardDragger: Draggable olan kartın sürüklenmesini sağlar. 
+
+
+GameRuleService:
+
+
+Rules:
+Amacı oyunun tüm hareket ve eşleştirme kurallarını saf C# mantığıyla doğrulamaktır. Hiçbir görsel veya Unity bağımlılığı olmaz. Yalnızca CardModel'ları ve Container'ların anlık durumlarını parametre olarak alır. Kurallar şunlardır:
+
+Category kartı: kaç tane content kartı olduğu text'i yazar. Crown image'ı vardır. categoryName text'i vardır. Çerçevesi vardır. Üzerine sadece Foundation'da kart gelebilir. Üzerine kart geldiğinde kendisi görünmeyeceği için üst tarafında bir text vardır o aktif olur. O text'te category name yazar. Category kartı kendisiyle aynı kategorideki content kartına drag edilebilir. Ama sadece Foundation'daysa, ait olduğu content kartı drag edilebilir.
+
+Content kartı: Ya content ismi text'i vardır ya da content Image'ı vardır. Biri aktif olur sadece content type'a göre(yani category type'a göre). Boş foundation'a drag edilemez. Aynı category'deki başka content kartına drag edilebilir. Pile'daki bir category kartına drag edilemez. Pile'dayken üzerine bir kart geldiğinde gelen kart y offseti ile gelir. Yani bu kartın üzerinde bir miktar alan bırakacak şekilde kapatır. Alttaki kartın bu kalan alanında da categoryType'a göre ya contentValue text'i yazar ya da contentImage görünür. İkisinden biri type'a göre aktif olur yani. Content kart üzerindeki kart kaldırıldığındaysa geri önceki durumuna döner. 
+
+Eğer OpenHandDealer’da content ya da category kartı üzerine bir kart gelirse category type’a göre rightText ya da right Image aktif olur. Bunlar prenter ile set edilir. Kartın üzerindeki kart kalkarsa tekrar normal haline gelir kart. 
+
+Kartların bu durumları belirlenip methodlar haline getirilebilir. Presenter ile ilgili durum oluştuğunda ilgili view methodu çağrılır direk. 
+
+Boş bir pile'a hem category hem de content kartı gelebilir.
+
+Aynı category'deki kartlar yığını tek seferde altındaki kartlarla birlikte drag yapılabilir. Yani bir karta tıklandığında eğer o kart movable ise, yani altındaki kartlar ile aynı categoryde ise altındaki kartlarla birlikte drag olur.
+
+Foundation'daki hiçbir kart drag edilemez. Foundation'daki category'ye tüm content kartları drag edildiğinde bu kartlar kaybolur ve o foundation boşaltılır.
+
+Foundation'a sadece category kart drag edilebilir. Ama content kartları stack olarak drag edildiğinde bu stack'te category kartı da varsa, yine tamamı Foundation'a gider. Content kartı en altta kalır. Diğerleri sırayla onun üstüne gelir. Yani en üstte drag edilirken category kartının bir üstündeki kart görünür.
+
+Bu kurallara göre çıkarılan methodların görevleri şunlardır: Bunlar yeterli olmayabilir. Yukarıdaki kuralları uygulayacak tüm methodlar eklenecek.
+Genel bir kart hareketinin geçerli olup olmadığını doğrular (Örn: Sürüklenen kart hareket edilebilir mi?)
+Verilen kartın altındaki tüm kartların aynı kategoriye ait olup olmadığını kontrol eder.
+Kaynak kartın (veya Stack'in) Pile alanında bir hedefin üzerine bırakılıp bırakılamayacağını kontrol eder.
+Kaynak kartın (veya Stack'in) Foundation alanına bırakılıp bırakılamayacağını kontrol eder.
+Category kartının, aynı kategorideki Content kartına sürüklenip sürüklenemeyeceğini kontrol eder.
+Bir Foundation'ın tüm Content kartlarını alıp almadığını kontrol eder.

@@ -1,0 +1,90 @@
+First Step Instructions 
+
+Bu oyun, kategori eşleştirme mantığına dayanan, Solitaire benzeri bir bulmaca oyunudur. Temel amaç, tahta üzerinde rastgele dağılmış olan İçerik (Content) kartlarını, ait oldukları Kategori (Category) kartlarıyla eşleştirerek Foundation alanlarında tamamlamaktır.
+
+Oyun tamamen UI tarafında oynanır. Kartlar da UI buttonlar olacak.
+
+Data Fetch
+LoadingManager: Tamamen ağ (network) operasyonlarından sorumlu olan Unity Monobehaviour sınıfıdır. Firebase RC’den json çeker. Bu işlem için yoogolabManager’da hazır metotlar kullanılır. Rawjson gelir RC’den. 
+Oyunun levelleri CloudFlare de json olarak tutulur. RC’den ilgili http adresi gelir. O adresten request yapılarak level json’ı çekilir. 
+Bunun haricinde json’dan başka configuration datası da gelir. Birisi json olan Level Goal Configuration, diğeri int olan game layout. 
+Bunlar Aşağıda açıklanıyorlar:
+
+Level Goal Configuration (Remote Config)
+Oyundaki level’ların tamamlamak için sahip olması gereken maximum move sayısı Remote Config üzerinden kontrol edilir.
+Bu yapı iki bölümden oluşur:
+
+ColumnGoal:
+Belirli bir kolon sayısına sahip level’lar için probabilistic (olasılıklı) bir goal seçimi yapılır.
+Örn: 3 kolonlu bir level için %80 ihtimalle 75 move, %10 ihtimalle 70 move gibi.
+
+LevelGoal (Override):
+Belirli bir level numarası için özel bir goal tanımlanabilir.
+Bu değer varsa ColumnGoal değerini override eder ve doğrudan kullanılır.
+
+JSON Şeması
+
+ColumnGoals
+
+Key: kolon sayısı (3,4,5...)
+
+Value: { goal: int, probability: int } listesi
+
+LevelGoals
+
+level: override edilecek level numarası
+
+goal: bu level için sabit goal değeri
+
+
+
+Örnek JSON
+{
+  "ColumnGoals": {
+    "3": [
+      { "goal": 75, "probability": 80 },
+      { "goal": 70, "probability": 10 },
+      { "goal": 65, "probability": 10 }
+    ],
+    "4": [
+      { "goal": 90, "probability": 60 },
+      { "goal": 80, "probability": 30 },
+      { "goal": 70, "probability": 10 }
+    ],
+    "5": [
+      { "goal": 120, "probability": 70 },
+      { "goal": 110, "probability": 20 },
+      { "goal": 100, "probability": 10 }
+    ]
+  },
+
+  "LevelGoals": [
+    { "level": 1, "goal": 60 },
+    { "level": 7, "goal": 75 },
+    { "level": 13, "goal": 80 }
+  ]
+}
+
+
+Remote Config’ten gelen bu JSON ConfigurationService tarafından parse edilerek oyuna aktarılır.
+Goal seçimi sırasında:
+
+LevelGoals içinde override varsa → doğrudan bu kullanılır
+
+Yoksa → ilgili kolon sayısına göre ColumnGoals’dan olasılıklı seçim yapılır.
+
+Layout (Remote Config)
+Oyunda 2 farklı UI yapısı olacak. RC’den gelen değere göre birisi seçilecek. Yani bu değer 1 ya da 2 olacak. Layout dediğimiz de UI, CardContainerların pozisyonları vs olacak. 
+
+
+ConfigurationService
+LoadingManager’dan gelen json’ı parse eder. Ilgili DTO’lara dönüştürür. DTO’lar: GoalConfigModel, GoalProbabilityModel, LevelGoalModel, ConfigLayoutModel
+
+
+
+Level Generation
+LevelGeneratorService: LoadingManager’dan gelen level json’ı parse eder ve ilgili DTO'lara dönüştürür ve oyunun geri kalanına bu yapılandırılmış ayarları sunar. DTO’lar şunlar:
+LevelMap: Tüm levelların listesi
+LevelData: Bir level’ın sahip oldukları. Kategori listesini tutar
+CategoryData: Contenlerin listesini tutar. Name ve categoryType’ı vardır. 
+LevelProgressModel: Hangi level’da olduğumuzu ve tutorialCompleted mı bilgisini tutar. 

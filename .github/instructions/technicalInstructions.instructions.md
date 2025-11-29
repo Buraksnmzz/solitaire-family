@@ -1,0 +1,59 @@
+---
+applyTo: '**'
+---
+# Technical Instructions -- Unity Project Guidelines
+
+## Kod Standartları
+
+-   Tüm kod JetBrains Rider'ın default code style ve linter kurallarına
+    uygun yazılacaktır.\
+-   Kod içerisine yorum eklenmeyecek.\
+-   Tüm sınıf, metod ve property isimleri açık, anlamlı ve
+    self-explanatory olacaktır.
+
+## Mimari & Prensipler
+
+-   Tüm proje mimarisi **SOLID prensiplerine** uygun şekilde
+    geliştirilecektir.\
+-   Uygun görülen yerlerde `abstract` class, parent-child inheritance
+    veya interface yapıları kullanılacaktır.\
+-   Gerektiğinde **State, Strategy, Command, Observer** gibi tasarım
+    kalıpları tercih edilecektir.
+
+## UI Mimarisi
+
+-   UI sistemi **MVC Pattern** ile geliştirilir.\
+-   Her UI ekranı için:
+    -   `BasePresenter`'dan türeyen bir **Presenter**,\
+    -   `BaseView`'den türeyen bir **View** bulunacaktır.
+-   UI açma--kapama işlemleri **UIService** üzerinden yapılacaktır.\
+-   View sınıflarında inspector'dan atanması gereken tüm referanslar
+    `[SerializeField] private` olarak bırakılacaktır.\
+-   Presenter ve View arasında **event tabanlı iletişim** sağlanacaktır.
+
+## Servisler ve Bağımlılıklar
+
+-   Global bağımlılıklar **ServiceLocator** üzerinden erişilir.\
+-   Modellerin yüklenmesi, saklanması ve kaydedilmesi için
+    **SavedDataService** kullanılacaktır.\
+-   Genel haberleşmeler için **EventDispatcherService** kullanılabilir.
+    Bunun için gerekli **Signal** class'ları oluşturulur.\
+-   Kodun her yerinde **decoupled** bir yapı tercih edilecektir.
+
+## Kod Yazım Kuralları
+
+-   Gereksiz null check yapılmayacak.\
+-   **Magic number** kullanılmayacak; gerekli durumlarda enum veya
+    constant tercih edilecektir.\
+-   View dışı sınıflarda Unity API kullanımından mümkün olduğunca
+    kaçınılacak.\
+-   Data class'larında Unity bağımlılığı olmayacak (**POCO model**
+    yaklaşımı).\
+-   Bir sınıf tek bir işi yapacak (**Single Responsibility**).
+
+## Özel Kurallar
+
+-   **YoogoLabManager** class'ına kesinlikle dokunulmayacak.\
+-   Mevcut altyapıyı bozan veya bypass eden hızlı çözümler kabul
+    edilmeyecek.\
+-   Bağımlılık zincirinde **circular dependency** oluşturulmayacak.
