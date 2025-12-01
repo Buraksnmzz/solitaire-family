@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 using Collectible;
+using Levels;
 
 
 [Serializable]
@@ -16,7 +17,6 @@ public class SavedDataService : ISavedDataService
 
     private Dictionary<Type, IModel> models = new Dictionary<Type, IModel>();
 
-    // Method to register a model
     public void RegisterModels()
     {
         var settingsModel = LoadData<SettingsModel>();
@@ -31,6 +31,13 @@ public class SavedDataService : ISavedDataService
         {
             coinModel = new CollectibleModel();
             SaveData(coinModel);
+        }
+        
+        var levelProgressModel = LoadData<LevelProgressModel>();
+        if (levelProgressModel == null)
+        {
+            levelProgressModel = new LevelProgressModel();
+            SaveData(levelProgressModel);
         }
     }
     public T GetModel<T>() where T : IModel

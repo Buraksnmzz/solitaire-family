@@ -8,6 +8,5 @@ namespace Levels
     public class LevelMap
     {
         public List<LevelData> levelsList; 
-    
     }
 }

@@ -5,5 +5,6 @@ namespace Configuration
         ConfigLayoutModel LayoutConfig { get; }
         Goal.GoalConfigModel GoalConfig { get; }
         void Initialize(string rawJson);
+        int GetLevelGoal(int levelIndex, int columnCount);
     }
 }

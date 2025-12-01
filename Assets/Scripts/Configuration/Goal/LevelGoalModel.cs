@@ -1,5 +1,8 @@
+using System;
+
 namespace Goal
 {
+    [Serializable]
     public class LevelGoalModel
     {
         public int Level;

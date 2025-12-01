@@ -1,13 +1,19 @@
 
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace Levels
 {
     [System.Serializable]
     public class LevelData
     {
+        [JsonProperty("LevelID")]
         public int levelId;
-        public List<CategoryData> categories;
 
+        [JsonProperty("Columns")]
+        public int columns;
+
+        [JsonProperty("Categories")]
+        public List<CategoryData> categories;
     }
 }

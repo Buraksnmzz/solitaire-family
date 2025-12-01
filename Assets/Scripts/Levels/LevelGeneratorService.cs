@@ -1,53 +1,46 @@
 using System.Collections.Generic;
-using UnityEngine;
+using Newtonsoft.Json;
 
 namespace Levels
 {
     public class LevelGeneratorService : ILevelGeneratorService
     {
+	    ISavedDataService _savedDataService;
         public LevelGeneratorService(string levelJson)
         {
+	        _savedDataService = ServiceLocator.GetService<ISavedDataService>();
             ParseLevelsJson(levelJson);
         }
-		public LevelMap CurrentLevelMap { get; private set; }
 
-        public LevelMap ParseLevelsJson(string levelJson)
-        {
-            var wrapper = JsonUtility.FromJson<LevelMap>(levelJson);
-            var map = new LevelMap
-            {
-                levelsList = new List<LevelData>()
-            };
+        public LevelData GetCurrentLevelData()
+		{
+			var currentLevel = _savedDataService.GetModel<LevelProgressModel>().CurrentLevelIndex;
+			return CurrentLevelMap.levelsList[currentLevel];
+		}
 
-            if (wrapper == null || wrapper.levelsList == null)
-            {
-				CurrentLevelMap = map;
-                return map;
-            }
+		public LevelData GetLevelData(int levelIndex)
+		{
+			return CurrentLevelMap.levelsList[levelIndex];
+		}
 
-            foreach (var levelData in wrapper.levelsList)
-            {
-                if (levelData.categories == null)
-                {
-                    levelData.categories = new List<CategoryData>();
-                }
-                if (levelData.categories.Count > 0)
-                {
-                    for (var i = 0; i < levelData.categories.Count; i++)
-                    {
-                        var category = levelData.categories[i];
-                        if (category.contentValues == null)
-                        {
-                            category.contentValues = new List<string>();
-                        }
-                    }
-                }
-                map.levelsList.Add(levelData);
-            }
+		public int GetLevelColumnCount(int levelIndex)
+		{
+			return CurrentLevelMap.levelsList[levelIndex].columns;
+		}
+
+		private LevelMap CurrentLevelMap { get; set; }
+
+		public LevelMap ParseLevelsJson(string levelJson)
+		{
+			var levels = JsonConvert.DeserializeObject<List<LevelData>>(levelJson) ?? new List<LevelData>();
+
+			var map = new LevelMap
+			{
+				levelsList = levels
+			};
 
 			CurrentLevelMap = map;
-
-            return map;
-        }
+			return map;
+		}
     }
 }

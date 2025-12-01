@@ -24,11 +24,10 @@ MonoBehaviour:
     { \"level\": 7, \"goal\": 75 },\n      { \"level\": 13, \"goal\": 80 }\n    ]\n 
     }\n}"
   levelsJson: "[\n    {\n        \"LevelID\": 1,\n        \"Columns\": 4,\n       
-    \"TotalCategories\": 10,\n        \"Categories\": [\n            {\n               
-    \"TopicName\": \"Dew\",\n                \"TopicType\": \"Text\",\n               
-    \"ContentValues\": [\n                    \"Droplets\",\n                   
-    \"Condense\",\n                    \"Vapor\"\n                ]\n           
-    },\n            {\n                \"TopicName\": \"Charger\",\n               
+    \"Categories\": [\n            {\n                \"TopicName\": \"Dew\",\n               
+    \"TopicType\": \"Text\",\n                \"ContentValues\": [\n                   
+    \"Droplets\",\n                    \"Condense\",\n                    \"Vapor\"\n               
+    ]\n            },\n            {\n                \"TopicName\": \"Charger\",\n               
     \"TopicType\": \"Text\",\n                \"ContentValues\": [\n                   
     \"Electric car\",\n                    \"Smartwatch\",\n                    \"Laptop\",\n                   
     \"Digital camera\",\n                    \"Power bank\",\n                   
@@ -64,15 +63,15 @@ MonoBehaviour:
     \"Grimoire\",\n                    \"Codex\",\n                    \"Volume\",\n                   
     \"Atlas\",\n                    \"Journal\",\n                    \"Ledger\"\n               
     ]\n            }\n        ]\n    },\n    {\n        \"LevelID\": 2,\n       
-    \"Columns\": 4,\n        \"TotalCategories\": 10,\n        \"Categories\": [\n           
-    {\n                \"TopicName\": \"Meteors\",\n                \"TopicType\":
-    \"Text\",\n                \"ContentValues\": [\n                    \"Meteor
-    shower\",\n                    \"Meteoroid\",\n                    \"Meteorite\"\n               
-    ]\n            },\n            {\n                \"TopicName\": \"Speedy\",\n               
-    \"TopicType\": \"Text\",\n                \"ContentValues\": [\n                   
-    \"Supercar\",\n                    \"Sailfish\",\n                    \"Gadfly\",\n                   
-    \"Ostrich\",\n                    \"Turbojet\",\n                    \"Kangaroo\"\n               
-    ]\n            },\n            {\n                \"TopicName\": \"Cakes\",\n               
+    \"Columns\": 4,\n        \"Categories\": [\n            {\n                \"TopicName\":
+    \"Meteors\",\n                \"TopicType\": \"Text\",\n                \"ContentValues\":
+    [\n                    \"Meteor shower\",\n                    \"Meteoroid\",\n                   
+    \"Meteorite\"\n                ]\n            },\n            {\n               
+    \"TopicName\": \"Speedy\",\n                \"TopicType\": \"Text\",\n               
+    \"ContentValues\": [\n                    \"Supercar\",\n                   
+    \"Sailfish\",\n                    \"Gadfly\",\n                    \"Ostrich\",\n                   
+    \"Turbojet\",\n                    \"Kangaroo\"\n                ]\n           
+    },\n            {\n                \"TopicName\": \"Cakes\",\n               
     \"TopicType\": \"Text\",\n                \"ContentValues\": [\n                   
     \"Doberge\",\n                    \"Bundt\",\n                    \"Devil\u2019s
     Food\",\n                    \"Madeira\"\n                ]\n            },\n           
@@ -105,13 +104,13 @@ MonoBehaviour:
     \"Chanting\",\n                    \"Epicness\",\n                    \"Psalm\",\n                   
     \"Divinity\",\n                    \"Canticle\",\n                    \"Liturgy\"\n               
     ]\n            }\n        ]\n    },\n    {\n        \"LevelID\": 3,\n       
-    \"Columns\": 4,\n        \"TotalCategories\": 10,\n        \"Categories\": [\n           
-    {\n                \"TopicName\": \"Rafters\",\n                \"TopicType\":
-    \"Text\",\n                \"ContentValues\": [\n                    \"Purlin\",\n                   
-    \"Roof truss\",\n                    \"Ledger board\",\n                    \"Joist\",\n                   
-    \"Roof strut\"\n                ]\n            },\n            {\n               
-    \"TopicName\": \"Frames\",\n                \"TopicType\": \"Text\",\n               
-    \"ContentValues\": [\n                    \"Gilded\",\n                    \"Shadow\",\n                   
+    \"Columns\": 4,\n        \"Categories\": [\n            {\n                \"TopicName\":
+    \"Rafters\",\n                \"TopicType\": \"Text\",\n                \"ContentValues\":
+    [\n                    \"Purlin\",\n                    \"Roof truss\",\n                   
+    \"Ledger board\",\n                    \"Joist\",\n                    \"Roof
+    strut\"\n                ]\n            },\n            {\n                \"TopicName\":
+    \"Frames\",\n                \"TopicType\": \"Text\",\n                \"ContentValues\":
+    [\n                    \"Gilded\",\n                    \"Shadow\",\n                   
     \"Floating\",\n                    \"Matte\",\n                    \"Ornate\",\n                   
     \"Bevel\",\n                    \"Fillet\",\n                    \"Scoop\"\n               
     ]\n            },\n            {\n                \"TopicName\": \"Promise\",\n               
@@ -145,27 +144,27 @@ MonoBehaviour:
     \"TopicType\": \"Text\",\n                \"ContentValues\": [\n                   
     \"Paw\",\n                    \"Arm\",\n                    \"Talon\",\n                   
     \"Hoof\"\n                ]\n            }\n        ]\n    },\n    {\n       
-    \"LevelID\": 4,\n        \"Columns\": 4,\n        \"TotalCategories\": 10,\n       
-    \"Categories\": [\n            {\n                \"TopicName\": \"Canoes\",\n               
+    \"LevelID\": 4,\n        \"Columns\": 4,\n        \"Categories\": [\n           
+    {\n                \"TopicName\": \"Canoes\",\n                \"TopicType\":
+    \"Text\",\n                \"ContentValues\": [\n                    \"Canoe
+    paddle\",\n                    \"Thwart\",\n                    \"Canoe yoke\"\n               
+    ]\n            },\n            {\n                \"TopicName\": \"Hole\",\n               
     \"TopicType\": \"Text\",\n                \"ContentValues\": [\n                   
-    \"Canoe paddle\",\n                    \"Thwart\",\n                    \"Canoe
-    yoke\"\n                ]\n            },\n            {\n                \"TopicName\":
-    \"Hole\",\n                \"TopicType\": \"Text\",\n                \"ContentValues\":
-    [\n                    \"Cheese\",\n                    \"Diamond ring\",\n                   
-    \"Button\",\n                    \"Needle\"\n                ]\n            },\n           
-    {\n                \"TopicName\": \"Repair\",\n                \"TopicType\":
-    \"Text\",\n                \"ContentValues\": [\n                    \"Fix\",\n                   
-    \"Stitch\",\n                    \"Glue\",\n                    \"Caulk\",\n                   
-    \"Connect\",\n                    \"Patch\"\n                ]\n            },\n           
-    {\n                \"TopicName\": \"Hooks\",\n                \"TopicType\":
-    \"Text\",\n                \"ContentValues\": [\n                    \"Ramshorn
-    hook\",\n                    \"Clevis hook\",\n                    \"Swivel hook\",\n                   
-    \"J-hook\"\n                ]\n            },\n            {\n               
-    \"TopicName\": \"Alphabet\",\n                \"TopicType\": \"Text\",\n               
-    \"ContentValues\": [\n                    \"Braille\",\n                    \"Latin\",\n                   
-    \"Cyrillic\",\n                    \"Runic\",\n                    \"Armenian\",\n                   
-    \"Hebrew\",\n                    \"Chinese\",\n                    \"Georgian\"\n               
-    ]\n            },\n            {\n                \"TopicName\": \"Parent\",\n               
+    \"Cheese\",\n                    \"Diamond ring\",\n                    \"Button\",\n                   
+    \"Needle\"\n                ]\n            },\n            {\n               
+    \"TopicName\": \"Repair\",\n                \"TopicType\": \"Text\",\n               
+    \"ContentValues\": [\n                    \"Fix\",\n                    \"Stitch\",\n                   
+    \"Glue\",\n                    \"Caulk\",\n                    \"Connect\",\n                   
+    \"Patch\"\n                ]\n            },\n            {\n               
+    \"TopicName\": \"Hooks\",\n                \"TopicType\": \"Text\",\n               
+    \"ContentValues\": [\n                    \"Ramshorn hook\",\n                   
+    \"Clevis hook\",\n                    \"Swivel hook\",\n                    \"J-hook\"\n               
+    ]\n            },\n            {\n                \"TopicName\": \"Alphabet\",\n               
+    \"TopicType\": \"Text\",\n                \"ContentValues\": [\n                   
+    \"Braille\",\n                    \"Latin\",\n                    \"Cyrillic\",\n                   
+    \"Runic\",\n                    \"Armenian\",\n                    \"Hebrew\",\n                   
+    \"Chinese\",\n                    \"Georgian\"\n                ]\n           
+    },\n            {\n                \"TopicName\": \"Parent\",\n               
     \"TopicType\": \"Text\",\n                \"ContentValues\": [\n                   
     \"Son\",\n                    \"Daughter\",\n                    \"Care\",\n                   
     \"Love\",\n                    \"Raise\",\n                    \"Example\",\n                   

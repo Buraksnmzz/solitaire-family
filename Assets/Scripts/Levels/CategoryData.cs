@@ -1,18 +1,18 @@
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace Levels
 {
     [System.Serializable]
     public class CategoryData
     {
+        [JsonProperty("TopicName")]
         public string name; 
-        public CategoryType type;
-        public List<string> contentValues; 
-    }
 
-    public enum CategoryType
-    {
-        Text,
-        Image
+        [JsonProperty("TopicType")]
+        public CategoryType type;
+
+        [JsonProperty("ContentValues")]
+        public List<string> contentValues; 
     }
 }
