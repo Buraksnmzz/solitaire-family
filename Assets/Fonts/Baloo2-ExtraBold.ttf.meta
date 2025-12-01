@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 944be27086d8d454ea5de113fe2a849e
+guid: 23ebf5933791d4f9ea5011e9dad2e54d
 TrueTypeFontImporter:
   externalObjects: {}
   serializedVersion: 4
@@ -9,7 +9,7 @@ TrueTypeFontImporter:
   characterPadding: 1
   includeFontData: 1
   fontNames:
-  - Nunito
+  - Baloo 2
   fallbackFontReferences: []
   customCharacters: 
   fontRenderingMode: 0
