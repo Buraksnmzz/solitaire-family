@@ -1,6 +1,8 @@
+using UnityEngine;
+
 namespace Gameplay
 {
-    public class CardContainer
+    public class CardContainer: MonoBehaviour
     {
         
     }

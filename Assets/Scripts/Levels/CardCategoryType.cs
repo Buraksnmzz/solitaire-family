@@ -1,6 +1,6 @@
 namespace Levels
 {
-    public enum CategoryType
+    public enum CardCategoryType
     {
         Text,
         Image

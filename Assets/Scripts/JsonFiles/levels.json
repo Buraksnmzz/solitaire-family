@@ -1,8 +1,7 @@
 [
     {
         "LevelID": 1,
-        "Columns": 4,
-        "TotalCategories": 10,
+        "Columns": 3,
         "Categories": [
             {
                 "TopicName": "Dew",
@@ -123,7 +122,6 @@
     {
         "LevelID": 2,
         "Columns": 4,
-        "TotalCategories": 10,
         "Categories": [
             {
                 "TopicName": "Meteors",
@@ -244,7 +242,6 @@
     {
         "LevelID": 3,
         "Columns": 4,
-        "TotalCategories": 10,
         "Categories": [
             {
                 "TopicName": "Rafters",
@@ -365,7 +362,6 @@
     {
         "LevelID": 4,
         "Columns": 4,
-        "TotalCategories": 10,
         "Categories": [
             {
                 "TopicName": "Canoes",

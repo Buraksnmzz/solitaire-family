@@ -28,6 +28,11 @@ namespace Levels
 			return CurrentLevelMap.levelsList[levelIndex].columns;
 		}
 
+		public int GetLevelCategoryCardCount(int levelIndex)
+		{
+			return CurrentLevelMap.levelsList[levelIndex].categories.Count;
+		}
+
 		private LevelMap CurrentLevelMap { get; set; }
 
 		public LevelMap ParseLevelsJson(string levelJson)

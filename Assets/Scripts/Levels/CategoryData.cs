@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using UnityEngine.Serialization;
 
 namespace Levels
 {
@@ -9,8 +10,8 @@ namespace Levels
         [JsonProperty("TopicName")]
         public string name; 
 
-        [JsonProperty("TopicType")]
-        public CategoryType type;
+        [FormerlySerializedAs("type")] [JsonProperty("TopicType")]
+        public CardCategoryType cardCategoryType;
 
         [JsonProperty("ContentValues")]
         public List<string> contentValues; 
