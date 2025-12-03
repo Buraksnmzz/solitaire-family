@@ -1,3 +1,4 @@
+using Gameplay;
 using Levels;
 
 namespace Card
@@ -10,5 +11,6 @@ namespace Card
         public string CategoryName;
         public string ContentName;
         public int ContentCount;
+        public CardContainer Container;
     }
 }

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Card;
+using Gameplay.PlacableRules;
 using Levels;
 using UnityEditorInternal;
 using UnityEngine;
@@ -7,15 +8,18 @@ using UnityEngine.Serialization;
 
 namespace Gameplay
 {
-    public class Board: MonoBehaviour
+    public class Board : MonoBehaviour
     {
-        public List<Transform> foundations;
+        [SerializeField] Dealer dealer;
+        [SerializeField] private OpenDealer openDealer;
+        public List<CardContainer> foundations;
         public Transform foundationParent;
-        public List<Transform> piles;
+        public List<CardContainer> piles;
         public Transform pileParent;
-        public RectTransform dealer;
+        [FormerlySerializedAs("dealer")] public RectTransform dealerRectTransform;
         public Transform dealerCardsHolder;
-        public RectTransform openDealer;
+        [FormerlySerializedAs("openDealer")] public RectTransform openDealerRectTransform;
+        [SerializeField] private Transform goalCounterTransform;
         private int _foundationCount;
         public float distanceBetweenFoundations;
         public float widhtHeightRatio = 0.731f;
@@ -31,6 +35,10 @@ namespace Gameplay
         private List<CategoryData> _categoryDatas;
         public CardView contentCardView;
         public CardView categoryCardView;
+        private IPlacableRule _pileRule;
+        private IPlacableRule _foundationRule;
+        private IPlacableRule _noPlacableRule;
+
 
         public void Setup(LevelData levelData, int currentLevelIndex)
         {
@@ -40,18 +48,73 @@ namespace Gameplay
             _categoryDatas = levelData.categories;
             CalculateContentCardCount();
             SetFoundationsAndPiles();
+            InitializeContainers();
             GenerateCardModelsAndPresenters();
             InstantiateCardViews();
             ShuffleCards();
             DealCards();
         }
 
-        private void DealCards()
+        private void InitializeContainers()
         {
-            
+            _pileRule = new PilePlacableRule();
+            _foundationRule = new FoundationPlacableRule();
+            _noPlacableRule = new NoPlacableRule();
+            foreach (var pile in piles)
+            {
+                pile.Setup(_pileRule);
+            }
+
+            foreach (var foundation in foundations)
+            {
+                foundation.Setup(_foundationRule);
+            }
+            dealer.Setup(_noPlacableRule);
+            openDealer.Setup(_noPlacableRule);
         }
 
-        public void GenerateCardModelsAndPresenters()
+        private void DealCards()
+        {
+            if (dealer == null)
+                return;
+
+            var pileCounts = GetInitialPileCounts();
+            if (pileCounts == null)
+                return;
+
+            for (var pileIndex = 0; pileIndex < pileCounts.Length && pileIndex < piles.Count; pileIndex++)
+            {
+                var targetPile = piles[pileIndex];
+                var cardsToDeal = pileCounts[pileIndex];
+
+                for (var i = 0; i < cardsToDeal; i++)
+                {
+                    var topCardModel = dealer.GetTopCardModel();
+                    var topCardView = dealer.RemoveCard(topCardModel);
+                    if (topCardView == null)
+                        return;
+
+                    targetPile.AddCard(topCardView, topCardModel);
+                }
+            }
+        }
+
+        private int[] GetInitialPileCounts()
+        {
+            switch (_foundationCount)
+            {
+                case 3:
+                    return new[] { 3, 4, 5 };
+                case 4:
+                    return new[] { 3, 4, 5, 6 };
+                case 5:
+                    return new[] { 5, 6, 7, 8, 9 };
+                default:
+                    return null;
+            }
+        }
+
+        private void GenerateCardModelsAndPresenters()
         {
             foreach (var category in _categoryDatas)
             {
@@ -67,10 +130,7 @@ namespace Gameplay
                         ContentCount = category.contentValues.Count,
                     };
                     CardModels.Add(cardModel);
-                    var cardPresenter = new CardPresenter
-                    {
-                        cardModel = cardModel
-                    };
+                    var cardPresenter = new CardPresenter();
                     CardPresenters.Add(cardPresenter);
                 }
             }
@@ -86,18 +146,16 @@ namespace Gameplay
                     ContentCount = category.contentValues.Count,
                 };
                 CardModels.Add(cardModel);
-                var cardPresenter = new CardPresenter
-                {
-                    cardModel = cardModel
-                };
+                var cardPresenter = new CardPresenter();
                 CardPresenters.Add(cardPresenter);
             }
         }
 
-        public void InstantiateCardViews()
+        private void InstantiateCardViews()
         {
-            foreach (var cardModel in CardModels)
+            for (var index = 0; index < CardModels.Count; index++)
             {
+                var cardModel = CardModels[index];
                 CardView prefab;
 
                 if (cardModel.Type == CardType.Content)
@@ -116,9 +174,19 @@ namespace Gameplay
                 if (prefab == null)
                     continue;
 
-                var cardView = Instantiate(prefab, dealerCardsHolder);
-                cardView.Initialize(cardModel);
+                var cardView = Instantiate(prefab, dealerRectTransform);
                 cardViews.Add(cardView);
+
+                if (dealer != null)
+                {
+                    dealer.AddCard(cardView, cardModel);
+                }
+
+                if (index < CardPresenters.Count)
+                {
+                    var presenter = CardPresenters[index];
+                    presenter.Initialize(cardModel, cardView);
+                }
             }
         }
 
@@ -146,7 +214,7 @@ namespace Gameplay
                 cardView.transform.SetSiblingIndex(index);
             }
         }
-            
+
 
         private void CalculateContentCardCount()
         {
@@ -177,8 +245,10 @@ namespace Gameplay
         private void SetDealer()
         {
             var openDealerWidthMultiplier = 1.737f;
-            dealer.sizeDelta = new Vector2(_itemWidth, _itemHeight);
-            openDealer.sizeDelta = new Vector2(_itemWidth * openDealerWidthMultiplier, _itemHeight);
+            dealerRectTransform.sizeDelta = new Vector2(_itemWidth, _itemHeight);
+            openDealerRectTransform.sizeDelta = new Vector2(_itemWidth * openDealerWidthMultiplier, _itemHeight);
+            dealerRectTransform.pivot = new Vector2(0.5f, 0.5f);
+            dealerRectTransform.anchoredPosition = new Vector2(-_itemWidth / 2, -148 - _itemHeight / 2);
         }
 
         [ContextMenu("Set Foundations And Piles")]
@@ -186,8 +256,8 @@ namespace Gameplay
         {
             SetFoundationsAndPiles();
         }
-        
-        private void SetItems(List<Transform> items, Transform parent)
+
+        private void SetItems(List<CardContainer> items, Transform parent)
         {
             if (parent == null)
                 return;
@@ -212,7 +282,7 @@ namespace Gameplay
 
             for (var i = 0; i < activeCount; i++)
             {
-                var rect = (RectTransform)items[i];
+                var rect = items[i].GetComponent<RectTransform>();
                 rect.SetParent(parent, false);
                 rect.sizeDelta = new Vector2(_itemWidth, _itemHeight);
                 var x = leftX + i * (_itemWidth + distanceBetweenFoundations);
