@@ -354,7 +354,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameSceneName: MainScene
   localConfigurationJson: {fileID: 4900000, guid: a2614416a587749f5a7332d6ebe8b120, type: 3}
-  localLevelsJson: {fileID: 4900000, guid: 6e92fa4cf83a444a5bcb0e3ebe6986dd, type: 3}
+  localLevelsJson: {fileID: 4900000, guid: 77d6ac1e7edc545de91e2eedcc340141, type: 3}
   bootData: {fileID: 11400000, guid: aafade25d6cd44528a459620103fbfed, type: 2}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:

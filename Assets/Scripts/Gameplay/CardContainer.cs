@@ -8,61 +8,74 @@ namespace Gameplay
 {
     public abstract class CardContainer : MonoBehaviour
     {
-        public List<CardModel> _cardModels = new();
-        public List<CardView> _cardViews = new();
+        public List<CardPresenter> _cardPresenters = new();
         protected IPlacableRule PlacableRule;
+        protected readonly float _moveDuration = 0.3f;
+        protected readonly float _flipDuration = 0.1f;
 
-        protected abstract void SetCardPosition(CardView card);
+        public abstract Vector3 GetCardLocalPosition(int index);
 
         public virtual void Setup(IPlacableRule placableRule)
         {
             PlacableRule = placableRule;
         }
 
-        public CardModel GetTopCardModel() => _cardModels.LastOrDefault();
+        public CardPresenter GetTopCard() => _cardPresenters.LastOrDefault();
 
-        public CardView GetTopCardView() => _cardViews.LastOrDefault();
+        public CardPresenter GetTopCardPresenter() => _cardPresenters.LastOrDefault();
 
-        public bool CanPlaceCard(CardModel sourceCardModel)
+        public bool CanPlaceCard(CardPresenter sourceCardPresenter)
         {
-            var topCardModel = _cardModels.LastOrDefault();
-            return PlacableRule.IsPlaceable(topCardModel, sourceCardModel);
+            var topCardModel = _cardPresenters.LastOrDefault()?.CardModel;
+            return PlacableRule.IsPlaceable(topCardModel, sourceCardPresenter.CardModel);
         }
 
-        public void AddCard(CardView cardView, CardModel cardModel)
+        public virtual void AddCard(CardPresenter cardPresenter)
         {
-            _cardModels.Add(cardModel);
-            _cardViews.Add(cardView);
-            cardView.transform.SetParent(transform);
-            SetCardPosition(cardView);
-            cardView.transform.SetAsLastSibling();
-            cardModel.Container = this;
-            switch (this)
+            _cardPresenters.Add(cardPresenter);
+            var index = _cardPresenters.IndexOf(cardPresenter);
+
+            cardPresenter.SetParent(transform, true);
+            cardPresenter.SetContainer(this);
+
+            var targetLocalPosition = GetCardLocalPosition(index);
+            cardPresenter.MoveToLocalPosition(targetLocalPosition, _moveDuration);
+
+            if (cardPresenter.CardView != null)
             {
-                case Dealer:
-                    cardModel.ContainerType = CardContainerType.Dealer;
-                    break;
-                case OpenDealer:
-                    cardModel.ContainerType = CardContainerType.OpenDealer;
-                    break;
-                case Pile:
-                    cardModel.ContainerType = CardContainerType.Pile;
-                    break;
-                case Foundation:
-                    cardModel.ContainerType = CardContainerType.Foundation;
-                    break;
+                cardPresenter.CardView.transform.SetAsLastSibling();
             }
         }
 
-        public CardView RemoveCard(CardModel cardModel)
+        public virtual CardPresenter RemoveCard(CardPresenter cardPresenter)
         {
-            var index = _cardModels.IndexOf(cardModel);
+            var index = _cardPresenters.IndexOf(cardPresenter);
             if (index == -1) return null;
-            var cardView = _cardViews[index];
-            _cardViews.RemoveAt(index);
-            _cardModels.RemoveAt(index);
-            cardView.transform.SetParent(null);
-            return cardView;
+            var presenter = _cardPresenters[index];
+            _cardPresenters.RemoveAt(index);
+            return presenter;
+        }
+
+        public virtual List<CardPresenter> GetCardsFrom(CardPresenter startPresenter)
+        {
+            var index = _cardPresenters.IndexOf(startPresenter);
+            if (index == -1) return new List<CardPresenter>();
+            return _cardPresenters.Skip(index).ToList();
+        }
+
+        public virtual void RemoveCardsFrom(CardPresenter startPresenter)
+        {
+            var index = _cardPresenters.IndexOf(startPresenter);
+            if (index == -1) return;
+            _cardPresenters.RemoveRange(index, _cardPresenters.Count - index);
+        }
+
+        public virtual void RevealTopCardIfNeeded()
+        {
+            var topCardPresenter = GetTopCardPresenter();
+            if (topCardPresenter == null) return;
+            if (topCardPresenter.IsFaceUp) return;
+            topCardPresenter.SetFaceUp(true, _flipDuration * 2.5f);
         }
     }
 }

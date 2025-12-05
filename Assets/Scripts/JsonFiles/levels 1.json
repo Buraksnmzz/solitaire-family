@@ -1,0 +1,434 @@
+[
+    {
+        "LevelID": 1,
+        "Columns": 4,
+        "Categories": [
+            {
+                "TopicName": "Dew",
+                "TopicType": "Text",
+                "ContentValues": [
+                    "Droplets"
+                ]
+            },
+            {
+                "TopicName": "Charger",
+                "TopicType": "Text",
+                "ContentValues": [
+                    "Electric car"
+                ]
+            },
+            {
+                "TopicName": "Clones",
+                "TopicType": "Image",
+                "ContentValues": [
+                    "Clones1"
+                ]
+            },
+            {
+                "TopicName": "Hobbies",
+                "TopicType": "Text",
+                "ContentValues": [
+                    "Sewing"
+                ]
+            },
+            {
+                "TopicName": "Down",
+                "TopicType": "Text",
+                "ContentValues": [
+                    "Town"
+                ]
+            },
+            {
+                "TopicName": "Dali",
+                "TopicType": "Image",
+                "ContentValues": [
+                    "Dali1"
+                ]
+            },
+            {
+                "TopicName": "Evidence",
+                "TopicType": "Text",
+                "ContentValues": [
+                    "Forensic",
+                    "Artifact"
+                ]
+            },
+            {
+                "TopicName": "Cruise",
+                "TopicType": "Text",
+                "ContentValues": [
+                    "Luxury",
+                    "Shopping"
+                ]
+            },
+            {
+                "TopicName": "Vices",
+                "TopicType": "Text",
+                "ContentValues": [
+                    "Envy",
+                    "Greed"
+                ]
+            }
+        ]
+    },
+    {
+        "LevelID": 2,
+        "Columns": 4,
+        "Categories": [
+            {
+                "TopicName": "Meteors",
+                "TopicType": "Text",
+                "ContentValues": [
+                    "Meteor shower",
+                    "Meteoroid",
+                    "Meteorite"
+                ]
+            },
+            {
+                "TopicName": "Speedy",
+                "TopicType": "Text",
+                "ContentValues": [
+                    "Supercar",
+                    "Sailfish",
+                    "Gadfly",
+                    "Ostrich",
+                    "Turbojet",
+                    "Kangaroo"
+                ]
+            },
+            {
+                "TopicName": "Cakes",
+                "TopicType": "Text",
+                "ContentValues": [
+                    "Doberge",
+                    "Bundt",
+                    "Devil’s Food",
+                    "Madeira"
+                ]
+            },
+            {
+                "TopicName": "Moss",
+                "TopicType": "Text",
+                "ContentValues": [
+                    "Bryum",
+                    "Sphagnum",
+                    "Acrocarp",
+                    "Funaria"
+                ]
+            },
+            {
+                "TopicName": "Grandma",
+                "TopicType": "Image",
+                "ContentValues": [
+                    "Grandma1",
+                    "Grandma2",
+                    "Grandma3"
+                ]
+            },
+            {
+                "TopicName": "Proteins",
+                "TopicType": "Text",
+                "ContentValues": [
+                    "Actin",
+                    "Myosin",
+                    "Titin",
+                    "Nebulin",
+                    "Kinesin",
+                    "Dynein",
+                    "Elastin",
+                    "Keratin"
+                ]
+            },
+            {
+                "TopicName": "Doors",
+                "TopicType": "Text",
+                "ContentValues": [
+                    "Hinge",
+                    "Knob",
+                    "Lock",
+                    "Panel",
+                    "Frame",
+                    "Jamb",
+                    "Sill",
+                    "Latch"
+                ]
+            },
+            {
+                "TopicName": "Business",
+                "TopicType": "Text",
+                "ContentValues": [
+                    "Taxes",
+                    "Costs",
+                    "Consumer",
+                    "Brand",
+                    "Profit",
+                    "Company",
+                    "Finance",
+                    "Revenue"
+                ]
+            },
+            {
+                "TopicName": "Cogwheel",
+                "TopicType": "Text",
+                "ContentValues": [
+                    "Gear",
+                    "Pinion",
+                    "Ratchet",
+                    "Sprocket"
+                ]
+            },
+            {
+                "TopicName": "Hymn",
+                "TopicType": "Text",
+                "ContentValues": [
+                    "Chanting",
+                    "Epicness",
+                    "Psalm",
+                    "Divinity",
+                    "Canticle",
+                    "Liturgy"
+                ]
+            }
+        ]
+    },
+    {
+        "LevelID": 3,
+        "Columns": 4,
+        "Categories": [
+            {
+                "TopicName": "Rafters",
+                "TopicType": "Text",
+                "ContentValues": [
+                    "Purlin",
+                    "Roof truss",
+                    "Ledger board",
+                    "Joist",
+                    "Roof strut"
+                ]
+            },
+            {
+                "TopicName": "Frames",
+                "TopicType": "Text",
+                "ContentValues": [
+                    "Gilded",
+                    "Shadow",
+                    "Floating",
+                    "Matte",
+                    "Ornate",
+                    "Bevel",
+                    "Fillet",
+                    "Scoop"
+                ]
+            },
+            {
+                "TopicName": "Promise",
+                "TopicType": "Text",
+                "ContentValues": [
+                    "Oath",
+                    "Loyal",
+                    "Trust",
+                    "Swear"
+                ]
+            },
+            {
+                "TopicName": "Pot",
+                "TopicType": "Text",
+                "ContentValues": [
+                    "Flower",
+                    "Basil",
+                    "Cilantro",
+                    "Rosemary",
+                    "Dill",
+                    "Thyme"
+                ]
+            },
+            {
+                "TopicName": "Deter",
+                "TopicType": "Text",
+                "ContentValues": [
+                    "Hinder",
+                    "Prevent",
+                    "Thwart",
+                    "Daunt",
+                    "Stop",
+                    "Dissuade"
+                ]
+            },
+            {
+                "TopicName": "Shaving",
+                "TopicType": "Text",
+                "ContentValues": [
+                    "Razor",
+                    "Scissors",
+                    "Gel"
+                ]
+            },
+            {
+                "TopicName": "Dust",
+                "TopicType": "Text",
+                "ContentValues": [
+                    "Powder",
+                    "Ashes",
+                    "Sand",
+                    "Silt"
+                ]
+            },
+            {
+                "TopicName": "Glaze",
+                "TopicType": "Text",
+                "ContentValues": [
+                    "Lacquer",
+                    "Gloss",
+                    "Celadon",
+                    "Varnish",
+                    "Coating",
+                    "Polish"
+                ]
+            },
+            {
+                "TopicName": "Paradox",
+                "TopicType": "Text",
+                "ContentValues": [
+                    "Fallacy",
+                    "Opposite",
+                    "Antinomy",
+                    "Nonsense",
+                    "Duality",
+                    "Oxymoron",
+                    "Absurd",
+                    "Reverse"
+                ]
+            },
+            {
+                "TopicName": "Limb",
+                "TopicType": "Text",
+                "ContentValues": [
+                    "Paw",
+                    "Arm",
+                    "Talon",
+                    "Hoof"
+                ]
+            }
+        ]
+    },
+    {
+        "LevelID": 4,
+        "Columns": 4,
+        "Categories": [
+            {
+                "TopicName": "Canoes",
+                "TopicType": "Text",
+                "ContentValues": [
+                    "Canoe paddle",
+                    "Thwart",
+                    "Canoe yoke"
+                ]
+            },
+            {
+                "TopicName": "Hole",
+                "TopicType": "Text",
+                "ContentValues": [
+                    "Cheese",
+                    "Diamond ring",
+                    "Button",
+                    "Needle"
+                ]
+            },
+            {
+                "TopicName": "Repair",
+                "TopicType": "Text",
+                "ContentValues": [
+                    "Fix",
+                    "Stitch",
+                    "Glue",
+                    "Caulk",
+                    "Connect",
+                    "Patch"
+                ]
+            },
+            {
+                "TopicName": "Hooks",
+                "TopicType": "Text",
+                "ContentValues": [
+                    "Ramshorn hook",
+                    "Clevis hook",
+                    "Swivel hook",
+                    "J-hook"
+                ]
+            },
+            {
+                "TopicName": "Alphabet",
+                "TopicType": "Text",
+                "ContentValues": [
+                    "Braille",
+                    "Latin",
+                    "Cyrillic",
+                    "Runic",
+                    "Armenian",
+                    "Hebrew",
+                    "Chinese",
+                    "Georgian"
+                ]
+            },
+            {
+                "TopicName": "Parent",
+                "TopicType": "Text",
+                "ContentValues": [
+                    "Son",
+                    "Daughter",
+                    "Care",
+                    "Love",
+                    "Raise",
+                    "Example",
+                    "Father",
+                    "Mother"
+                ]
+            },
+            {
+                "TopicName": "Playroom",
+                "TopicType": "Text",
+                "ContentValues": [
+                    "Blocks",
+                    "Dolls",
+                    "Puzzles",
+                    "Mats",
+                    "Chalk",
+                    "Tent",
+                    "Fort",
+                    "Plushie"
+                ]
+            },
+            {
+                "TopicName": "Spell",
+                "TopicType": "Text",
+                "ContentValues": [
+                    "Fireball",
+                    "Heal",
+                    "Shield",
+                    "Summon",
+                    "Teleport",
+                    "Levitate"
+                ]
+            },
+            {
+                "TopicName": "Accents",
+                "TopicType": "Text",
+                "ContentValues": [
+                    "Cockney",
+                    "Aussie",
+                    "Scottish"
+                ]
+            },
+            {
+                "TopicName": "Wagon",
+                "TopicType": "Text",
+                "ContentValues": [
+                    "Axle",
+                    "Wheel",
+                    "Hitch",
+                    "Wagon tongue"
+                ]
+            }
+        ]
+    }
+]

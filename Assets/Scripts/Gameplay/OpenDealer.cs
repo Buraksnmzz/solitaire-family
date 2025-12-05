@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Card;
 using UnityEngine;
 
@@ -5,39 +6,65 @@ namespace Gameplay
 {
     public class OpenDealer : CardContainer
     {
-        protected override void SetCardPosition(CardView card)
+        private readonly float _distanceMultiplier = 0.368f;
+
+        public override Vector3 GetCardLocalPosition(int index)
         {
-            var cardRectTransform = (RectTransform)card.transform;
+            var cardRectTransform = (RectTransform)_cardPresenters[0].CardView.transform;
             var cardWidth = cardRectTransform.rect.width;
             var cardHeight = cardRectTransform.rect.height;
-            var offsetX = cardWidth * 0.368f;
-
-            var index = _cardViews.Count - 1;
+            var offsetX = cardWidth * _distanceMultiplier;
 
             if (index == 0)
             {
-                card.transform.localPosition = new Vector3(-cardWidth * 0.5f, -cardHeight * 0.5f, 0f);
-                return;
+                return new Vector3(-cardWidth * 0.5f, -cardHeight * 0.5f, 0f);
             }
 
             if (index == 1)
             {
-                card.transform.localPosition = new Vector3(-cardWidth * 0.5f - offsetX, -cardHeight * 0.5f, 0f);
-                return;
+                return new Vector3(-cardWidth * 0.5f - offsetX, -cardHeight * 0.5f, 0f);
             }
 
             if (index == 2)
             {
-                card.transform.localPosition = new Vector3(-cardWidth * 0.5f - offsetX * 2f, -cardHeight * 0.5f, 0f);
-                return;
+                return new Vector3(-cardWidth * 0.5f - offsetX * 2f, -cardHeight * 0.5f, 0f);
             }
 
             var baseX = -cardWidth * 0.5f;
             var baseY = -cardHeight * 0.5f;
 
-            _cardViews[index - 2].transform.localPosition = new Vector3(baseX, baseY, 0f);
-            _cardViews[index - 1].transform.localPosition = new Vector3(baseX - offsetX, baseY, 0f);
-            card.transform.localPosition = new Vector3(baseX - offsetX * 2f, baseY, 0f);
+            if (index >= 3)
+            {
+                return new Vector3(baseX - offsetX * 2f, baseY, 0f);
+            }
+
+            return Vector3.zero;
+        }
+
+        public override void AddCard(CardPresenter cardPresenter)
+        {
+            _cardPresenters.Add(cardPresenter);
+
+            cardPresenter.SetParent(transform, true);
+            cardPresenter.SetContainer(this);
+
+            var startIndex = Mathf.Max(0, _cardPresenters.Count - 3);
+
+            for (var i = startIndex; i < _cardPresenters.Count; i++)
+            {
+                var targetLocalPosition = GetCardLocalPosition(i - startIndex);
+                _cardPresenters[i].MoveToLocalPosition(targetLocalPosition, _moveDuration);
+            }
+
+            if (cardPresenter.CardView != null)
+            {
+                cardPresenter.CardView.transform.SetAsLastSibling();
+            }
+        }
+
+        public List<CardPresenter> GetAllCardPresenters()
+        {
+            return _cardPresenters;
         }
     }
 }

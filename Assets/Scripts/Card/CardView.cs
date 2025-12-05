@@ -4,28 +4,29 @@ using Levels;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
 
 namespace Card
 {
-    public class CardView: MonoBehaviour
+    public class CardView : MonoBehaviour
     {
         [SerializeField] TextMeshProUGUI contentCountText;
         [SerializeField] TextMeshProUGUI mainText;
         [SerializeField] TextMeshProUGUI rightText;
-        [SerializeField] [CanBeNull] TextMeshProUGUI upText;
-        [SerializeField] [CanBeNull] Image mainImage;
-        [SerializeField] [CanBeNull] Image upImage;
-        [SerializeField] [CanBeNull] Image rightImage;
-        [SerializeField] [CanBeNull] Image crownImage;
+        [SerializeField][CanBeNull] TextMeshProUGUI upText;
+        [SerializeField][CanBeNull] Image mainImage;
+        [SerializeField][CanBeNull] Image upImage;
+        [SerializeField][CanBeNull] Image rightImage;
+        [SerializeField][CanBeNull] Image crownImage;
         [SerializeField] RectTransform rightTextParent;
         [SerializeField] GameObject frontSide;
         [SerializeField] GameObject backSide;
-        [SerializeField] [CanBeNull] GameObject upCategoryInfoImage;
-        [SerializeField] [CanBeNull] TextMeshProUGUI upCategoryName;
+        [SerializeField][CanBeNull] GameObject upCategoryInfoImage;
+        [SerializeField][CanBeNull] TextMeshProUGUI upCategoryName;
 
         public void SetRightTextTransform()
         {
-            var cardRectTransform = (RectTransform) transform;
+            var cardRectTransform = (RectTransform)transform;
             var cardWidth = cardRectTransform.rect.width;
             var cardHeight = cardRectTransform.rect.height;
 
@@ -73,9 +74,64 @@ namespace Card
 
         public void SetRotation(bool isFront)
         {
-            transform.eulerAngles  = isFront ? new Vector3(0, 0, 0) : new Vector3(0, -180, 0);
+            transform.eulerAngles = isFront ? new Vector3(0, 0, 0) : new Vector3(0, -180, 0);
             if (frontSide != null) frontSide.SetActive(isFront);
             if (backSide != null) backSide.SetActive(!isFront);
+        }
+
+        public void Rotate(bool isFront, float duration, float delay = 0f)
+        {
+            if (duration <= 0f && delay <= 0f)
+            {
+                SetRotation(isFront);
+                return;
+            }
+
+            var currentRotation = transform.eulerAngles;
+            var startY = currentRotation.y;
+            if (startY > 180f)
+            {
+                startY -= 360f;
+            }
+
+            var targetY = isFront ? 0f : -180f;
+            var targetRotation = new Vector3(0f, targetY, 0f);
+
+            var sequence = DOTween.Sequence();
+            sequence.SetDelay(delay);
+
+            var halfDuration = duration * 0.5f;
+
+            var midRotation = new Vector3(0f, -90f, 0f);
+
+            sequence.Append(transform.DORotate(midRotation, halfDuration).OnComplete(() =>
+            {
+                if (frontSide != null) frontSide.SetActive(isFront);
+                if (backSide != null) backSide.SetActive(!isFront);
+            }));
+
+            sequence.Append(transform.DORotate(targetRotation, halfDuration));
+
+            sequence.OnComplete(() => { SetRotation(isFront); });
+        }
+
+        public void SetLocalPosition(Vector3 localPosition)
+        {
+            transform.localPosition = localPosition;
+        }
+
+        public void MoveToLocalPosition(Vector3 targetLocalPosition, float duration, float delay = 0f, Ease ease = Ease.Linear)
+        {
+            if (duration <= 0f && delay <= 0f)
+            {
+                transform.localPosition = targetLocalPosition;
+                return;
+            }
+
+            transform.DOKill();
+            transform.DOLocalMove(targetLocalPosition, duration)
+                .SetDelay(delay)
+                .SetEase(ease);
         }
 
         public void SetAllInactive()
@@ -98,13 +154,13 @@ namespace Card
             if (mainText != null) mainText.gameObject.SetActive(true);
             if (crownImage != null) crownImage.gameObject.SetActive(true);
         }
-        
+
         public void SetCategoryBelowNoCategoryInfoState()
         {
             SetAllInactive();
             if (rightText != null) rightText.gameObject.SetActive(true);
         }
-        
+
         public void SetCategoryBelowWithCategoryInfoState()
         {
             SetAllInactive();
@@ -116,7 +172,7 @@ namespace Card
             SetAllInactive();
             if (mainText != null) mainText.gameObject.SetActive(true);
         }
-        
+
         public void SetContentImageTopNoCategoryInfoState()
         {
             SetAllInactive();

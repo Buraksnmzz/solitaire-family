@@ -15,6 +15,8 @@ namespace Card
         Vector3 _startPosition;
         Transform _startParent;
         int _startSiblingIndex;
+        CardPresenter[] _draggedPresenters;
+        Vector3[] _startLocalPositions;
 
         public void Setup(CardPresenter presenter)
         {
@@ -33,10 +35,24 @@ namespace Card
 
             _startParent = transform.parent;
             _startSiblingIndex = transform.GetSiblingIndex();
-            _startPosition = transform.localPosition;
 
-            transform.SetParent(_canvasTransform);
-            transform.SetAsLastSibling();
+            var container = _presenter.GetContainer();
+            if (container == null) return;
+
+            var stack = container.GetCardsFrom(_presenter);
+            _draggedPresenters = stack.ToArray();
+            _startLocalPositions = new Vector3[_draggedPresenters.Length];
+
+            for (var i = 0; i < _draggedPresenters.Length; i++)
+            {
+                var view = _draggedPresenters[i].CardView;
+                if (view == null) continue;
+                var rectTransform = view.transform as RectTransform;
+                if (rectTransform == null) continue;
+                _startLocalPositions[i] = rectTransform.localPosition;
+                rectTransform.SetParent(_canvasTransform);
+                rectTransform.SetAsLastSibling();
+            }
         }
 
         public void OnDrag(PointerEventData eventData)
@@ -50,7 +66,21 @@ namespace Card
                 _canvas.worldCamera,
                 out var localPoint);
 
-            transform.position = _canvas.transform.TransformPoint(localPoint);
+            var worldPoint = _canvas.transform.TransformPoint(localPoint);
+            var delta = worldPoint - transform.position;
+
+            if (_draggedPresenters == null || _draggedPresenters.Length == 0)
+            {
+                transform.position = worldPoint;
+                return;
+            }
+
+            for (var i = 0; i < _draggedPresenters.Length; i++)
+            {
+                var view = _draggedPresenters[i].CardView;
+                if (view == null) continue;
+                view.transform.position += delta;
+            }
         }
 
         public void OnEndDrag(PointerEventData eventData)
@@ -76,34 +106,73 @@ namespace Card
 
             if (closestContainer != null && closestDistance <= snapDistance)
             {
-                var targetTop = closestContainer.GetTopCardModel();
-                if (closestContainer.CanPlaceCard(_presenter.CardModel))
+                if (closestContainer.CanPlaceCard(_presenter))
                 {
-                    if (_presenter.CardModel.Container != null)
+                    var currentContainer = _presenter.GetContainer();
+                    if (currentContainer != null)
                     {
-                        _presenter.CardModel.Container.RemoveCard(_presenter.CardModel);
+                        var stack = currentContainer.GetCardsFrom(_presenter).ToArray();
+                        currentContainer.RemoveCardsFrom(_presenter);
+
+                        for (var i = 0; i < stack.Length; i++)
+                        {
+                            var presenter = stack[i];
+                            closestContainer.AddCard(presenter);
+                        }
+
+                        if (currentContainer is Pile)
+                        {
+                            currentContainer.RevealTopCardIfNeeded();
+                        }
                     }
 
-                    closestContainer.AddCard(_presenter.CardView, _presenter.CardModel);
-                    _presenter.CardModel.Container = closestContainer;
+                    _draggedPresenters = null;
+                    _startLocalPositions = null;
                     return;
                 }
             }
 
-            transform.SetParent(_startParent);
-            transform.SetSiblingIndex(_startSiblingIndex);
-            transform.localPosition = _startPosition;
+            if (_draggedPresenters != null)
+            {
+                for (var i = 0; i < _draggedPresenters.Length; i++)
+                {
+                    var presenter = _draggedPresenters[i];
+                    var view = presenter.CardView;
+                    if (view == null) continue;
+                    view.transform.SetParent(_startParent);
+                    view.transform.SetSiblingIndex(_startSiblingIndex + i);
+                    presenter.MoveToLocalPosition(_startLocalPositions[i], 0.2f);
+                }
+            }
+
+            _draggedPresenters = null;
+            _startLocalPositions = null;
         }
 
         bool IsDraggable()
         {
             if (_presenter == null) return false;
-            var containerType = _presenter.CardModel.ContainerType;
 
-            if (containerType == CardContainerType.Foundation) return false;
-            if (containerType == CardContainerType.Dealer) return false;
+            var container = _presenter.GetContainer();
+            if (container == null) return false;
 
-            return containerType == CardContainerType.OpenDealer || containerType == CardContainerType.Pile;
+            var containerType = container.GetType();
+
+            if (containerType == typeof(Foundation)) return false;
+            if (containerType == typeof(Dealer)) return false;
+
+            if (containerType == typeof(OpenDealer))
+            {
+                var topCard = container.GetTopCard();
+                return topCard == _presenter;
+            }
+
+            if (containerType == typeof(Pile))
+            {
+                return _presenter.IsFaceUp;
+            }
+
+            return false;
         }
     }
 }

@@ -51,8 +51,9 @@ namespace Gameplay
             InitializeContainers();
             GenerateCardModelsAndPresenters();
             InstantiateCardViews();
-            ShuffleCards();
-            DealCards();
+            dealer.SetupDeck(CardModels, CardPresenters, cardViews);
+            dealer.ShuffleDeck();
+            dealer.DealInitialCards(piles, _foundationCount);
         }
 
         private void InitializeContainers()
@@ -73,47 +74,6 @@ namespace Gameplay
             openDealer.Setup(_noPlacableRule);
         }
 
-        private void DealCards()
-        {
-            if (dealer == null)
-                return;
-
-            var pileCounts = GetInitialPileCounts();
-            if (pileCounts == null)
-                return;
-
-            for (var pileIndex = 0; pileIndex < pileCounts.Length && pileIndex < piles.Count; pileIndex++)
-            {
-                var targetPile = piles[pileIndex];
-                var cardsToDeal = pileCounts[pileIndex];
-
-                for (var i = 0; i < cardsToDeal; i++)
-                {
-                    var topCardModel = dealer.GetTopCardModel();
-                    var topCardView = dealer.RemoveCard(topCardModel);
-                    if (topCardView == null)
-                        return;
-
-                    targetPile.AddCard(topCardView, topCardModel);
-                }
-            }
-        }
-
-        private int[] GetInitialPileCounts()
-        {
-            switch (_foundationCount)
-            {
-                case 3:
-                    return new[] { 3, 4, 5 };
-                case 4:
-                    return new[] { 3, 4, 5, 6 };
-                case 5:
-                    return new[] { 5, 6, 7, 8, 9 };
-                default:
-                    return null;
-            }
-        }
-
         private void GenerateCardModelsAndPresenters()
         {
             foreach (var category in _categoryDatas)
@@ -124,10 +84,10 @@ namespace Gameplay
                     {
                         CategoryType = category.cardCategoryType,
                         CategoryName = category.name,
-                        ContainerType = CardContainerType.Dealer,
                         Type = CardType.Content,
                         ContentName = content,
                         ContentCount = category.contentValues.Count,
+                        IsFaceUp = false
                     };
                     CardModels.Add(cardModel);
                     var cardPresenter = new CardPresenter();
@@ -141,9 +101,9 @@ namespace Gameplay
                 {
                     CategoryType = category.cardCategoryType,
                     CategoryName = category.name,
-                    ContainerType = CardContainerType.Dealer,
                     Type = CardType.Category,
                     ContentCount = category.contentValues.Count,
+                    IsFaceUp = false
                 };
                 CardModels.Add(cardModel);
                 var cardPresenter = new CardPresenter();
@@ -177,41 +137,12 @@ namespace Gameplay
                 var cardView = Instantiate(prefab, dealerRectTransform);
                 cardViews.Add(cardView);
 
-                if (dealer != null)
-                {
-                    dealer.AddCard(cardView, cardModel);
-                }
-
                 if (index < CardPresenters.Count)
                 {
                     var presenter = CardPresenters[index];
                     presenter.Initialize(cardModel, cardView);
+                    dealer.AddCard(presenter);
                 }
-            }
-        }
-
-        private void ShuffleCards()
-        {
-            if (cardViews.Count == 0)
-                return;
-
-            var count = cardViews.Count;
-            for (var i = count - 1; i > 0; i--)
-            {
-                var j = Random.Range(0, i + 1);
-                if (i == j)
-                    continue;
-
-                (cardViews[i], cardViews[j]) = (cardViews[j], cardViews[i]);
-            }
-
-            for (var index = 0; index < cardViews.Count; index++)
-            {
-                var cardView = cardViews[index];
-                if (cardView == null)
-                    continue;
-
-                cardView.transform.SetSiblingIndex(index);
             }
         }
 
