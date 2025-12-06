@@ -37,7 +37,6 @@ namespace UI.Gameplay
             _levelData = _levelGeneratorService.GetLevelData(_currentLevelIndex);
             _movesCount = _totalGoalCount;
             _eventDispatcherService.AddListener<MoveCountRequestedSignal>(OnMoveCountRequested);
-            _eventDispatcherService.AddListener<UndoClickedSignal>(OnUndoClickedSignal);
             _eventDispatcherService.AddListener<CardMovePerformedSignal>(OnCardMovePerformed);
             View.UndoButtonClicked += OnUndoClicked;
         }
@@ -50,12 +49,9 @@ namespace UI.Gameplay
         private void OnUndoClicked()
         {
             _eventDispatcherService.Dispatch(new UndoClickedSignal());
-        }
-
-        void OnUndoClickedSignal(UndoClickedSignal _)
-        {
             _movesCount++;
             View.SetMovesCount(_movesCount);
+            View.SetUndoButtonInteractable(false);
         }
 
         public override void ViewShown()

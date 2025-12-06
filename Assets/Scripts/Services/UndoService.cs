@@ -27,9 +27,14 @@ namespace Services
 
         void OnCardMovePerformed(CardMovePerformedSignal signal)
         {
-            // İstersen burada "completed category" gibi özel bitiş durumlarını yine kontrol edip resetleyebilirsin.
             _lastFromContainer = signal.FromContainer;
             _lastToContainer = signal.ToContainer;
+            if (_lastToContainer is Foundation && _lastToContainer.GetCardsCount() == 0)
+            {
+                UndoAvailable = false;
+                return;
+            }
+            
             _lastMovedPresenters = new List<CardPresenter>(signal.MovedPresenters);
             _lastMovedFaceUpStates = signal.MovedFaceUpStates != null
                 ? new List<bool>(signal.MovedFaceUpStates)
@@ -45,7 +50,6 @@ namespace Services
             if (_lastFromContainer == null || _lastToContainer == null) return;
             if (_lastMovedPresenters == null || _lastMovedPresenters.Count == 0) return;
 
-            // 1) Stack kartlarını geri taşı ve yüzlerini eski haline döndür
             for (var i = _lastMovedPresenters.Count - 1; i >= 0; i--)
             {
                 var presenter = _lastMovedPresenters[i];
@@ -54,9 +58,7 @@ namespace Services
                 var removed = _lastToContainer.RemoveCard(presenter);
                 if (removed == null) continue;
 
-                if (_lastMovedFaceUpStates != null &&
-                    i >= 0 &&
-                    i < _lastMovedFaceUpStates.Count)
+                if (_lastMovedFaceUpStates != null && i < _lastMovedFaceUpStates.Count)
                 {
                     var shouldBeFaceUp = _lastMovedFaceUpStates[i];
                     removed.SetFaceUp(shouldBeFaceUp, 0.2f);
@@ -65,10 +67,7 @@ namespace Services
                 _lastFromContainer.AddCard(removed);
             }
 
-            // 2) Hamlede otomatik açılan "previous" kart varsa, onu eski haline döndür
-            if (_lastPreviousCard != null &&
-                !_lastPreviousCardWasFaceUp &&    // hamle öncesi kapalıydı
-                _lastPreviousCard.IsFaceUp)       // şu an açıksa (RevealTopCardIfNeeded açtı)
+            if (_lastPreviousCard != null && !_lastPreviousCardWasFaceUp && _lastPreviousCard.IsFaceUp)   
             {
                 _lastPreviousCard.SetFaceUp(false, 0.2f);
             }

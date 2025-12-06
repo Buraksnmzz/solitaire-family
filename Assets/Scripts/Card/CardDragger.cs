@@ -114,7 +114,6 @@ namespace Card
                     var currentContainer = _presenter.GetContainer();
                     if (currentContainer != null)
                     {
-                        // 1) Taşınacak stack ve faceUp snapshot
                         var stack = currentContainer.GetCardsFrom(_presenter).ToArray();
 
                         var movedFaceUpStates = new bool[stack.Length];
@@ -123,20 +122,17 @@ namespace Card
                             movedFaceUpStates[i] = stack[i].IsFaceUp;
                         }
 
-                        // 2) Stack’in altındaki “previous” kart ve eski yüz durumu
                         var before = currentContainer.GetCardsBefore(_presenter);
                         var previousCard = before.Count > 0 ? before[before.Count - 1] : null;
                         var previousCardWasFaceUp = previousCard != null && previousCard.IsFaceUp;
 
-                        // 3) Gerçek taşıma
                         currentContainer.RemoveCardsFrom(_presenter);
                         for (var i = 0; i < stack.Length; i++)
                         {
                             var presenter = stack[i];
                             closestContainer.AddCard(presenter);
                         }
-
-                        // 4) Snapshot sinyalini gönder
+                        
                         _eventDispatcherService.Dispatch(
                             new CardMovePerformedSignal(
                                 currentContainer,
