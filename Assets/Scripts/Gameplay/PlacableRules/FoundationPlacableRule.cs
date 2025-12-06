@@ -7,9 +7,21 @@ namespace Gameplay.PlacableRules
         public bool IsPlaceable(CardModel targetCardModel, CardModel sourceCardModel)
         {
             if (targetCardModel == null)
-                return sourceCardModel.Type == CardType.Category;
+            {
+                var isCategoryCard = sourceCardModel.Type == CardType.Category;
+                if (!isCategoryCard)
+                {
+                    ErrorMessage = StringConstants.ErrorCategoryCanGoInEmptyFoundation;
+                }
+                return isCategoryCard;
+            }
 
-            return targetCardModel.CategoryName == sourceCardModel.CategoryName;
+            var sameCategory = targetCardModel.CategoryName == sourceCardModel.CategoryName;
+            if (!sameCategory)
+                ErrorMessage = null;
+            return sameCategory;
         }
+
+        public string ErrorMessage { get; set; } = null;
     }
 }

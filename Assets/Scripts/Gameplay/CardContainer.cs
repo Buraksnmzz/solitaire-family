@@ -32,7 +32,11 @@ namespace Gameplay
         public bool CanPlaceCard(CardPresenter sourceCardPresenter)
         {
             var topCardModel = CardPresenters.LastOrDefault()?.CardModel;
-            return _placableRule.IsPlaceable(topCardModel, sourceCardPresenter.CardModel);
+            var isPlacable = _placableRule.IsPlaceable(topCardModel, sourceCardPresenter.CardModel);
+            var placableError = _placableRule.ErrorMessage;
+            if(!isPlacable && placableError != null)
+                EventDispatcherService.Dispatch(new PlacableErrorSignal(placableError));
+            return isPlacable;
         }
 
         public virtual void AddCard(CardPresenter cardPresenter)

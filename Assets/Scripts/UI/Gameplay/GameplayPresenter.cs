@@ -1,4 +1,5 @@
 using Configuration;
+using Gameplay;
 using Levels;
 using Services;
 using UI.NoMoreMoves;
@@ -38,7 +39,14 @@ namespace UI.Gameplay
             _movesCount = _totalGoalCount;
             _eventDispatcherService.AddListener<MoveCountRequestedSignal>(OnMoveCountRequested);
             _eventDispatcherService.AddListener<CardMovePerformedSignal>(OnCardMovePerformed);
+            _eventDispatcherService.AddListener<PlacableErrorSignal>(OnPlacableError);
             View.UndoButtonClicked += OnUndoClicked;
+        }
+
+        private void OnPlacableError(PlacableErrorSignal placableError)
+        {
+            var errorMessage = placableError.PlacableErrorMessage;
+            View.ShowErrorMessage(errorMessage);
         }
 
         private void OnCardMovePerformed(CardMovePerformedSignal _)

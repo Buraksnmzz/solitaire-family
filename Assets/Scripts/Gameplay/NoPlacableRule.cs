@@ -9,5 +9,6 @@ namespace Gameplay
         {
             return false;
         }
+        public string ErrorMessage { get; } = null;
     }
 }
