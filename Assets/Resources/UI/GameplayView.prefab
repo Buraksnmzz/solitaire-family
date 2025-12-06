@@ -3995,6 +3995,7 @@ MonoBehaviour:
   movesCount: {fileID: 2642544038244180677}
   board: {fileID: 3235187306076201371}
   undoButton: {fileID: 3511356221316189227}
+  undoButtonIcon: {fileID: 2540333703019120732}
 --- !u!114 &8188636935371010217 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8493961421456829881, guid: 5e00244a9bfc9446b8feb7649af3f8ff, type: 3}

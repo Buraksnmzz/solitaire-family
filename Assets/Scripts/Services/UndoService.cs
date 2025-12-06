@@ -34,7 +34,7 @@ namespace Services
                 UndoAvailable = false;
                 return;
             }
-            
+
             _lastMovedPresenters = new List<CardPresenter>(signal.MovedPresenters);
             _lastMovedFaceUpStates = signal.MovedFaceUpStates != null
                 ? new List<bool>(signal.MovedFaceUpStates)
@@ -50,7 +50,7 @@ namespace Services
             if (_lastFromContainer == null || _lastToContainer == null) return;
             if (_lastMovedPresenters == null || _lastMovedPresenters.Count == 0) return;
 
-            for (var i = _lastMovedPresenters.Count - 1; i >= 0; i--)
+            for (var i = 0; i < _lastMovedPresenters.Count; i++)
             {
                 var presenter = _lastMovedPresenters[i];
                 if (presenter == null) continue;
@@ -67,7 +67,7 @@ namespace Services
                 _lastFromContainer.AddCard(removed);
             }
 
-            if (_lastPreviousCard != null && !_lastPreviousCardWasFaceUp && _lastPreviousCard.IsFaceUp)   
+            if (_lastPreviousCard != null && !_lastPreviousCardWasFaceUp && _lastPreviousCard.IsFaceUp)
             {
                 _lastPreviousCard.SetFaceUp(false, 0.2f);
             }

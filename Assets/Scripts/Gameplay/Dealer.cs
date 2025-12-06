@@ -137,12 +137,20 @@ namespace Gameplay
 
             var openDealerCards = openDealer.GetAllCardPresenters();
             if (openDealerCards == null || openDealerCards.Count == 0) return;
-            _eventDispatcherService.Dispatch(new MoveCountRequestedSignal());
-            var movedPresenters = new List<CardPresenter>();
+            // Snapshot: hamle öncesi OpenDealer kartları ve yüz durumları
+            var movedPresenters = new List<CardPresenter>(openDealerCards);
             var movedStates = new List<bool>();
-            for (var i = openDealerCards.Count - 1; i >= 0; i--)
+            for (var i = 0; i < movedPresenters.Count; i++)
             {
-                var presenter = openDealerCards[i];
+                movedStates.Add(movedPresenters[i].IsFaceUp);
+            }
+
+            _eventDispatcherService.Dispatch(new MoveCountRequestedSignal());
+
+            // Gerçek taşıma: OpenDealer -> Dealer, kartları faceDown yap
+            for (var i = movedPresenters.Count - 1; i >= 0; i--)
+            {
+                var presenter = movedPresenters[i];
                 if (presenter == null) continue;
 
                 var removedPresenter = openDealer.RemoveCard(presenter);
@@ -151,8 +159,6 @@ namespace Gameplay
                 removedPresenter.SetFaceUp(false, FlipDuration);
                 removedPresenter.SetParent(transform, true);
                 AddCard(removedPresenter);
-                movedPresenters.Add(removedPresenter);
-                movedStates.Add(removedPresenter.IsFaceUp);
             }
 
             if (movedPresenters.Count > 0)
