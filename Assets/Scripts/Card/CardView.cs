@@ -24,6 +24,12 @@ namespace Card
         [SerializeField][CanBeNull] GameObject upCategoryInfoImage;
         [SerializeField][CanBeNull] TextMeshProUGUI upCategoryName;
 
+        public void SetContentCountText(int currentCount, int totalCount)
+        {
+            if (contentCountText == null) return;
+            contentCountText.SetText(currentCount + "/" + totalCount);
+        }
+
         public void SetRightTextTransform()
         {
             var cardRectTransform = (RectTransform)transform;
@@ -38,12 +44,12 @@ namespace Card
 
         public void Initialize(CardModel cardModel)
         {
+            SetContentCountText(0, cardModel.ContentCount);
             if (cardModel.Type == CardType.Category)
             {
                 if (mainText != null) mainText.text = cardModel.CategoryName;
                 if (rightText != null) rightText.text = cardModel.CategoryName;
                 if (crownImage != null) crownImage.gameObject.SetActive(true);
-                if (contentCountText != null) contentCountText.SetText(0 + "/" + cardModel.ContentCount);
                 if (upCategoryName != null) upCategoryName.SetText(cardModel.CategoryName);
                 if (upCategoryInfoImage != null) upCategoryInfoImage.SetActive(false);
                 SetCategoryTopState();
@@ -134,7 +140,7 @@ namespace Card
                 .SetEase(ease);
         }
 
-        public void SetAllInactive()
+        private void SetAllInactive()
         {
             if (contentCountText != null) contentCountText.gameObject.SetActive(false);
             if (upCategoryInfoImage != null) upCategoryInfoImage.SetActive(false);
@@ -147,7 +153,47 @@ namespace Card
             if (crownImage != null) crownImage.gameObject.SetActive(false);
         }
 
-        public void SetCategoryTopState()
+        public void SetState(CardViewState state)
+        {
+            switch (state)
+            {
+                case CardViewState.CategoryTop:
+                    SetCategoryTopState();
+                    break;
+                case CardViewState.CategoryBelowNoCategoryInfo:
+                    SetCategoryBelowNoCategoryInfoState();
+                    break;
+                case CardViewState.CategoryBelowWithCategoryInfo:
+                    SetCategoryBelowWithCategoryInfoState();
+                    break;
+                case CardViewState.ContentTextTopNoCategoryInfo:
+                    SetContentTextTopNoCategoryInfoState();
+                    break;
+                case CardViewState.ContentTextTopWithCategoryInfo:
+                    SetContentTextTopWithCategoryInfoState();
+                    break;
+                case CardViewState.ContentTextBelowWithUpInfo:
+                    SetContentTextBelowWithUpperInfoState();
+                    break;
+                case CardViewState.ContentTextBelowWithSideInfo:
+                    SetContentTextBelowWithSideInfoState();
+                    break;
+                case CardViewState.ContentImageTopNoCategoryInfo:
+                    SetContentImageTopNoCategoryInfoState();
+                    break;
+                case CardViewState.ContentImageTopWithCategoryInfo:
+                    SetContentImageTopWithCategoryInfoState();
+                    break;
+                case CardViewState.ContentImageBelowWithUpInfo:
+                    SetContentImageBelowWithUpperInfoState();
+                    break;
+                case CardViewState.ContentImageBelowWithSideInfo:
+                    SetContentImageBelowWithSideInfoState();
+                    break;
+            }
+        }
+
+        private void SetCategoryTopState()
         {
             SetAllInactive();
             if (contentCountText != null) contentCountText.gameObject.SetActive(true);
@@ -155,28 +201,66 @@ namespace Card
             if (crownImage != null) crownImage.gameObject.SetActive(true);
         }
 
-        public void SetCategoryBelowNoCategoryInfoState()
+        private void SetCategoryBelowNoCategoryInfoState()
         {
             SetAllInactive();
             if (rightText != null) rightText.gameObject.SetActive(true);
         }
 
-        public void SetCategoryBelowWithCategoryInfoState()
+        private void SetCategoryBelowWithCategoryInfoState()
         {
             SetAllInactive();
             if (upCategoryInfoImage != null) upCategoryInfoImage.SetActive(true);
         }
 
-        public void SetContentTextTopNoCategoryInfoState()
+        private void SetContentTextTopNoCategoryInfoState()
         {
             SetAllInactive();
             if (mainText != null) mainText.gameObject.SetActive(true);
         }
 
-        public void SetContentImageTopNoCategoryInfoState()
+        private void SetContentTextTopWithCategoryInfoState()
+        {
+            SetAllInactive();
+            if (mainText != null) mainText.gameObject.SetActive(true);
+            if (contentCountText != null) contentCountText.gameObject.SetActive(true);
+        }
+
+        private void SetContentTextBelowWithUpperInfoState()
+        {
+            SetAllInactive();
+            if (upText != null) upText.gameObject.SetActive(true);
+        }
+
+        private void SetContentTextBelowWithSideInfoState()
+        {
+            SetAllInactive();
+            if (rightText != null) rightText.gameObject.SetActive(true);
+        }
+
+        private void SetContentImageTopNoCategoryInfoState()
         {
             SetAllInactive();
             if (mainImage != null) mainImage.gameObject.SetActive(true);
+        }
+
+        private void SetContentImageTopWithCategoryInfoState()
+        {
+            SetAllInactive();
+            if (mainImage != null) mainImage.gameObject.SetActive(true);
+            if (contentCountText != null) contentCountText.gameObject.SetActive(true);
+        }
+
+        private void SetContentImageBelowWithUpperInfoState()
+        {
+            SetAllInactive();
+            if (upImage != null) upImage.gameObject.SetActive(true);
+        }
+
+        private void SetContentImageBelowWithSideInfoState()
+        {
+            SetAllInactive();
+            if (rightImage != null) rightImage.gameObject.SetActive(true);
         }
     }
 }

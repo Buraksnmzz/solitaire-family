@@ -14,5 +14,49 @@ namespace Gameplay
             return offset;
         }
 
+        protected override void OnCardAdded(CardPresenter previousTop, CardPresenter newTop)
+        {
+            if (previousTop != null)
+            {
+                var previousModel = previousTop.CardModel;
+                if (previousModel.CategoryType == Levels.CardCategoryType.Text)
+                {
+                    previousTop.ApplyViewState(CardViewState.ContentTextBelowWithUpInfo);
+                }
+                else
+                {
+                    previousTop.ApplyViewState(CardViewState.ContentImageBelowWithUpInfo);
+                }
+            }
+
+            ApplyTopCardState(newTop);
+        }
+
+        protected override void OnTopCardChangedAfterRemove(CardPresenter newTop)
+        {
+            if (newTop == null) return;
+            ApplyTopCardState(newTop);
+        }
+
+        void ApplyTopCardState(CardPresenter presenter)
+        {
+            var model = presenter.CardModel;
+
+            if (model.Type == CardType.Category)
+            {
+                presenter.ApplyViewState(CardViewState.CategoryTop);
+                return;
+            }
+
+            if (model.CategoryType == Levels.CardCategoryType.Text)
+            {
+                presenter.ApplyViewState(CardViewState.ContentTextTopNoCategoryInfo);
+            }
+            else
+            {
+                presenter.ApplyViewState(CardViewState.ContentImageTopNoCategoryInfo);
+            }
+        }
+
     }
 }

@@ -1,5 +1,6 @@
 using Card;
 using Gameplay;
+using UI.Signals;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -17,9 +18,11 @@ namespace Card
         int _startSiblingIndex;
         CardPresenter[] _draggedPresenters;
         Vector3[] _startLocalPositions;
+        IEventDispatcherService _eventDispatcherService;
 
         public void Setup(CardPresenter presenter)
         {
+            _eventDispatcherService = ServiceLocator.GetService<IEventDispatcherService>();
             _presenter = presenter;
             var canvas = GetComponentInParent<Canvas>();
             if (canvas != null)
@@ -97,7 +100,7 @@ namespace Card
                 if (rectTransform == null) continue;
 
                 var distance = Vector3.Distance(transform.position, rectTransform.position);
-                if (distance < closestDistance)
+                if (distance < closestDistance && _presenter.GetContainer() != container)
                 {
                     closestDistance = distance;
                     closestContainer = container;
@@ -111,14 +114,39 @@ namespace Card
                     var currentContainer = _presenter.GetContainer();
                     if (currentContainer != null)
                     {
+                        // 1) Taşınacak stack ve faceUp snapshot
                         var stack = currentContainer.GetCardsFrom(_presenter).ToArray();
-                        currentContainer.RemoveCardsFrom(_presenter);
 
+                        var movedFaceUpStates = new bool[stack.Length];
+                        for (var i = 0; i < stack.Length; i++)
+                        {
+                            movedFaceUpStates[i] = stack[i].IsFaceUp;
+                        }
+
+                        // 2) Stack’in altındaki “previous” kart ve eski yüz durumu
+                        var before = currentContainer.GetCardsBefore(_presenter);
+                        var previousCard = before.Count > 0 ? before[before.Count - 1] : null;
+                        var previousCardWasFaceUp = previousCard != null && previousCard.IsFaceUp;
+
+                        // 3) Gerçek taşıma
+                        currentContainer.RemoveCardsFrom(_presenter);
                         for (var i = 0; i < stack.Length; i++)
                         {
                             var presenter = stack[i];
                             closestContainer.AddCard(presenter);
                         }
+
+                        // 4) Snapshot sinyalini gönder
+                        _eventDispatcherService.Dispatch(
+                            new CardMovePerformedSignal(
+                                currentContainer,
+                                closestContainer,
+                                stack,
+                                movedFaceUpStates,
+                                previousCard,
+                                previousCardWasFaceUp));
+
+                        _eventDispatcherService.Dispatch(new MoveCountRequestedSignal());
 
                         if (currentContainer is Pile)
                         {

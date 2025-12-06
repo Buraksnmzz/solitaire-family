@@ -58,6 +58,7 @@ public class Installer : MonoBehaviour
         ServiceLocator.Register<ICollectibelService>(new CollectibleService());
         ServiceLocator.Register<ILevelGeneratorService>(new LevelGeneratorService(bootData.levelsJson));
         ServiceLocator.Register<IConfigurationService>(new ConfigurationService(bootData.configurationJson));
+        ServiceLocator.Register<IUndoService>(new UndoService());
         
         ServiceLocator.GetService<IUIService>().ShowPopup<MainMenuPresenter>();
         // if (PlayerPrefs.GetInt(StringConstants.IsTutorialShown) == 0)

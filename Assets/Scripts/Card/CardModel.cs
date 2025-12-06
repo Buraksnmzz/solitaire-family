@@ -10,6 +10,7 @@ namespace Card
         public string CategoryName;
         public string ContentName;
         public int ContentCount;
+        public int CurrentContentCount;
         public CardContainer Container;
         public bool IsFaceUp;
     }

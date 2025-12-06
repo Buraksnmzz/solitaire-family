@@ -1,7 +1,11 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using Card;
 using Gameplay.PlacableRules;
 using Levels;
+using UI.Signals;
+using UI.Win;
 using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -38,10 +42,15 @@ namespace Gameplay
         private IPlacableRule _pileRule;
         private IPlacableRule _foundationRule;
         private IPlacableRule _noPlacableRule;
+        IEventDispatcherService _eventDispatcher;
+        IUIService _uiService;
 
 
         public void Setup(LevelData levelData, int currentLevelIndex)
         {
+            _eventDispatcher = ServiceLocator.GetService<IEventDispatcherService>();
+            _uiService = ServiceLocator.GetService<IUIService>();
+            _eventDispatcher.AddListener<MoveCountRequestedSignal>(OnMoveCountRequested);
             _levelData = levelData;
             _foundationCount = levelData.columns;
             _categoryCardCount = levelData.categories.Count;
@@ -54,6 +63,30 @@ namespace Gameplay
             dealer.SetupDeck(CardModels, CardPresenters, cardViews);
             dealer.ShuffleDeck();
             dealer.DealInitialCards(piles, _foundationCount);
+        }
+
+        private void OnDisable()
+        {
+            _eventDispatcher.RemoveListener<MoveCountRequestedSignal>(OnMoveCountRequested);
+        }
+
+        private void OnMoveCountRequested(MoveCountRequestedSignal _)
+        {
+            if(dealer.GetCardsCount() > 0)
+                return;
+            if(openDealer.GetCardsCount() > 0)
+                return;
+            if (piles.Any(pile => pile.GetCardsCount() > 0))
+            {
+                return;
+            }
+
+            if (foundations.Any(foundation => foundation.GetCardsCount() > 0))
+            {
+                return;
+            }
+
+            _uiService.ShowPopup<WinPresenter>();
         }
 
         private void InitializeContainers()

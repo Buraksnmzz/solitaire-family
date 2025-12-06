@@ -7,7 +7,7 @@ namespace Card
     {
         public CardModel CardModel;
         public CardView CardView;
-        public bool IsFaceUp => CardModel.IsFaceUp; 
+        public bool IsFaceUp => CardModel.IsFaceUp;
 
 
         public void Initialize(CardModel cardModel, CardView cardView)
@@ -38,7 +38,7 @@ namespace Card
             CardModel.Container = container;
         }
 
-        public void SetFaceUp(bool isFaceUp,float duration, float delay = 0)
+        public void SetFaceUp(bool isFaceUp, float duration, float delay = 0)
         {
             CardModel.IsFaceUp = isFaceUp;
             if (CardView != null)
@@ -63,6 +63,18 @@ namespace Card
         {
             if (CardView == null) return;
             CardView.MoveToLocalPosition(targetLocalPosition, duration, delay, ease);
+        }
+
+        public void ApplyViewState(CardViewState state)
+        {
+            if (CardView == null) return;
+            CardView.SetState(state);
+        }
+
+        public void SetContentCount(int currentCount, int totalCount)
+        {
+            CardModel.CurrentContentCount = currentCount;
+            CardView.SetContentCountText(currentCount, totalCount);
         }
     }
 }

@@ -1,0 +1,19 @@
+,AddCard,RemoveCard
+OpenDealer,"if Previous Card:
+Category: SetCategoryBelowNoCategoryInfoState
+Content-Text: SetContentTextBelowWithSideInfoState
+Content-Image: SetContentImageBelowWithSideInfoState","if Top Card:
+Category:SetCategoryTopState
+Content-Text: SetContentTextTopNoCategoryInfoState
+Content-Image: SetContentImageTopNoCategoryInfoState"
+Foundation,"if TopCard
+Category: -
+Content-Text: SetContentTextTopWithCategoryInfoState
+Content-Image: SetContentImageTopWithCategoryInfoState
+Content: Category kartını bul ve SetCategoryBelowWithCategoryInfoState",Not Possible
+Pile,"if Previous Card: Content card olmak zorunda
+Content-Text: SetContentTextBelowWithUpInfoState
+Content-Image: SetContentImageBelowWithUpInfoState","if Top Card:
+Category:SetCategoryTopState
+Content-Text: SetContentTextTopNoCategoryInfoState
+Content-Image: SetContentImageTopNoCategoryInfoState"

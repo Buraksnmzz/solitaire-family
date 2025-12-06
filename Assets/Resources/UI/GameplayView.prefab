@@ -176,6 +176,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fec5693fee194ca894c622a4170be83d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  completeScaleDuration: 0.25
 --- !u!1 &554004178471313811
 GameObject:
   m_ObjectHideFlags: 0
@@ -264,6 +265,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fec5693fee194ca894c622a4170be83d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  completeScaleDuration: 0.25
 --- !u!1 &845796531632854588
 GameObject:
   m_ObjectHideFlags: 0
@@ -576,7 +578,7 @@ GameObject:
   - component: {fileID: 259302085473476077}
   - component: {fileID: 2642544038244180677}
   m_Layer: 5
-  m_Name: GoalCount
+  m_Name: MovesCount
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1163,6 +1165,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fec5693fee194ca894c622a4170be83d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  completeScaleDuration: 0.25
 --- !u!1 &2213568283827438182
 GameObject:
   m_ObjectHideFlags: 0
@@ -1372,6 +1375,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fec5693fee194ca894c622a4170be83d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  completeScaleDuration: 0.25
 --- !u!1 &2254694761523926582
 GameObject:
   m_ObjectHideFlags: 0
@@ -1636,6 +1640,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fec5693fee194ca894c622a4170be83d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  completeScaleDuration: 0.25
 --- !u!1 &2975764139903955615
 GameObject:
   m_ObjectHideFlags: 0
@@ -3939,9 +3944,6 @@ PrefabInstance:
       addedObject: {fileID: 6492281600395167458}
     - targetCorrespondingSourceObject: {fileID: 1980271820259349449, guid: 5e00244a9bfc9446b8feb7649af3f8ff, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 9002695876481500346}
-    - targetCorrespondingSourceObject: {fileID: 1980271820259349449, guid: 5e00244a9bfc9446b8feb7649af3f8ff, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 1916068725928057599}
     - targetCorrespondingSourceObject: {fileID: 1980271820259349449, guid: 5e00244a9bfc9446b8feb7649af3f8ff, type: 3}
       insertIndex: -1
@@ -3955,6 +3957,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1980271820259349449, guid: 5e00244a9bfc9446b8feb7649af3f8ff, type: 3}
       insertIndex: -1
       addedObject: {fileID: 3173455425935032031}
+    - targetCorrespondingSourceObject: {fileID: 1980271820259349449, guid: 5e00244a9bfc9446b8feb7649af3f8ff, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 9002695876481500346}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 2924397321243473100, guid: 5e00244a9bfc9446b8feb7649af3f8ff, type: 3}
       insertIndex: -1
@@ -3987,8 +3992,9 @@ MonoBehaviour:
   animationType: 0
   panel: {fileID: 2249596092404895449}
   fadeEndValue: 1
-  goalCount: {fileID: 2642544038244180677}
+  movesCount: {fileID: 2642544038244180677}
   board: {fileID: 3235187306076201371}
+  undoButton: {fileID: 3511356221316189227}
 --- !u!114 &8188636935371010217 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8493961421456829881, guid: 5e00244a9bfc9446b8feb7649af3f8ff, type: 3}

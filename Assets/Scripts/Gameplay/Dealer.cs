@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Card;
 using Gameplay.PlacableRules;
+using UI.Signals;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,15 +12,17 @@ namespace Gameplay
         [SerializeField] private Button dealerButton;
         [SerializeField] private OpenDealer openDealer;
         private List<CardModel> _cardModels;
+        private IEventDispatcherService _eventDispatcherService;
 
         public void SetupDeck(List<CardModel> cardModels, List<CardPresenter> cardPresenters, List<CardView> cardViews)
         {
+            _eventDispatcherService = ServiceLocator.GetService<IEventDispatcherService>();
             _cardModels = cardModels;
-            _cardPresenters = cardPresenters;
+            CardPresenters = cardPresenters;
 
-            for (var i = 0; i < _cardPresenters.Count && i < cardViews.Count; i++)
+            for (var i = 0; i < CardPresenters.Count && i < cardViews.Count; i++)
             {
-                var presenter = _cardPresenters[i];
+                var presenter = CardPresenters[i];
                 var view = cardViews[i];
                 presenter.Initialize(_cardModels[i], view);
                 presenter.SetParent(transform, true);
@@ -29,7 +32,7 @@ namespace Gameplay
 
         public void ShuffleDeck()
         {
-            var count = _cardPresenters.Count;
+            var count = CardPresenters.Count;
             if (count == 0) return;
 
             for (var i = count - 1; i > 0; i--)
@@ -37,16 +40,16 @@ namespace Gameplay
                 var j = Random.Range(0, i + 1);
                 if (i == j) continue;
 
-                (_cardPresenters[i], _cardPresenters[j]) = (_cardPresenters[j], _cardPresenters[i]);
+                (CardPresenters[i], CardPresenters[j]) = (CardPresenters[j], CardPresenters[i]);
                 if (_cardModels != null && _cardModels.Count == count)
                 {
                     (_cardModels[i], _cardModels[j]) = (_cardModels[j], _cardModels[i]);
                 }
             }
 
-            for (var index = 0; index < _cardPresenters.Count; index++)
+            for (var index = 0; index < CardPresenters.Count; index++)
             {
-                var presenter = _cardPresenters[index];
+                var presenter = CardPresenters[index];
                 if (presenter.CardView == null) continue;
                 presenter.CardView.transform.SetSiblingIndex(index);
             }
@@ -78,7 +81,7 @@ namespace Gameplay
             {
                 var topCard = piles[i].GetTopCardPresenter();
                 if (topCard == null) continue;
-                topCard.SetFaceUp(true, _flipDuration * 2f);
+                topCard.SetFaceUp(true, FlipDuration * 2f);
             }
         }
 
@@ -119,10 +122,13 @@ namespace Gameplay
 
             var removedPresenter = RemoveCard(topCardPresenter);
             if (removedPresenter == null) return;
-
+            var moved = new List<CardPresenter> { removedPresenter };
+            var movedStates = new List<bool> { removedPresenter.IsFaceUp };
+            _eventDispatcherService.Dispatch(new CardMovePerformedSignal(this, openDealer, moved, movedStates, null, false));
+            _eventDispatcherService.Dispatch(new MoveCountRequestedSignal());
             removedPresenter.SetParent(openDealer.transform, true);
             openDealer.AddCard(removedPresenter);
-            removedPresenter.SetFaceUp(true, _flipDuration);
+            removedPresenter.SetFaceUp(true, FlipDuration);
         }
 
         private void MoveAllCardsFromOpenDealerToDealer()
@@ -131,7 +137,9 @@ namespace Gameplay
 
             var openDealerCards = openDealer.GetAllCardPresenters();
             if (openDealerCards == null || openDealerCards.Count == 0) return;
-
+            _eventDispatcherService.Dispatch(new MoveCountRequestedSignal());
+            var movedPresenters = new List<CardPresenter>();
+            var movedStates = new List<bool>();
             for (var i = openDealerCards.Count - 1; i >= 0; i--)
             {
                 var presenter = openDealerCards[i];
@@ -140,9 +148,16 @@ namespace Gameplay
                 var removedPresenter = openDealer.RemoveCard(presenter);
                 if (removedPresenter == null) continue;
 
-                removedPresenter.SetFaceUp(false, _flipDuration);
+                removedPresenter.SetFaceUp(false, FlipDuration);
                 removedPresenter.SetParent(transform, true);
                 AddCard(removedPresenter);
+                movedPresenters.Add(removedPresenter);
+                movedStates.Add(removedPresenter.IsFaceUp);
+            }
+
+            if (movedPresenters.Count > 0)
+            {
+                _eventDispatcherService.Dispatch(new CardMovePerformedSignal(openDealer, this, movedPresenters, movedStates, null, false));
             }
         }
     }
