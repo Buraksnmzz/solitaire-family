@@ -19,6 +19,7 @@ namespace Card
         CardPresenter[] _draggedPresenters;
         Vector3[] _startLocalPositions;
         IEventDispatcherService _eventDispatcherService;
+        private readonly float _moveDuration = 1.3f;
 
         public void Setup(CardPresenter presenter)
         {
@@ -165,7 +166,7 @@ namespace Card
                     if (view == null) continue;
                     view.transform.SetParent(_startParent);
                     view.transform.SetSiblingIndex(_startSiblingIndex + i);
-                    presenter.MoveToLocalPosition(_startLocalPositions[i], 0.2f);
+                    presenter.MoveToLocalPosition(_startLocalPositions[i], _moveDuration);
                 }
             }
 

@@ -56,7 +56,7 @@ namespace Card
         public void SetParent(Transform parent, bool worldPositionStays)
         {
             if (CardView == null) return;
-            CardView.transform.SetParent(parent, worldPositionStays);
+            CardView.SetParent(parent, worldPositionStays);
         }
 
         public void MoveToLocalPosition(Vector3 targetLocalPosition, float duration, float delay = 0f, DG.Tweening.Ease ease = DG.Tweening.Ease.OutQuad)

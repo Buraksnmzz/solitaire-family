@@ -78,6 +78,11 @@ namespace Card
             SetRotation(false);
         }
 
+        public void SetParent(Transform parent, bool worldPositionStays)
+        {
+            transform.SetParent(parent, worldPositionStays);
+        }
+
         public void SetRotation(bool isFront)
         {
             transform.eulerAngles = isFront ? new Vector3(0, 0, 0) : new Vector3(0, -180, 0);
