@@ -10,7 +10,7 @@ namespace Card
         public bool IsFaceUp => CardModel.IsFaceUp;
 
 
-        public void Initialize(CardModel cardModel, CardView cardView)
+        public void Initialize(CardModel cardModel, CardView cardView, Transform parent)
         {
             CardModel = cardModel;
             CardView = cardView;
@@ -24,7 +24,7 @@ namespace Card
                     dragger = CardView.gameObject.AddComponent<CardDragger>();
                 }
 
-                dragger.Setup(this);
+                dragger.Setup(this, parent);
             }
         }
 
@@ -59,10 +59,10 @@ namespace Card
             CardView.SetParent(parent, worldPositionStays);
         }
 
-        public void MoveToLocalPosition(Vector3 targetLocalPosition, float duration, float delay = 0f, DG.Tweening.Ease ease = DG.Tweening.Ease.OutQuad)
+        public void MoveToLocalPosition(Vector3 targetLocalPosition, float duration, float delay = 0f, DG.Tweening.Ease ease = DG.Tweening.Ease.OutQuad, System.Action onComplete = null)
         {
             if (CardView == null) return;
-            CardView.MoveToLocalPosition(targetLocalPosition, duration, delay, ease);
+            CardView.MoveToLocalPosition(targetLocalPosition, duration, delay, ease, onComplete);
         }
 
         public void ApplyViewState(CardViewState state)

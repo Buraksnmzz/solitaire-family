@@ -44,10 +44,12 @@ namespace Gameplay
         private IPlacableRule _noPlacableRule;
         IEventDispatcherService _eventDispatcher;
         IUIService _uiService;
+        private Transform _parent;
 
 
-        public void Setup(LevelData levelData, int currentLevelIndex)
+        public void Setup(LevelData levelData, int currentLevelIndex, Transform parent)
         {
+            _parent = parent;
             _eventDispatcher = ServiceLocator.GetService<IEventDispatcherService>();
             _uiService = ServiceLocator.GetService<IUIService>();
             _eventDispatcher.AddListener<MoveCountRequestedSignal>(OnMoveCountRequested);
@@ -173,7 +175,7 @@ namespace Gameplay
                 if (index < CardPresenters.Count)
                 {
                     var presenter = CardPresenters[index];
-                    presenter.Initialize(cardModel, cardView);
+                    presenter.Initialize(cardModel, cardView, _parent);
                     dealer.AddCard(presenter);
                 }
             }

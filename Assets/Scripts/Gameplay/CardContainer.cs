@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Card;
+using DG.Tweening;
 using Gameplay.PlacableRules;
 using UI.Signals;
 using UnityEngine;
@@ -34,7 +35,7 @@ namespace Gameplay
             var topCardModel = CardPresenters.LastOrDefault()?.CardModel;
             var isPlacable = _placableRule.IsPlaceable(topCardModel, sourceCardPresenter.CardModel);
             var placableError = _placableRule.ErrorMessage;
-            if(!isPlacable && placableError != null)
+            if (!isPlacable && placableError != null)
                 EventDispatcherService.Dispatch(new PlacableErrorSignal(placableError));
             return isPlacable;
         }
@@ -47,7 +48,7 @@ namespace Gameplay
             cardPresenter.SetParent(transform, true);
             cardPresenter.SetContainer(this);
             var targetLocalPosition = GetCardLocalPosition(index);
-            cardPresenter.MoveToLocalPosition(targetLocalPosition, MoveDuration);
+            cardPresenter.MoveToLocalPosition(targetLocalPosition, MoveDuration, 0, Ease.OutQuad, () => EventDispatcherService.Dispatch(new CardMovementStateChangedSignal(false)));
 
             if (cardPresenter.CardView != null)
             {

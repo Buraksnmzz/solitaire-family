@@ -27,7 +27,7 @@ namespace Gameplay
             if (cardPresenter.CardView != null)
             {
                 cardPresenter.CardView.transform.SetAsLastSibling();
-                cardPresenter.MoveToLocalPosition(targetLocalPosition, MoveDuration);
+                cardPresenter.MoveToLocalPosition(targetLocalPosition, MoveDuration, 0, Ease.OutQuad, () => EventDispatcherService.Dispatch(new CardMovementStateChangedSignal(false)));
                 ClearPresentersIfCompleted(out var presentersToRemove);
                 DOVirtual.DelayedCall(MoveDuration, ()=>CheckAndHandleCompletion(presentersToRemove));
             }

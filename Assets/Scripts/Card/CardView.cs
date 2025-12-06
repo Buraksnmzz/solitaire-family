@@ -131,18 +131,20 @@ namespace Card
             transform.localPosition = localPosition;
         }
 
-        public void MoveToLocalPosition(Vector3 targetLocalPosition, float duration, float delay = 0f, Ease ease = Ease.Linear)
+        public void MoveToLocalPosition(Vector3 targetLocalPosition, float duration, float delay = 0f, Ease ease = Ease.Linear, System.Action onComplete = null)
         {
             if (duration <= 0f && delay <= 0f)
             {
                 transform.localPosition = targetLocalPosition;
+                onComplete?.Invoke();
                 return;
             }
 
             transform.DOKill();
             transform.DOLocalMove(targetLocalPosition, duration)
                 .SetDelay(delay)
-                .SetEase(ease);
+                .SetEase(ease)
+                .OnComplete(() => { onComplete?.Invoke(); });
         }
 
         private void SetAllInactive()

@@ -1,4 +1,5 @@
 using Card;
+using DG.Tweening;
 using Gameplay;
 using UI.Signals;
 using UnityEngine;
@@ -19,17 +20,18 @@ namespace Card
         CardPresenter[] _draggedPresenters;
         Vector3[] _startLocalPositions;
         IEventDispatcherService _eventDispatcherService;
-        private readonly float _moveDuration = 1.3f;
+        private readonly float _moveDuration = 0.3f;
 
-        public void Setup(CardPresenter presenter)
+        public void Setup(CardPresenter presenter, Transform parent)
         {
             _eventDispatcherService = ServiceLocator.GetService<IEventDispatcherService>();
             _presenter = presenter;
+            _canvasTransform = parent as RectTransform;
             var canvas = GetComponentInParent<Canvas>();
             if (canvas != null)
             {
                 _canvas = canvas;
-                _canvasTransform = canvas.transform as RectTransform;
+                //_canvasTransform = canvas.transform as RectTransform;
             }
         }
 
@@ -91,6 +93,8 @@ namespace Card
         {
             if (!IsDraggable()) return;
 
+            _eventDispatcherService.Dispatch(new CardMovementStateChangedSignal(true));
+
             var containers = FindObjectsOfType<CardContainer>();
             CardContainer closestContainer = null;
             var closestDistance = float.MaxValue;
@@ -133,7 +137,7 @@ namespace Card
                             var presenter = stack[i];
                             closestContainer.AddCard(presenter);
                         }
-                        
+
                         _eventDispatcherService.Dispatch(
                             new CardMovePerformedSignal(
                                 currentContainer,
@@ -150,23 +154,44 @@ namespace Card
                             currentContainer.RevealTopCardIfNeeded();
                         }
                     }
-
-                    _draggedPresenters = null;
-                    _startLocalPositions = null;
                     return;
                 }
             }
 
             if (_draggedPresenters != null)
             {
+                var remainingAnimations = _draggedPresenters.Length;
                 for (var i = 0; i < _draggedPresenters.Length; i++)
                 {
                     var presenter = _draggedPresenters[i];
                     var view = presenter.CardView;
                     if (view == null) continue;
-                    view.transform.SetParent(_startParent);
-                    view.transform.SetSiblingIndex(_startSiblingIndex + i);
-                    presenter.MoveToLocalPosition(_startLocalPositions[i], _moveDuration);
+                    var viewRectTransform = view.transform as RectTransform;
+                    if (viewRectTransform == null) continue;
+
+                    var targetLocalInStartParent = _startLocalPositions[i];
+                    var startParentRect = _startParent as RectTransform;
+                    if (startParentRect == null) continue;
+
+                    var worldTargetInStartParent = startParentRect.TransformPoint(targetLocalInStartParent);
+                    var canvasLocalTarget = _canvasTransform.InverseTransformPoint(worldTargetInStartParent);
+
+                    viewRectTransform.DOKill();
+                    viewRectTransform.SetAsLastSibling();
+                    viewRectTransform.DOLocalMove(canvasLocalTarget, _moveDuration)
+                        .SetEase(DG.Tweening.Ease.OutQuad)
+                        .OnComplete(() =>
+                        {
+                            viewRectTransform.SetParent(_startParent, true);
+                            viewRectTransform.localPosition = targetLocalInStartParent;
+                            viewRectTransform.SetSiblingIndex(_startSiblingIndex + i);
+
+                            remainingAnimations--;
+                            if (remainingAnimations <= 0)
+                            {
+                                _eventDispatcherService.Dispatch(new CardMovementStateChangedSignal(false));
+                            }
+                        });
                 }
             }
 

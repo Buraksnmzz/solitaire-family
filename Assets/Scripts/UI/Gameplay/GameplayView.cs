@@ -14,19 +14,20 @@ public class GameplayView : BaseView
     [SerializeField] private Image undoButtonIcon;
     [SerializeField] private CanvasGroup errorImage;
     [SerializeField] private TextMeshProUGUI errorText;
+    [SerializeField] private CanvasGroup _inputBlocker;
     private Sequence _sequence;
     public event Action UndoButtonClicked;
 
     private void Start()
     {
-        undoButton.onClick.AddListener(()=>UndoButtonClicked?.Invoke());
+        undoButton.onClick.AddListener(() => UndoButtonClicked?.Invoke());
         SetUndoButtonInteractable(false);
     }
 
     public void SetUndoButtonInteractable(bool interactable)
     {
         undoButton.interactable = interactable;
-        undoButtonIcon.color = interactable ? new Color(1,1,1,1) : new Color(1,1,1,0.4f);
+        undoButtonIcon.color = interactable ? new Color(1, 1, 1, 1) : new Color(1, 1, 1, 0.4f);
     }
 
     public void SetMovesCount(int totalMovesCount)
@@ -36,7 +37,14 @@ public class GameplayView : BaseView
 
     public void SetupBoard(LevelData levelData, int currentLevelIndex)
     {
-        board.Setup(levelData, currentLevelIndex);
+        board.Setup(levelData, currentLevelIndex, panel);
+    }
+
+    public void SetInputBlocked(bool blocked)
+    {
+        if (_inputBlocker == null) return;
+        _inputBlocker.blocksRaycasts = blocked;
+        _inputBlocker.interactable = blocked;
     }
 
     public void ShowErrorMessage(string errorMessage)
@@ -52,6 +60,6 @@ public class GameplayView : BaseView
         _sequence.AppendInterval(2);
         _sequence.Append(errorImage.DOFade(0f, 0.2f));
         _sequence.OnComplete(() => errorImage.gameObject.SetActive(false));
-        
+
     }
 }

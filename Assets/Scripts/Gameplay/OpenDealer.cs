@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Card;
+using DG.Tweening;
 using UI.Signals;
 using UnityEngine;
 
@@ -56,7 +57,7 @@ namespace Gameplay
             for (var i = startIndex; i < CardPresenters.Count; i++)
             {
                 var targetLocalPosition = GetCardLocalPosition(i - startIndex);
-                CardPresenters[i].MoveToLocalPosition(targetLocalPosition, MoveDuration);
+                CardPresenters[i].MoveToLocalPosition(targetLocalPosition, MoveDuration, 0, Ease.OutQuad, () => EventDispatcherService.Dispatch(new CardMovementStateChangedSignal(false)));
             }
 
             if (cardPresenter.CardView != null)

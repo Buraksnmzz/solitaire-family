@@ -40,6 +40,7 @@ namespace UI.Gameplay
             _eventDispatcherService.AddListener<MoveCountRequestedSignal>(OnMoveCountRequested);
             _eventDispatcherService.AddListener<CardMovePerformedSignal>(OnCardMovePerformed);
             _eventDispatcherService.AddListener<PlacableErrorSignal>(OnPlacableError);
+            _eventDispatcherService.AddListener<CardMovementStateChangedSignal>(OnCardMovementStateChanged);
             View.UndoButtonClicked += OnUndoClicked;
         }
 
@@ -52,6 +53,11 @@ namespace UI.Gameplay
         private void OnCardMovePerformed(CardMovePerformedSignal _)
         {
             View.SetUndoButtonInteractable(_undoService.UndoAvailable);
+        }
+
+        private void OnCardMovementStateChanged(CardMovementStateChangedSignal signal)
+        {
+            View.SetInputBlocked(signal.IsMoving);
         }
 
         private void OnUndoClicked()

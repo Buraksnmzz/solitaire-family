@@ -23,8 +23,6 @@ namespace Gameplay
             for (var i = 0; i < CardPresenters.Count && i < cardViews.Count; i++)
             {
                 var presenter = CardPresenters[i];
-                var view = cardViews[i];
-                presenter.Initialize(_cardModels[i], view);
                 presenter.SetParent(transform, true);
                 presenter.SetContainer(this);
             }
@@ -119,7 +117,7 @@ namespace Gameplay
                 MoveAllCardsFromOpenDealerToDealer();
                 return;
             }
-
+            EventDispatcherService.Dispatch(new CardMovementStateChangedSignal(true));
             var removedPresenter = RemoveCard(topCardPresenter);
             if (removedPresenter == null) return;
             var moved = new List<CardPresenter> { removedPresenter };
