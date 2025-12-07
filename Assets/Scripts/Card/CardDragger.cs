@@ -21,6 +21,7 @@ namespace Card
         Vector3[] _startLocalPositions;
         IEventDispatcherService _eventDispatcherService;
         private readonly float _moveDuration = 0.3f;
+        bool _isDragging;
 
         public void Setup(CardPresenter presenter, Transform parent)
         {
@@ -37,7 +38,10 @@ namespace Card
 
         public void OnBeginDrag(PointerEventData eventData)
         {
+            if (_isDragging) return;
             if (!IsDraggable()) return;
+
+            _isDragging = true;
 
             _startParent = transform.parent;
             _startSiblingIndex = transform.GetSiblingIndex();
@@ -91,7 +95,12 @@ namespace Card
 
         public void OnEndDrag(PointerEventData eventData)
         {
-            if (!IsDraggable()) return;
+            if (!_isDragging) return;
+            if (!IsDraggable())
+            {
+                _isDragging = false;
+                return;
+            }
 
             _eventDispatcherService.Dispatch(new CardMovementStateChangedSignal(true));
 
@@ -197,6 +206,7 @@ namespace Card
 
             _draggedPresenters = null;
             _startLocalPositions = null;
+            _isDragging = false;
         }
 
         bool IsDraggable()

@@ -9,11 +9,21 @@ namespace Gameplay.PlacableRules
             if (targetCardModel == null)
             {
                 var isCategoryCard = sourceCardModel.Type == CardType.Category;
-                if (!isCategoryCard)
+                if (isCategoryCard)
                 {
-                    ErrorMessage = StringConstants.ErrorCategoryCanGoInEmptyFoundation;
+                    return true;
                 }
-                return isCategoryCard;
+
+                var container = sourceCardModel.Container;
+                if (container != null)
+                {
+                    var topPresenter = container.GetTopCardPresenter();
+                    if (topPresenter.CardModel.Type == CardType.Category)
+                        return true;
+                }
+
+                ErrorMessage = StringConstants.ErrorCategoryCanGoInEmptyFoundation;
+                return false;
             }
 
             var sameCategory = targetCardModel.CategoryName == sourceCardModel.CategoryName;

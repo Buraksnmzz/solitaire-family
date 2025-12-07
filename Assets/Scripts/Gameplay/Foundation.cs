@@ -29,12 +29,13 @@ namespace Gameplay
                 cardPresenter.CardView.transform.SetAsLastSibling();
                 cardPresenter.MoveToLocalPosition(targetLocalPosition, MoveDuration, 0, Ease.OutQuad, () => EventDispatcherService.Dispatch(new CardMovementStateChangedSignal(false)));
                 ClearPresentersIfCompleted(out var presentersToRemove);
-                DOVirtual.DelayedCall(MoveDuration, ()=>CheckAndHandleCompletion(presentersToRemove));
+                DOVirtual.DelayedCall(MoveDuration, () => CheckAndHandleCompletion(presentersToRemove));
             }
 
             OnCardAdded(null, cardPresenter);
 
             UpdateLastCardContentCountText();
+            TryUpdateCategoryAndTopContentStatesForStackCase();
         }
 
         protected override void OnCardAdded(CardPresenter previousTop, CardPresenter newTop)
@@ -87,6 +88,30 @@ namespace Gameplay
             }
 
             return null;
+        }
+
+        void TryUpdateCategoryAndTopContentStatesForStackCase()
+        {
+            if (CardPresenters.Count < 2)
+                return;
+
+            var lastIndex = CardPresenters.Count - 1;
+            var lastPresenter = CardPresenters[lastIndex];
+            var previousPresenter = CardPresenters[lastIndex - 1];
+            var lastModel = lastPresenter.CardModel;
+            if (lastModel.Type == CardType.Content) return;
+
+            lastPresenter.CardView.transform.SetAsFirstSibling();
+
+            CardPresenters.RemoveAt(lastIndex);
+            CardPresenters.Insert(0, lastPresenter);
+
+            lastPresenter.ApplyViewState(CardViewState.CategoryBelowWithCategoryInfo);
+            previousPresenter.ApplyViewState(previousPresenter.CardModel.CategoryType == Levels.CardCategoryType.Text
+                ? CardViewState.ContentTextTopWithCategoryInfo
+                : CardViewState.ContentImageTopWithCategoryInfo);
+
+            UpdateLastCardContentCountText();
         }
 
         private void CheckAndHandleCompletion(List<CardPresenter> presentersToRemove)
