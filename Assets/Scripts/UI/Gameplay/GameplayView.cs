@@ -16,6 +16,7 @@ public class GameplayView : BaseView
     [SerializeField] private TextMeshProUGUI errorText;
     [SerializeField] private CanvasGroup _inputBlocker;
     private Sequence _sequence;
+    private Sequence _inputBlockerSequence;
     public event Action UndoButtonClicked;
 
     private void Start()
@@ -43,8 +44,26 @@ public class GameplayView : BaseView
     public void SetInputBlocked(bool blocked)
     {
         if (_inputBlocker == null) return;
+        if (_inputBlockerSequence != null && _inputBlockerSequence.IsActive())
+        {
+            _inputBlockerSequence.Kill();
+            _inputBlockerSequence = null;
+        }
+
         _inputBlocker.blocksRaycasts = blocked;
         _inputBlocker.interactable = blocked;
+
+        if (blocked)
+        {
+            _inputBlockerSequence = DOTween.Sequence();
+            _inputBlockerSequence.AppendInterval(2f);
+            _inputBlockerSequence.OnComplete(() =>
+            {
+                _inputBlocker.blocksRaycasts = false;
+                _inputBlocker.interactable = false;
+                _inputBlockerSequence = null;
+            });
+        }
     }
 
     public void ShowErrorMessage(string errorMessage)

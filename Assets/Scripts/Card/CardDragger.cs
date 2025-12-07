@@ -20,7 +20,7 @@ namespace Card
         CardPresenter[] _draggedPresenters;
         Vector3[] _startLocalPositions;
         IEventDispatcherService _eventDispatcherService;
-        private readonly float _moveDuration = 0.3f;
+        private readonly float _moveDuration = 0.25f;
         bool _isDragging;
 
         public void Setup(CardPresenter presenter, Transform parent)

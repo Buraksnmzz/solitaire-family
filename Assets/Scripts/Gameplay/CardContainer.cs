@@ -12,7 +12,7 @@ namespace Gameplay
     {
         protected List<CardPresenter> CardPresenters = new();
         private IPlacableRule _placableRule;
-        protected readonly float MoveDuration = 0.3f;
+        protected readonly float MoveDuration = 0.25f;
         protected readonly float FlipDuration = 0.1f;
         protected IEventDispatcherService EventDispatcherService;
 
