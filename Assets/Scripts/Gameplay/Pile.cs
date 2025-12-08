@@ -1,5 +1,4 @@
 using Card;
-using Gameplay.PlacableRules;
 using UnityEngine;
 
 namespace Gameplay

@@ -1,4 +1,3 @@
-using Card;
 using DG.Tweening;
 using Gameplay;
 using UI.Signals;
@@ -21,7 +20,6 @@ namespace Card
         Vector3[] _startLocalPositions;
         IEventDispatcherService _eventDispatcherService;
         private readonly float _moveDuration = 0.25f;
-        bool _isDragging;
 
         public void Setup(CardPresenter presenter, Transform parent)
         {
@@ -32,16 +30,13 @@ namespace Card
             if (canvas != null)
             {
                 _canvas = canvas;
-                //_canvasTransform = canvas.transform as RectTransform;
             }
         }
 
         public void OnBeginDrag(PointerEventData eventData)
         {
-            if (_isDragging) return;
             if (!IsDraggable()) return;
 
-            _isDragging = true;
 
             _startParent = transform.parent;
             _startSiblingIndex = transform.GetSiblingIndex();
@@ -95,10 +90,8 @@ namespace Card
 
         public void OnEndDrag(PointerEventData eventData)
         {
-            if (!_isDragging) return;
             if (!IsDraggable())
             {
-                _isDragging = false;
                 return;
             }
 
@@ -206,7 +199,6 @@ namespace Card
 
             _draggedPresenters = null;
             _startLocalPositions = null;
-            _isDragging = false;
         }
 
         bool IsDraggable()

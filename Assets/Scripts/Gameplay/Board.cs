@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Card;
@@ -6,7 +5,6 @@ using Gameplay.PlacableRules;
 using Levels;
 using UI.Signals;
 using UI.Win;
-using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -17,9 +15,9 @@ namespace Gameplay
         [SerializeField] Dealer dealer;
         [SerializeField] private OpenDealer openDealer;
         public List<CardContainer> foundations;
-        public Transform foundationParent;
+        public RectTransform foundationParent;
         public List<CardContainer> piles;
-        public Transform pileParent;
+        public RectTransform pileParent;
         [FormerlySerializedAs("dealer")] public RectTransform dealerRectTransform;
         public Transform dealerCardsHolder;
         [FormerlySerializedAs("openDealer")] public RectTransform openDealerRectTransform;
@@ -30,7 +28,6 @@ namespace Gameplay
         private float _itemWidth;
         private float _itemHeight;
         private readonly List<int> _totalCardsCountHolder = new List<int> { 30, 54, 80 };
-        private int _contentCardCount;
         private int _categoryCardCount;
         public List<CardModel> CardModels = new();
         public List<CardView> cardViews = new();
@@ -57,8 +54,7 @@ namespace Gameplay
             _foundationCount = levelData.columns;
             _categoryCardCount = levelData.categories.Count;
             _categoryDatas = levelData.categories;
-            CalculateContentCardCount();
-            SetFoundationsAndPiles();
+            SetContainerTransforms();
             InitializeContainers();
             GenerateCardModelsAndPresenters();
             InstantiateCardViews();
@@ -181,30 +177,31 @@ namespace Gameplay
             }
         }
 
-
-        private void CalculateContentCardCount()
+        private void SetContainerTransforms()
         {
-            var totalCardsCount = 0;
-            switch (_foundationCount)
+            foundationParent.anchoredPosition =
+                _foundationCount <= 4 ? new Vector3(0, -404, 0) : new Vector3(0, -355, 0);
+            pileParent.anchoredPosition =
+                _foundationCount <= 4 ? new Vector3(0, -642, 0) : new Vector3(0, -540, 0);
+            
+            _itemWidth = _foundationCount <= 4 ? 152f : 116f;
+            _itemHeight = _itemWidth / widhtHeightRatio;
+            for (var index = 0; index < piles.Count; index++)
             {
-                case 3:
-                    totalCardsCount = _totalCardsCountHolder[0];
-                    break;
-                case 4:
-                    totalCardsCount = _totalCardsCountHolder[1];
-                    break;
-                case 5:
-                    totalCardsCount = _totalCardsCountHolder[2];
-                    break;
+                piles[index].gameObject.SetActive(index < _foundationCount);
+                var pile = piles[index];
+                var rect = pile.GetComponent<RectTransform>();
+                rect.sizeDelta = new Vector2(_itemWidth, _itemHeight);
             }
 
-            _contentCardCount = totalCardsCount - _categoryCardCount;
-        }
+            for (var index = 0; index < foundations.Count; index++)
+            {
+                foundations[index].gameObject.SetActive(index < _foundationCount);
+                var foundation = foundations[index];
+                var rect = foundation.GetComponent<RectTransform>();
+                rect.sizeDelta = new Vector2(_itemWidth, _itemHeight);
+            }
 
-        private void SetFoundationsAndPiles()
-        {
-            SetItems(foundations, foundationParent);
-            SetItems(piles, pileParent);
             SetDealer();
         }
 
@@ -216,46 +213,5 @@ namespace Gameplay
             dealerRectTransform.pivot = new Vector2(0.5f, 0.5f);
             dealerRectTransform.anchoredPosition = new Vector2(-_itemWidth / 2, -148 - _itemHeight / 2);
         }
-
-        [ContextMenu("Set Foundations And Piles")]
-        private void ContextMenuSetFoundationsAndPiles()
-        {
-            SetFoundationsAndPiles();
-        }
-
-        private void SetItems(List<CardContainer> items, Transform parent)
-        {
-            if (parent == null)
-                return;
-
-            for (var i = 0; i < items.Count; i++)
-            {
-                items[i].gameObject.SetActive(i < _foundationCount);
-            }
-
-            var activeCount = Mathf.Clamp(_foundationCount, 0, items.Count);
-            if (activeCount == 0)
-                return;
-
-            var parentWidth = ((RectTransform)parent).rect.width;
-            var layoutCountForWidth = activeCount == 3 ? 4 : activeCount;
-            var totalSpacing = distanceBetweenFoundations * (layoutCountForWidth - 1);
-            var availableWidth = parentWidth - totalSpacing;
-            _itemWidth = availableWidth / layoutCountForWidth;
-            _itemHeight = _itemWidth / widhtHeightRatio;
-
-            var leftX = -parentWidth * 0.5f + _itemWidth * 0.5f;
-
-            for (var i = 0; i < activeCount; i++)
-            {
-                var rect = items[i].GetComponent<RectTransform>();
-                rect.SetParent(parent, false);
-                rect.sizeDelta = new Vector2(_itemWidth, _itemHeight);
-                var x = leftX + i * (_itemWidth + distanceBetweenFoundations);
-                float y = 0;
-                rect.anchoredPosition = new Vector2(x, y);
-            }
-        }
-
     }
 }
