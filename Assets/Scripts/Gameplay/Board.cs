@@ -44,6 +44,12 @@ namespace Gameplay
         IUIService _uiService;
         private Transform _parent;
 
+        public Dealer Dealer => dealer;
+        public OpenDealer OpenDealer => openDealer;
+        public IReadOnlyList<CardContainer> Foundations => foundations;
+        public IReadOnlyList<CardContainer> Piles => piles;
+        public Transform BoardParent => _parent;
+
 
         public void Setup(LevelData levelData, int currentLevelIndex, Transform parent)
         {
@@ -71,9 +77,9 @@ namespace Gameplay
 
         private void OnMoveCountRequested(MoveCountRequestedSignal _)
         {
-            if(dealer.GetCardsCount() > 0)
+            if (dealer.GetCardsCount() > 0)
                 return;
-            if(openDealer.GetCardsCount() > 0)
+            if (openDealer.GetCardsCount() > 0)
                 return;
             if (piles.Any(pile => pile.GetCardsCount() > 0))
             {
@@ -180,11 +186,12 @@ namespace Gameplay
 
         private void SetContainerTransforms()
         {
+            TrimContainerLists();
             foundationParent.anchoredPosition =
                 _foundationCount <= 4 ? new Vector3(0, -404, 0) : new Vector3(0, -355, 0);
             pileParent.anchoredPosition =
                 _foundationCount <= 4 ? new Vector3(0, -642, 0) : new Vector3(0, -540, 0);
-            
+
             _itemWidth = _foundationCount <= 4 ? 152f : 116f;
             _itemHeight = _itemWidth / widhtHeightRatio;
             for (var index = 0; index < piles.Count; index++)
@@ -204,6 +211,31 @@ namespace Gameplay
             }
 
             SetDealer();
+        }
+
+        void TrimContainerLists()
+        {
+            while (foundations.Count > _foundationCount)
+            {
+                var index = foundations.Count - 1;
+                var container = foundations[index];
+                if (container != null)
+                {
+                    Destroy(container.gameObject);
+                }
+                foundations.RemoveAt(index);
+            }
+
+            while (piles.Count > _foundationCount)
+            {
+                var index = piles.Count - 1;
+                var container = piles[index];
+                if (container != null)
+                {
+                    Destroy(container.gameObject);
+                }
+                piles.RemoveAt(index);
+            }
         }
 
         private void SetDealer()

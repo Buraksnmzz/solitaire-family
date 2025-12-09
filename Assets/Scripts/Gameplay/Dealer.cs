@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Card;
+using DG.Tweening;
 using Gameplay.PlacableRules;
 using UI.Signals;
 using UnityEngine;
@@ -11,8 +12,10 @@ namespace Gameplay
     {
         [SerializeField] private Button dealerButton;
         [SerializeField] private OpenDealer openDealer;
+        [SerializeField] private CanvasGroup dealerHint;
         private List<CardModel> _cardModels;
         private IEventDispatcherService _eventDispatcherService;
+        private Sequence _hintSequence;
 
         public void SetupDeck(List<CardModel> cardModels, List<CardPresenter> cardPresenters, List<CardView> cardViews)
         {
@@ -107,6 +110,23 @@ namespace Gameplay
         {
             base.Setup(placableRule);
             dealerButton.onClick.AddListener(OnDealerButtonClick);
+        }
+
+        public void PlayHintCue(float fadeDuration = 0.2f, float holdDuration = 0.6f)
+        {
+            if (dealerHint == null) return;
+
+            _hintSequence?.Kill();
+            dealerHint.DOKill();
+
+            dealerHint.alpha = 0f;
+            dealerHint.gameObject.SetActive(true);
+
+            _hintSequence = DOTween.Sequence();
+            _hintSequence.Append(dealerHint.DOFade(1f, fadeDuration));
+            _hintSequence.AppendInterval(holdDuration);
+            _hintSequence.Append(dealerHint.DOFade(0f, fadeDuration));
+            _hintSequence.OnComplete(() => { dealerHint.gameObject.SetActive(false); _hintSequence = null; });
         }
 
         private void OnDealerButtonClick()

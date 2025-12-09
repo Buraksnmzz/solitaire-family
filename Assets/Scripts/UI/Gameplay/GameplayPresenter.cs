@@ -2,6 +2,7 @@ using Configuration;
 using Gameplay;
 using Levels;
 using Services;
+using Services.Hint;
 using UI.NoMoreMoves;
 using UI.Signals;
 
@@ -21,6 +22,7 @@ namespace UI.Gameplay
         int _movesCount;
         private IUIService _uiService;
         private IUndoService _undoService;
+        private IHintService _hintService;
 
         protected override void OnInitialize()
         {
@@ -31,6 +33,7 @@ namespace UI.Gameplay
             _eventDispatcherService = ServiceLocator.GetService<IEventDispatcherService>();
             _uiService = ServiceLocator.GetService<IUIService>();
             _undoService = ServiceLocator.GetService<IUndoService>();
+            _hintService = ServiceLocator.GetService<IHintService>();
             _currentLevelIndex = _savedDataService.GetModel<LevelProgressModel>().CurrentLevelIndex;
             _totalColumnCount = _levelGeneratorService.GetLevelColumnCount(_currentLevelIndex);
             _categoryCardCount = _levelGeneratorService.GetLevelCategoryCardCount(_currentLevelIndex);
@@ -42,6 +45,7 @@ namespace UI.Gameplay
             _eventDispatcherService.AddListener<PlacableErrorSignal>(OnPlacableError);
             _eventDispatcherService.AddListener<CardMovementStateChangedSignal>(OnCardMovementStateChanged);
             View.UndoButtonClicked += OnUndoClicked;
+            View.HintButtonClicked += OnHintClicked;
         }
 
         private void OnPlacableError(PlacableErrorSignal placableError)
@@ -66,6 +70,11 @@ namespace UI.Gameplay
             _movesCount++;
             View.SetMovesCount(_movesCount);
             View.SetUndoButtonInteractable(false);
+        }
+
+        private void OnHintClicked()
+        {
+            _hintService.ShowHint(View.Board);
         }
 
         public override void ViewShown()

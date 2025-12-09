@@ -40,6 +40,12 @@ namespace Gameplay
             return isPlacable;
         }
 
+        public bool CanPlaceCardSilently(CardPresenter sourceCardPresenter)
+        {
+            var topCardModel = CardPresenters.LastOrDefault()?.CardModel;
+            return _placableRule.IsPlaceable(topCardModel, sourceCardPresenter.CardModel);
+        }
+
         public virtual void AddCard(CardPresenter cardPresenter)
         {
             var previousTop = GetTopCardPresenter();
@@ -110,6 +116,11 @@ namespace Gameplay
             if (topCardPresenter == null) return;
             if (topCardPresenter.IsFaceUp) return;
             topCardPresenter.SetFaceUp(true, FlipDuration * 2.5f);
+        }
+
+        public IReadOnlyList<CardPresenter> GetAllCards()
+        {
+            return CardPresenters.ToList();
         }
 
         protected virtual void OnCardAdded(CardPresenter previousTop, CardPresenter newTop)

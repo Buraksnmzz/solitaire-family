@@ -12,6 +12,7 @@ public class GameplayView : BaseView
     [SerializeField] private Board board;
     [SerializeField] private Button undoButton;
     [SerializeField] private Button jokerButton;
+    [SerializeField] private Button hintButton;
     [SerializeField] private Image undoButtonIcon;
     [SerializeField] private CanvasGroup errorImage;
     [SerializeField] private TextMeshProUGUI errorText;
@@ -19,13 +20,17 @@ public class GameplayView : BaseView
     private Sequence _sequence;
     private Sequence _inputBlockerSequence;
     public event Action UndoButtonClicked;
+    public event Action HintButtonClicked;
 
     private void Start()
     {
         undoButton.onClick.AddListener(() => UndoButtonClicked?.Invoke());
         jokerButton.onClick.AddListener(() => board.GenerateJokerCard());
+        hintButton.onClick.AddListener(() => HintButtonClicked?.Invoke());
         SetUndoButtonInteractable(false);
     }
+
+    public Board Board => board;
 
     public void SetUndoButtonInteractable(bool interactable)
     {

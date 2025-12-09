@@ -2,6 +2,7 @@ using Configuration;
 using Core.Scripts.Services;
 using Levels;
 using Services;
+using Services.Hint;
 using UnityEngine;
 using Loading;
 using Services.Drag;
@@ -59,6 +60,7 @@ public class Installer : MonoBehaviour
         ServiceLocator.Register<IConfigurationService>(new ConfigurationService(bootData.configurationJson));
         ServiceLocator.Register<IUndoService>(new UndoService());
         ServiceLocator.Register<IDragStateService>(new DragStateService());
+        ServiceLocator.Register<IHintService>(new HintService());
 
         ServiceLocator.GetService<IUIService>().ShowPopup<MainMenuPresenter>();
         // if (PlayerPrefs.GetInt(StringConstants.IsTutorialShown) == 0)
