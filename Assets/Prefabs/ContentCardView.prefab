@@ -649,6 +649,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2789966259120808049, guid: 27464e8aa71334990acb09cd95bfda59, type: 3}
+      propertyPath: m_RaycastPadding.w
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 3996730602744994198, guid: 27464e8aa71334990acb09cd95bfda59, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0.64419234

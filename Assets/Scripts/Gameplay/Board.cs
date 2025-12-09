@@ -36,6 +36,7 @@ namespace Gameplay
         private List<CategoryData> _categoryDatas;
         public CardView contentCardView;
         public CardView categoryCardView;
+        public CardView jokerCardView;
         private IPlacableRule _pileRule;
         private IPlacableRule _foundationRule;
         private IPlacableRule _noPlacableRule;
@@ -212,6 +213,23 @@ namespace Gameplay
             openDealerRectTransform.sizeDelta = new Vector2(_itemWidth * openDealerWidthMultiplier, _itemHeight);
             dealerRectTransform.pivot = new Vector2(0.5f, 0.5f);
             dealerRectTransform.anchoredPosition = new Vector2(-_itemWidth / 2, -148 - _itemHeight / 2);
+        }
+
+        public void GenerateJokerCard()
+        {
+            var cardModel = new CardModel
+            {
+                CategoryType = CardCategoryType.Image,
+                Type = CardType.Joker,
+                IsFaceUp = true
+            };
+            CardModels.Add(cardModel);
+            var cardPresenter = new CardPresenter();
+            CardPresenters.Add(cardPresenter);
+            var cardView = Instantiate(jokerCardView, piles[0].transform);
+            cardViews.Add(cardView);
+            cardPresenter.Initialize(cardModel, cardView, _parent);
+            piles[0].AddCard(cardPresenter);
         }
     }
 }

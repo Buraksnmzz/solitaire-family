@@ -8,7 +8,7 @@ namespace Gameplay
         public override Vector3 GetCardLocalPosition(int index)
         {
             var rectTransform = (RectTransform)transform;
-            var cardYOffset = -rectTransform.rect.width * 0.25f;
+            var cardYOffset = -rectTransform.rect.width * 0.28f;
             var offset = new Vector3(0f, index * cardYOffset, 0f);
             return offset;
         }
@@ -18,6 +18,16 @@ namespace Gameplay
             if (previousTop != null)
             {
                 var previousModel = previousTop.CardModel;
+                if (previousModel.Type == CardType.Joker)
+                {
+                    previousTop.ApplyViewState(CardViewState.JokerBelow);
+                    return;
+                }
+
+                if (previousModel.Type == CardType.Category)
+                {
+                    previousTop.ApplyViewState(CardViewState.CategoryBelowWithTopText);
+                }
                 if (previousModel.CategoryType == Levels.CardCategoryType.Text)
                 {
                     previousTop.ApplyViewState(CardViewState.ContentTextBelowWithUpInfo);
@@ -40,6 +50,12 @@ namespace Gameplay
         void ApplyTopCardState(CardPresenter presenter)
         {
             var model = presenter.CardModel;
+
+            if (model.Type == CardType.Joker)
+            {
+                presenter.ApplyViewState(CardViewState.JokerTop);
+                return;
+            }
 
             if (model.Type == CardType.Category)
             {

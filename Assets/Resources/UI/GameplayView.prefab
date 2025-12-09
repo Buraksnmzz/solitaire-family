@@ -2003,6 +2003,7 @@ MonoBehaviour:
   cardViews: []
   contentCardView: {fileID: 1327752246671556505, guid: 9b71243d475594f7980398a97a7c1f7b, type: 3}
   categoryCardView: {fileID: 3088518322032840439, guid: 0e055766a03934c4da1c60e75c13ce6e, type: 3}
+  jokerCardView: {fileID: 3088518322032840439, guid: 00453a8f0860c4edc825d581bd3bdf10, type: 3}
 --- !u!1 &3400436043820307099
 GameObject:
   m_ObjectHideFlags: 0
@@ -4368,6 +4369,7 @@ MonoBehaviour:
   movesCount: {fileID: 2642544038244180677}
   board: {fileID: 3235187306076201371}
   undoButton: {fileID: 3511356221316189227}
+  jokerButton: {fileID: 6045951598091361246}
   undoButtonIcon: {fileID: 2540333703019120732}
   errorImage: {fileID: 6020840223791496586}
   errorText: {fileID: 1279586330919714968}

@@ -11,6 +11,9 @@ namespace Gameplay.PlacableRules
         {
             if (targetCardModel == null)
                 return true;
+            
+            if(sourceCardModel.Type == CardType.Joker || targetCardModel.Type == CardType.Joker)
+                return true;
 
             if (targetCardModel.Type == CardType.Category)
             {

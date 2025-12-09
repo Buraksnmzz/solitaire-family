@@ -4,13 +4,14 @@ using Levels;
 using Services;
 using UnityEngine;
 using Loading;
+using Services.Drag;
 using UI.MainMenu;
 
 public class Installer : MonoBehaviour
 {
     [Header("UI References")]
     public Transform uiRoot;
-	[SerializeField] private BootData bootData;
+    [SerializeField] private BootData bootData;
 
     void Awake()
     {
@@ -23,7 +24,7 @@ public class Installer : MonoBehaviour
         SetOptimalFrameRate();
         YoogoLabManager.ShowBanner();
     }
-    
+
     private void SetOptimalFrameRate()
     {
         var memoryMb = SystemInfo.systemMemorySize;
@@ -57,12 +58,13 @@ public class Installer : MonoBehaviour
         ServiceLocator.Register<ILevelGeneratorService>(new LevelGeneratorService(bootData.levelsJson));
         ServiceLocator.Register<IConfigurationService>(new ConfigurationService(bootData.configurationJson));
         ServiceLocator.Register<IUndoService>(new UndoService());
-        
+        ServiceLocator.Register<IDragStateService>(new DragStateService());
+
         ServiceLocator.GetService<IUIService>().ShowPopup<MainMenuPresenter>();
         // if (PlayerPrefs.GetInt(StringConstants.IsTutorialShown) == 0)
         // {
         //     ServiceLocator.GetService<IUIService>().ShowPopup<TutorialGamePresenter>();
         // }
     }
-    
+
 }

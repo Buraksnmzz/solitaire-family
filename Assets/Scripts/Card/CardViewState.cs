@@ -14,6 +14,10 @@ namespace Card
         ContentImageTopNoCategoryInfo,
         ContentImageTopWithCategoryInfo,
         ContentImageBelowWithUpInfo,
-        ContentImageBelowWithSideInfo
+        ContentImageBelowWithSideInfo,
+        
+        JokerTop,
+        JokerBelow,
+        CategoryBelowWithTopText
     }
 }

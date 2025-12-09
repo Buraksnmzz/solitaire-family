@@ -49,12 +49,13 @@ namespace Card
             {
                 if (mainText != null) mainText.text = cardModel.CategoryName;
                 if (rightText != null) rightText.text = cardModel.CategoryName;
+                if (upText != null) upText.text = cardModel.CategoryName;
                 if (crownImage != null) crownImage.gameObject.SetActive(true);
                 if (upCategoryName != null) upCategoryName.SetText(cardModel.CategoryName);
                 if (upCategoryInfoImage != null) upCategoryInfoImage.SetActive(false);
                 SetCategoryTopState();
             }
-            else
+            else if(cardModel.Type == CardType.Content)
             {
                 if (cardModel.CategoryType == CardCategoryType.Text)
                 {
@@ -74,6 +75,9 @@ namespace Card
 
                 if (crownImage != null) crownImage.gameObject.SetActive(false);
             }
+            
+            if(cardModel.Type == CardType.Joker)
+                return;
 
             SetRotation(false);
         }
@@ -173,6 +177,9 @@ namespace Card
                 case CardViewState.CategoryBelowWithCategoryInfo:
                     SetCategoryBelowWithCategoryInfoState();
                     break;
+                case CardViewState.CategoryBelowWithTopText:
+                    SetCategoryBelowWithTopTextState();
+                    break;
                 case CardViewState.ContentTextTopNoCategoryInfo:
                     SetContentTextTopNoCategoryInfoState();
                     break;
@@ -197,7 +204,32 @@ namespace Card
                 case CardViewState.ContentImageBelowWithSideInfo:
                     SetContentImageBelowWithSideInfoState();
                     break;
+                case CardViewState.JokerTop:
+                    SetJokerTopState();
+                    break;
+                case CardViewState.JokerBelow:
+                    SetJokerBelowState();
+                    break;
             }
+        }
+
+        private void SetCategoryBelowWithTopTextState()
+        {
+            SetAllInactive();
+            if(upText != null) upText.gameObject.SetActive(true);
+        }
+
+        private void SetJokerBelowState()
+        {
+            SetAllInactive();
+            if(upImage != null) upImage.gameObject.SetActive(true);
+        }
+
+        private void SetJokerTopState()
+        {
+            SetAllInactive();
+            if(mainImage != null) mainImage.gameObject.SetActive(true);
+            if(mainText != null) mainText.gameObject.SetActive(true);
         }
 
         private void SetCategoryTopState()

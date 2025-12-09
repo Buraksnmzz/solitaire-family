@@ -1,5 +1,7 @@
 using DG.Tweening;
 using Gameplay;
+using Services;
+using Services.Drag;
 using UI.Signals;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -19,11 +21,14 @@ namespace Card
         CardPresenter[] _draggedPresenters;
         Vector3[] _startLocalPositions;
         IEventDispatcherService _eventDispatcherService;
+        IDragStateService _dragStateService;
+        bool _isDragging;
         private readonly float _moveDuration = 0.25f;
 
         public void Setup(CardPresenter presenter, Transform parent)
         {
             _eventDispatcherService = ServiceLocator.GetService<IEventDispatcherService>();
+            _dragStateService = ServiceLocator.GetService<IDragStateService>();
             _presenter = presenter;
             _canvasTransform = parent as RectTransform;
             var canvas = GetComponentInParent<Canvas>();
@@ -35,7 +40,12 @@ namespace Card
 
         public void OnBeginDrag(PointerEventData eventData)
         {
+            if (_dragStateService == null) return;
+            if (!_dragStateService.CanStartDrag()) return;
             if (!IsDraggable()) return;
+
+            _dragStateService.StartDrag();
+            _isDragging = true;
 
 
             _startParent = transform.parent;
@@ -62,6 +72,7 @@ namespace Card
 
         public void OnDrag(PointerEventData eventData)
         {
+            if (!_isDragging) return;
             if (!IsDraggable()) return;
             if (_canvasTransform == null || _canvas == null) return;
 
@@ -90,8 +101,12 @@ namespace Card
 
         public void OnEndDrag(PointerEventData eventData)
         {
+            if (!_isDragging) return;
+            if (_dragStateService == null) return;
             if (!IsDraggable())
             {
+                _dragStateService.EndDrag();
+                _isDragging = false;
                 return;
             }
 
@@ -130,8 +145,8 @@ namespace Card
                         }
 
                         var before = currentContainer.GetCardsBefore(_presenter);
-                        var previousCard = before.Count > 0 ? before[before.Count - 1] : null;
-                        var previousCardWasFaceUp = previousCard != null && previousCard.IsFaceUp;
+                        var previousCard = before.Count > 0 ? before[^1] : null;
+                        var previousCardWasFaceUp = previousCard is { IsFaceUp: true };
 
                         currentContainer.RemoveCardsFrom(_presenter);
                         for (var i = 0; i < stack.Length; i++)
@@ -155,6 +170,9 @@ namespace Card
                         {
                             currentContainer.RevealTopCardIfNeeded();
                         }
+
+                        _dragStateService.EndDrag();
+                        _isDragging = false;
                     }
                     return;
                 }
@@ -192,6 +210,8 @@ namespace Card
                             if (remainingAnimations <= 0)
                             {
                                 _eventDispatcherService.Dispatch(new CardMovementStateChangedSignal(false));
+                                _dragStateService.EndDrag();
+                                _isDragging = false;
                             }
                         });
                 }
@@ -199,6 +219,7 @@ namespace Card
 
             _draggedPresenters = null;
             _startLocalPositions = null;
+            _isDragging = false;
         }
 
         bool IsDraggable()

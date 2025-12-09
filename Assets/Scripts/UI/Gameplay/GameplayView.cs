@@ -11,6 +11,7 @@ public class GameplayView : BaseView
     [SerializeField] private TextMeshProUGUI movesCount;
     [SerializeField] private Board board;
     [SerializeField] private Button undoButton;
+    [SerializeField] private Button jokerButton;
     [SerializeField] private Image undoButtonIcon;
     [SerializeField] private CanvasGroup errorImage;
     [SerializeField] private TextMeshProUGUI errorText;
@@ -22,6 +23,7 @@ public class GameplayView : BaseView
     private void Start()
     {
         undoButton.onClick.AddListener(() => UndoButtonClicked?.Invoke());
+        jokerButton.onClick.AddListener(() => board.GenerateJokerCard());
         SetUndoButtonInteractable(false);
     }
 
