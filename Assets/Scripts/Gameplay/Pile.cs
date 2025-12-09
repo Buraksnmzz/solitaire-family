@@ -13,6 +13,25 @@ namespace Gameplay
             return offset;
         }
 
+        public bool CanDrag(CardPresenter presenter)
+        {
+            var index = CardPresenters.IndexOf(presenter);
+            if (index == -1) return false;
+            if (!presenter.IsFaceUp) return false;
+
+            var jokerIndex = CardPresenters.FindIndex(x => x.CardModel.Type == CardType.Joker);
+            if (jokerIndex == -1) return true;
+            if (index < jokerIndex) return false;
+
+            var hasCardAfterJoker = CardPresenters.Count > jokerIndex + 1;
+            if (hasCardAfterJoker)
+            {
+                return index > jokerIndex;
+            }
+
+            return index == jokerIndex;
+        }
+
         protected override void OnCardAdded(CardPresenter previousTop, CardPresenter newTop)
         {
             if (previousTop != null)

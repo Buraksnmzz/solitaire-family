@@ -17,8 +17,8 @@ namespace Gameplay
         public void SetupDeck(List<CardModel> cardModels, List<CardPresenter> cardPresenters, List<CardView> cardViews)
         {
             _eventDispatcherService = ServiceLocator.GetService<IEventDispatcherService>();
-            _cardModels = cardModels;
-            CardPresenters = cardPresenters;
+            _cardModels = new List<CardModel>(cardModels);
+            CardPresenters = new List<CardPresenter>(cardPresenters);
 
             for (var i = 0; i < CardPresenters.Count && i < cardViews.Count; i++)
             {

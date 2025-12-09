@@ -242,7 +242,8 @@ namespace Card
 
             if (containerType == typeof(Pile))
             {
-                return _presenter.IsFaceUp;
+                var pile = container as Pile;
+                return pile != null && pile.CanDrag(_presenter);
             }
 
             return false;
