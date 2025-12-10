@@ -121,5 +121,48 @@ namespace Gameplay
         {
             return CardPresenters;
         }
+
+        public override CardPresenter RemoveCard(CardPresenter cardPresenter)
+        {
+            var removed = base.RemoveCard(cardPresenter);
+            if (removed == null) return null;
+
+            // reposition visible window (mirror AddCard)
+            if (CardPresenters.Count > 0)
+            {
+                var startIndex = Mathf.Max(0, CardPresenters.Count - 3);
+                for (var i = startIndex; i < CardPresenters.Count; i++)
+                {
+                    var relativeIndex = i - startIndex;
+                    var targetLocalPosition = GetCardLocalPosition(relativeIndex);
+                    CardPresenters[i].MoveToLocalPosition(targetLocalPosition, MoveDuration, 0, Ease.OutQuad, () => EventDispatcherService.Dispatch(new CardMovementStateChangedSignal(false)));
+                }
+
+                var top = GetTopCardPresenter();
+                if (top != null && top.CardView != null)
+                    top.CardView.transform.SetAsLastSibling();
+            }
+
+            return removed;
+        }
+
+        public override void RemoveCardsFrom(CardPresenter startPresenter)
+        {
+            base.RemoveCardsFrom(startPresenter);
+
+            if (CardPresenters.Count == 0) return;
+
+            var startIndex = Mathf.Max(0, CardPresenters.Count - 3);
+            for (var i = startIndex; i < CardPresenters.Count; i++)
+            {
+                var relativeIndex = i - startIndex;
+                var targetLocalPosition = GetCardLocalPosition(relativeIndex);
+                CardPresenters[i].MoveToLocalPosition(targetLocalPosition, MoveDuration, 0, Ease.OutQuad, () => EventDispatcherService.Dispatch(new CardMovementStateChangedSignal(false)));
+            }
+
+            var top = GetTopCardPresenter();
+            if (top != null && top.CardView != null)
+                top.CardView.transform.SetAsLastSibling();
+        }
     }
 }

@@ -25,6 +25,7 @@ namespace Gameplay
         }
 
         public int GetCardsCount() => CardPresenters.Count;
+        public int GetCardsCountWithoutJoker() => CardPresenters.Count(p => p.CardModel == null || p.CardModel.Type != CardType.Joker);
 
         public CardPresenter GetTopCard() => CardPresenters.LastOrDefault();
 

@@ -83,12 +83,12 @@ namespace Gameplay
                 return;
             if (openDealer.GetCardsCount() > 0)
                 return;
-            if (piles.Any(pile => pile.GetCardsCount() > 0))
+            if (piles.Any(pile => pile.GetCardsCountWithoutJoker() > 0))
             {
                 return;
             }
 
-            if (foundations.Any(foundation => foundation.GetCardsCount() > 0))
+            if (foundations.Any(foundation => foundation.GetCardsCountWithoutJoker() > 0))
             {
                 return;
             }

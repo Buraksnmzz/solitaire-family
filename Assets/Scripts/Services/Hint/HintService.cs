@@ -191,12 +191,91 @@ namespace Services.Hint
             var dealer = board.Dealer;
             var openDealer = board.OpenDealer;
             if (dealer == null || openDealer == null) return;
-            if (dealer.GetCardsCount() == 0) return;
+            // If neither dealer nor openDealer have any card that can be placed anywhere,
+            // then showing a dealer hint (reveal cue) is pointless — don't add reveal movement.
+            // We consider all cards in dealer and openDealer as potential candidates (treat dealer
+            // cards as if they were face-up) and check silently whether any of them can be placed.
 
-            var presenter = dealer.GetTopCardPresenter();
-            if (presenter == null) return;
+            var dealerCards = dealer.GetAllCards();
+            var openCards = openDealer.GetAllCards();
 
-            var stack = new List<CardPresenter> { presenter };
+            // If there are no cards anywhere, nothing to do
+            if ((dealerCards == null || dealerCards.Count == 0) && (openCards == null || openCards.Count == 0))
+                return;
+
+            bool anyPlacable = false;
+
+            // Helper to check a presenter against all possible targets
+            bool CheckPresenterPlacable(CardPresenter presenter)
+            {
+                if (presenter == null) return false;
+
+                // Check foundations
+                foreach (var foundation in board.Foundations)
+                {
+                    if (foundation == null) continue;
+                    if (foundation.CanPlaceCardSilently(presenter)) return true;
+                }
+
+                // Check piles (exclude openDealer container itself)
+                foreach (var pileContainer in board.Piles)
+                {
+                    if (pileContainer == null) continue;
+                    if (pileContainer == openDealer) continue;
+                    if (pileContainer.CanPlaceCardSilently(presenter)) return true;
+                }
+
+                return false;
+            }
+
+            // Check dealer cards first (treating them as if they could become face-up)
+            if (dealerCards != null)
+            {
+                foreach (var p in dealerCards)
+                {
+                    if (CheckPresenterPlacable(p))
+                    {
+                        anyPlacable = true;
+                        break;
+                    }
+                }
+            }
+
+            // If none found yet, check openDealer cards
+            if (!anyPlacable && openCards != null)
+            {
+                foreach (var p in openCards)
+                {
+                    if (CheckPresenterPlacable(p))
+                    {
+                        anyPlacable = true;
+                        break;
+                    }
+                }
+            }
+
+            if (!anyPlacable)
+            {
+                // No card in dealer or openDealer can be placed anywhere — no reveal hint needed
+                return;
+            }
+
+            // At least one card could be placed after dealing — add a reveal movement so the
+            // dealer hint cue will be shown. If dealer currently has cards, show cue for dealer;
+            // otherwise, use an openDealer presenter as the representative stack.
+            CardPresenter presenterToUse = null;
+            if (dealer.GetCardsCount() > 0)
+            {
+                presenterToUse = dealer.GetTopCardPresenter();
+            }
+            else
+            {
+                presenterToUse = openDealer.GetTopCardPresenter();
+            }
+
+            if (presenterToUse == null) return;
+
+            var stack = new List<CardPresenter> { presenterToUse };
             movements.Add(CreateRevealMovement(dealer, openDealer, stack));
         }
 

@@ -4,6 +4,7 @@ using Levels;
 using Services;
 using Services.Hint;
 using UI.NoMoreMoves;
+using UI.OutOfMoves;
 using UI.Signals;
 
 namespace UI.Gameplay
@@ -62,6 +63,11 @@ namespace UI.Gameplay
         private void OnCardMovementStateChanged(CardMovementStateChangedSignal signal)
         {
             View.SetInputBlocked(signal.IsMoving);
+            if (!signal.IsMoving)
+            {
+                if (_hintService.GetPlayableMovements(View.Board).Count == 0)
+                    _uiService.ShowPopup<OutOfMovesPresenter>();
+            }
         }
 
         private void OnUndoClicked()
