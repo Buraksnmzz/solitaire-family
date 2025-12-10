@@ -24,6 +24,7 @@ namespace UI.Gameplay
         private IUIService _uiService;
         private IUndoService _undoService;
         private IHintService _hintService;
+        private ISnapshotService _snapshotService;
 
         protected override void OnInitialize()
         {
@@ -35,6 +36,7 @@ namespace UI.Gameplay
             _uiService = ServiceLocator.GetService<IUIService>();
             _undoService = ServiceLocator.GetService<IUndoService>();
             _hintService = ServiceLocator.GetService<IHintService>();
+            _snapshotService = ServiceLocator.GetService<ISnapshotService>();
             _currentLevelIndex = _savedDataService.GetModel<LevelProgressModel>().CurrentLevelIndex;
             _totalColumnCount = _levelGeneratorService.GetLevelColumnCount(_currentLevelIndex);
             _categoryCardCount = _levelGeneratorService.GetLevelCategoryCardCount(_currentLevelIndex);
@@ -47,6 +49,15 @@ namespace UI.Gameplay
             _eventDispatcherService.AddListener<CardMovementStateChangedSignal>(OnCardMovementStateChanged);
             View.UndoButtonClicked += OnUndoClicked;
             View.HintButtonClicked += OnHintClicked;
+            View.ApplicationPaused += OnApplicationPaused;
+        }
+
+        private void OnApplicationPaused(bool isPaused)
+        {
+            if (!isPaused)
+                return;
+
+            SaveSnapshot();
         }
 
         private void OnPlacableError(PlacableErrorSignal placableError)
@@ -86,8 +97,16 @@ namespace UI.Gameplay
         public override void ViewShown()
         {
             base.ViewShown();
-            View.SetupBoard(_levelData, _currentLevelIndex);
-            View.SetMovesCount(_movesCount);
+            if (_snapshotService.HasSnapShot())
+            {
+                var snapshot = _snapshotService.LoadSnapshot();
+                if (TryResumeFromSnapshot(snapshot))
+                    return;
+
+                _snapshotService.ClearSnapshot();
+            }
+
+            StartNewLevel();
         }
 
         void OnMoveCountRequested(MoveCountRequestedSignal signal)
@@ -97,6 +116,53 @@ namespace UI.Gameplay
             View.SetMovesCount(_movesCount);
             if (_movesCount == 0)
                 _uiService.ShowPopup<NoMoreMovesPresenter>();
+        }
+
+        void StartNewLevel()
+        {
+            _movesCount = _totalGoalCount;
+            View.SetupBoard(_levelData, _currentLevelIndex);
+            View.SetMovesCount(_movesCount);
+            View.SetUndoButtonInteractable(false);
+        }
+
+        bool TryResumeFromSnapshot(SnapShotModel snapshot)
+        {
+            if (snapshot == null)
+                return false;
+
+            if (snapshot.Cards == null || snapshot.Cards.Count == 0)
+                return false;
+
+            if (snapshot.LevelIndex != _currentLevelIndex)
+            {
+                _currentLevelIndex = snapshot.LevelIndex;
+                _totalColumnCount = _levelGeneratorService.GetLevelColumnCount(_currentLevelIndex);
+                _categoryCardCount = _levelGeneratorService.GetLevelCategoryCardCount(_currentLevelIndex);
+                _totalGoalCount = _configurationService.GetLevelGoal(_currentLevelIndex, _totalColumnCount);
+                _levelData = _levelGeneratorService.GetLevelData(_currentLevelIndex);
+            }
+
+            _movesCount = snapshot.MovesCount;
+            View.SetupBoard(_levelData, _currentLevelIndex, snapshot);
+            View.SetMovesCount(_movesCount);
+            View.SetUndoButtonInteractable(false);
+            return true;
+        }
+
+        void SaveSnapshot()
+        {
+            if (View == null || View.Board == null)
+                return;
+
+            var snapshot = View.Board.CreateSnapshot(_movesCount, _currentLevelIndex);
+            if (snapshot == null)
+            {
+                _snapshotService.ClearSnapshot();
+                return;
+            }
+
+            _snapshotService.SaveSnapshot(snapshot);
         }
     }
 }

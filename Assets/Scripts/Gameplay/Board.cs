@@ -53,7 +53,7 @@ namespace Gameplay
         public Transform BoardParent => _parent;
 
 
-        public void Setup(LevelData levelData, int currentLevelIndex, Transform parent)
+        public void Setup(LevelData levelData, int currentLevelIndex, Transform parent, SnapShotModel snapshot = null)
         {
             _parent = parent;
             _eventDispatcher = ServiceLocator.GetService<IEventDispatcherService>();
@@ -65,6 +65,8 @@ namespace Gameplay
             _categoryDatas = levelData.categories;
             SetContainerTransforms();
             InitializeContainers();
+            if (snapshot != null && TryRestoreSnapshot(snapshot, currentLevelIndex))
+                return;
             GenerateCardModelsAndPresenters();
             InstantiateCardViews();
             dealer.SetupDeck(CardModels, CardPresenters, cardViews);
@@ -247,7 +249,7 @@ namespace Gameplay
             openDealerRectTransform.sizeDelta = new Vector2(_itemWidth * openDealerWidthMultiplier, _itemHeight);
             dealerRectTransform.pivot = new Vector2(0.5f, 0.5f);
             dealerRectTransform.anchoredPosition = new Vector2(-_itemWidth / 2, -148 - _itemHeight / 2);
-            
+
             dealerHint.sizeDelta = dealerRectTransform.sizeDelta;
             dealerHint.anchoredPosition = dealerRectTransform.anchoredPosition;
             dealerEmptyImage.sizeDelta = dealerRectTransform.sizeDelta;
@@ -269,6 +271,201 @@ namespace Gameplay
             cardViews.Add(cardView);
             cardPresenter.Initialize(cardModel, cardView, _parent);
             piles[0].AddCard(cardPresenter);
+        }
+
+        public SnapShotModel CreateSnapshot(int movesCount, int levelIndex)
+        {
+            var snapshot = new SnapShotModel
+            {
+                LevelIndex = levelIndex,
+                MovesCount = movesCount
+            };
+
+            if (!AddContainerSnapshots(dealer, SnapshotContainerType.Dealer, 0, snapshot))
+                return null;
+            if (!AddContainerSnapshots(openDealer, SnapshotContainerType.OpenDealer, 0, snapshot))
+                return null;
+            if (!AddContainerSnapshots(foundations, SnapshotContainerType.Foundation, snapshot))
+                return null;
+            if (!AddContainerSnapshots(piles, SnapshotContainerType.Pile, snapshot))
+                return null;
+
+            if (snapshot.Cards.Count != CardModels.Count)
+                return null;
+
+            return snapshot;
+        }
+
+        bool AddContainerSnapshots(CardContainer container, SnapshotContainerType containerType, int containerIndex, SnapShotModel snapshot)
+        {
+            if (container == null)
+                return false;
+
+            var cards = container.GetAllCards();
+            foreach (var presenter in cards)
+            {
+                if (presenter == null)
+                    return false;
+
+                var model = presenter.CardModel;
+                if (model == null)
+                    return false;
+
+                snapshot.Cards.Add(new CardSnapshot
+                {
+                    Type = model.Type,
+                    CategoryType = model.CategoryType,
+                    CategoryName = model.CategoryName,
+                    ContentName = model.ContentName,
+                    ContentCount = model.ContentCount,
+                    CurrentContentCount = model.CurrentContentCount,
+                    IsFaceUp = model.IsFaceUp,
+                    ContainerType = containerType,
+                    ContainerIndex = containerIndex
+                });
+            }
+
+            return true;
+        }
+
+        bool AddContainerSnapshots(List<CardContainer> containers, SnapshotContainerType containerType, SnapShotModel snapshot)
+        {
+            var count = Mathf.Min(_foundationCount, containers.Count);
+            for (var index = 0; index < count; index++)
+            {
+                var container = containers[index];
+                if (!AddContainerSnapshots(container, containerType, index, snapshot))
+                    return false;
+            }
+
+            return true;
+        }
+
+        bool TryRestoreSnapshot(SnapShotModel snapshot, int currentLevelIndex)
+        {
+            if (snapshot == null)
+                return false;
+
+            if (snapshot.LevelIndex != currentLevelIndex)
+                return false;
+
+            if (snapshot.Cards == null || snapshot.Cards.Count == 0)
+                return false;
+
+            if (!AreContainerIndicesValid(snapshot.Cards))
+                return false;
+
+            var tempModels = new List<CardModel>();
+            var tempPresenters = new List<CardPresenter>();
+            var tempViews = new List<CardView>();
+
+            foreach (var cardData in snapshot.Cards)
+            {
+                var cardModel = new CardModel
+                {
+                    Type = cardData.Type,
+                    CategoryType = cardData.CategoryType,
+                    CategoryName = cardData.CategoryName,
+                    ContentName = cardData.ContentName,
+                    ContentCount = cardData.ContentCount,
+                    CurrentContentCount = cardData.CurrentContentCount,
+                    IsFaceUp = cardData.IsFaceUp
+                };
+
+                var prefab = GetPrefab(cardModel);
+                if (prefab == null)
+                {
+                    DestroyCardViews(tempViews);
+                    return false;
+                }
+
+                var cardView = Instantiate(prefab, dealerRectTransform);
+                var presenter = new CardPresenter();
+                presenter.Initialize(cardModel, cardView, _parent);
+
+                tempModels.Add(cardModel);
+                tempPresenters.Add(presenter);
+                tempViews.Add(cardView);
+            }
+
+            for (var index = 0; index < snapshot.Cards.Count; index++)
+            {
+                var cardData = snapshot.Cards[index];
+                var presenter = tempPresenters[index];
+                var container = ResolveContainer(cardData.ContainerType, cardData.ContainerIndex);
+                if (container == null)
+                {
+                    DestroyCardViews(tempViews);
+                    return false;
+                }
+
+                container.AddCard(presenter);
+                presenter.SetFaceUp(cardData.IsFaceUp, 0);
+            }
+
+            CardModels.Clear();
+            CardModels.AddRange(tempModels);
+            CardPresenters.Clear();
+            CardPresenters.AddRange(tempPresenters);
+            cardViews.Clear();
+            cardViews.AddRange(tempViews);
+
+            return true;
+        }
+
+        bool AreContainerIndicesValid(IEnumerable<CardSnapshot> cards)
+        {
+            foreach (var card in cards)
+            {
+                if (card.ContainerType == SnapshotContainerType.Foundation || card.ContainerType == SnapshotContainerType.Pile)
+                {
+                    if (card.ContainerIndex < 0 || card.ContainerIndex >= _foundationCount)
+                        return false;
+                }
+            }
+
+            return true;
+        }
+
+        CardContainer ResolveContainer(SnapshotContainerType containerType, int containerIndex)
+        {
+            switch (containerType)
+            {
+                case SnapshotContainerType.Dealer:
+                    return dealer;
+                case SnapshotContainerType.OpenDealer:
+                    return openDealer;
+                case SnapshotContainerType.Foundation:
+                    return containerIndex >= 0 && containerIndex < foundations.Count ? foundations[containerIndex] : null;
+                case SnapshotContainerType.Pile:
+                    return containerIndex >= 0 && containerIndex < piles.Count ? piles[containerIndex] : null;
+                default:
+                    return null;
+            }
+        }
+
+        CardView GetPrefab(CardModel cardModel)
+        {
+            switch (cardModel.Type)
+            {
+                case CardType.Content:
+                    return contentCardView;
+                case CardType.Category:
+                    return categoryCardView;
+                case CardType.Joker:
+                    return jokerCardView;
+                default:
+                    return null;
+            }
+        }
+
+        void DestroyCardViews(IEnumerable<CardView> views)
+        {
+            foreach (var view in views)
+            {
+                if (view != null)
+                    Destroy(view.gameObject);
+            }
         }
     }
 }

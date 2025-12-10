@@ -21,6 +21,7 @@ public class GameplayView : BaseView
     private Sequence _inputBlockerSequence;
     public event Action UndoButtonClicked;
     public event Action HintButtonClicked;
+    public event Action<bool> ApplicationPaused;
 
     private void Start()
     {
@@ -28,6 +29,11 @@ public class GameplayView : BaseView
         jokerButton.onClick.AddListener(() => board.GenerateJokerCard());
         hintButton.onClick.AddListener(() => HintButtonClicked?.Invoke());
         SetUndoButtonInteractable(false);
+    }
+
+    private void OnApplicationPause(bool pauseStatus)
+    {
+        ApplicationPaused?.Invoke(pauseStatus);
     }
 
     public Board Board => board;
@@ -43,9 +49,9 @@ public class GameplayView : BaseView
         movesCount.SetText(totalMovesCount.ToString());
     }
 
-    public void SetupBoard(LevelData levelData, int currentLevelIndex)
+    public void SetupBoard(LevelData levelData, int currentLevelIndex, SnapShotModel snapshot = null)
     {
-        board.Setup(levelData, currentLevelIndex, panel);
+        board.Setup(levelData, currentLevelIndex, panel, snapshot);
     }
 
     public void SetInputBlocked(bool blocked)
