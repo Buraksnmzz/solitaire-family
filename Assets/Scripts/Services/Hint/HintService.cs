@@ -82,14 +82,14 @@ namespace Services.Hint
                 movement.Priority = HintPriority.ColumnStandard;
                 return movement;
             }
-            
+
             movement = movements.FirstOrDefault(x => x.FromOpenDealer && x.ToFoundation && x.IsStandardMove);
             if (movement != null)
             {
                 movement.Priority = HintPriority.FromOpenDealer;
                 return movement;
             }
-            
+
             movement = movements.FirstOrDefault(x => x.FromOpenDealer);
             if (movement != null)
             {
@@ -401,6 +401,21 @@ namespace Services.Hint
 
             var baseCount = movement.ToContainer != null ? movement.ToContainer.GetCardsCount() : 0;
 
+            var targetPositions = new List<Vector3>();
+            for (var i = 0; i < movement.Presenters.Count; i++)
+            {
+                var targetIndex = baseCount + i;
+                var targetPosition = movement.ToContainer != null
+                    ? GetTargetWorldPosition(movement.ToContainer, targetIndex)
+                    : movement.Presenters[i].CardView != null
+                        ? movement.Presenters[i].CardView.transform.position
+                        : Vector3.zero;
+                targetPositions.Add(targetPosition);
+            }
+
+            var copyData = new List<(RectTransform rect, CanvasGroup group)>();
+            Vector3? firstBasePosition = null;
+
             for (var i = 0; i < movement.Presenters.Count; i++)
             {
                 var presenter = movement.Presenters[i];
@@ -416,36 +431,48 @@ namespace Services.Hint
                     continue;
                 }
 
-                copyRect.position = viewRect.position;
+                if (firstBasePosition == null)
+                {
+                    firstBasePosition = viewRect.position;
+                }
+
+                var offset = targetPositions[i] - targetPositions[0];
+                copyRect.position = firstBasePosition.Value + offset;
                 copyRect.rotation = viewRect.rotation;
                 copy.transform.SetParent(board.BoardParent);
 
                 var dragger = copy.GetComponent<CardDragger>();
                 if (dragger != null) dragger.enabled = false;
-                if (copy.GetComponent<CanvasGroup>() == null)
-                    copy.gameObject.AddComponent<CanvasGroup>();
-
                 var canvasGroup = copy.GetComponent<CanvasGroup>();
+                if (canvasGroup == null)
+                {
+                    canvasGroup = copy.gameObject.AddComponent<CanvasGroup>();
+                }
+
                 canvasGroup.alpha = 1f;
 
                 _activeCopies.Add(copy.gameObject);
-
-                var targetIndex = baseCount + i;
-                var targetPosition = movement.ToContainer != null
-                    ? GetTargetWorldPosition(movement.ToContainer, targetIndex)
-                    : copyRect.position;
-
-                _sequence ??= DOTween.Sequence();
-                _sequence.Append(copyRect.DOMove(targetPosition, 0.4f).SetEase(Ease.OutQuad));
-                _sequence.Append(canvasGroup.DOFade(0f, 0.3f).SetDelay(0.3f));
+                copyData.Add((copyRect, canvasGroup));
             }
 
-            if (_sequence == null) return;
+            if (copyData.Count == 0) return;
 
-            _sequence.OnComplete(() =>
+            _sequence = DOTween.Sequence();
+
+            for (var i = 0; i < copyData.Count; i++)
             {
-                CleanupAnimation();
-            });
+                var moveTarget = i < targetPositions.Count ? targetPositions[i] : copyData[i].rect.position;
+                _sequence.Join(copyData[i].rect.DOMove(moveTarget, 0.4f).SetEase(Ease.OutQuad));
+            }
+
+            var fadeSequence = DOTween.Sequence();
+            for (var i = 0; i < copyData.Count; i++)
+            {
+                fadeSequence.Join(copyData[i].group.DOFade(0f, 0.25f).SetEase(Ease.Linear));
+            }
+
+            _sequence.Append(fadeSequence);
+            _sequence.OnComplete(CleanupAnimation);
         }
 
         private Vector3 GetTargetWorldPosition(CardContainer container, int targetIndex)
