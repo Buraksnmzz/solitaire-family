@@ -82,6 +82,20 @@ namespace Services.Hint
                 movement.Priority = HintPriority.ColumnStandard;
                 return movement;
             }
+            
+            movement = movements.FirstOrDefault(x => x.FromOpenDealer && x.ToFoundation && x.IsStandardMove);
+            if (movement != null)
+            {
+                movement.Priority = HintPriority.FromOpenDealer;
+                return movement;
+            }
+            
+            movement = movements.FirstOrDefault(x => x.FromOpenDealer);
+            if (movement != null)
+            {
+                movement.Priority = HintPriority.FromOpenDealer;
+                return movement;
+            }
 
             movement = movements.FirstOrDefault(x => x.IsReveal);
             if (movement != null)
@@ -90,8 +104,6 @@ namespace Services.Hint
                 return movement;
             }
             return movements.FirstOrDefault();
-
-            return null;
         }
 
         public void ShowHint(Board board)

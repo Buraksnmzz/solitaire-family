@@ -13,7 +13,8 @@ namespace Services.Hint
         CategoryOnFullGroup = 5,
         MergeGroups = 6,
         ColumnStandard = 7,
-        RevealDealer = 8
+        FromOpenDealer = 8,
+        RevealDealer = 9
     }
 
     public class HintMovement
