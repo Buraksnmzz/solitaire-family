@@ -28,12 +28,14 @@ namespace Gameplay
             {
                 cardPresenter.CardView.transform.SetAsLastSibling();
                 cardPresenter.MoveToLocalPosition(targetLocalPosition, MoveDuration, 0, Ease.OutQuad, () => EventDispatcherService.Dispatch(new CardMovementStateChangedSignal(false)));
-                ClearPresentersIfCompleted(out var presentersToRemove);
-                DOVirtual.DelayedCall(MoveDuration, () => CheckAndHandleCompletion(presentersToRemove));
+                var isCompleted = TryCollectCompletedPresenters(out var presentersToRemove);
+                if (isCompleted)
+                {
+                    DOVirtual.DelayedCall(MoveDuration, () => CheckAndHandleCompletion(presentersToRemove));
+                }
             }
 
             OnCardAdded(null, cardPresenter);
-
             UpdateLastCardContentCountText();
             TryUpdateCategoryAndTopContentStatesForStackCase();
         }
@@ -116,7 +118,7 @@ namespace Gameplay
 
         private void CheckAndHandleCompletion(List<CardPresenter> presentersToRemove)
         {
-            //if (ClearPresentersIfCompleted(out var presentersToRemove)) return;
+            if (presentersToRemove == null || presentersToRemove.Count == 0) return;
 
             foreach (var presenter in presentersToRemove)
             {
@@ -128,38 +130,24 @@ namespace Gameplay
             }
         }
 
-        private bool ClearPresentersIfCompleted(out List<CardPresenter> presentersToRemove)
+        private bool TryCollectCompletedPresenters(out List<CardPresenter> presentersToRemove)
         {
-            if (CardPresenters.Count == 0)
-            {
-                presentersToRemove = null;
-                return true;
-            }
+            presentersToRemove = null;
+
+            if (CardPresenters.Count == 0) return false;
 
             var categoryCard = CardPresenters[0].CardModel;
-            if (categoryCard.Type != CardType.Category)
-            {
-                presentersToRemove = null;
-                return true;
-            }
+            //if (categoryCard.Type != CardType.Category) return false;
 
             var contentTotal = categoryCard.ContentCount;
-            if (contentTotal <= 0)
-            {
-                presentersToRemove = null;
-                return true;
-            }
+            if (contentTotal <= 0) return false;
 
             var currentCount = CardPresenters.Count - 1;
-            if (currentCount < contentTotal)
-            {
-                presentersToRemove = null;
-                return true;
-            }
+            if (currentCount < contentTotal) return false;
 
             presentersToRemove = new List<CardPresenter>(CardPresenters);
             CardPresenters.Clear();
-            return false;
+            return true;
         }
 
         private void UpdateLastCardContentCountText()

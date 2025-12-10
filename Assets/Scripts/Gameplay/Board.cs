@@ -22,6 +22,8 @@ namespace Gameplay
         public Transform dealerCardsHolder;
         [FormerlySerializedAs("openDealer")] public RectTransform openDealerRectTransform;
         [SerializeField] private Transform goalCounterTransform;
+        [SerializeField] private RectTransform dealerHint;
+        [SerializeField] private RectTransform dealerEmptyImage;
         private int _foundationCount;
         public float distanceBetweenFoundations;
         public float widhtHeightRatio = 0.731f;
@@ -245,6 +247,11 @@ namespace Gameplay
             openDealerRectTransform.sizeDelta = new Vector2(_itemWidth * openDealerWidthMultiplier, _itemHeight);
             dealerRectTransform.pivot = new Vector2(0.5f, 0.5f);
             dealerRectTransform.anchoredPosition = new Vector2(-_itemWidth / 2, -148 - _itemHeight / 2);
+            
+            dealerHint.sizeDelta = dealerRectTransform.sizeDelta;
+            dealerHint.anchoredPosition = dealerRectTransform.anchoredPosition;
+            dealerEmptyImage.sizeDelta = dealerRectTransform.sizeDelta;
+            dealerEmptyImage.anchoredPosition = dealerRectTransform.anchoredPosition;
         }
 
         public void GenerateJokerCard()

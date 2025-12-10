@@ -45,7 +45,10 @@ namespace Services.Hint
                 return movement;
             }
 
-            movement = movements.FirstOrDefault(x => x.ToFoundation && x.IsStandardMove);
+            movement = movements
+                .Where(x => x.ToFoundation && x.IsStandardMove)
+                .OrderByDescending(x => x.Presenters?.Count ?? 0)
+                .FirstOrDefault();
             if (movement != null)
             {
                 movement.Priority = HintPriority.FoundationStandard;
@@ -415,6 +418,7 @@ namespace Services.Hint
 
             var copyData = new List<(RectTransform rect, CanvasGroup group)>();
             Vector3? firstBasePosition = null;
+            var sourceOffsets = new List<Vector3>();
 
             for (var i = 0; i < movement.Presenters.Count; i++)
             {
@@ -436,8 +440,10 @@ namespace Services.Hint
                     firstBasePosition = viewRect.position;
                 }
 
-                var offset = targetPositions[i] - targetPositions[0];
-                copyRect.position = firstBasePosition.Value + offset;
+                var sourceOffset = viewRect.position - firstBasePosition.Value;
+                sourceOffsets.Add(sourceOffset);
+
+                copyRect.position = firstBasePosition.Value + sourceOffset;
                 copyRect.rotation = viewRect.rotation;
                 copy.transform.SetParent(board.BoardParent);
 
@@ -461,7 +467,9 @@ namespace Services.Hint
 
             for (var i = 0; i < copyData.Count; i++)
             {
-                var moveTarget = i < targetPositions.Count ? targetPositions[i] : copyData[i].rect.position;
+                var rootTarget = i < targetPositions.Count ? targetPositions[0] : copyData[i].rect.position;
+                var offset = i < sourceOffsets.Count ? sourceOffsets[i] : Vector3.zero;
+                var moveTarget = rootTarget + offset;
                 _sequence.Join(copyData[i].rect.DOMove(moveTarget, 0.4f).SetEase(Ease.OutQuad));
             }
 
