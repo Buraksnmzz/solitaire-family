@@ -19,6 +19,9 @@ namespace Configuration
 		{
 			[JsonProperty("layoutId")]
 			public int LayoutId { get; set; }
+			
+			[JsonProperty("backgroundImageId")]
+			public int BackgroundImageId { get; set; }
 
 			[JsonProperty("goalConfig")]
 			public GoalConfigModel GoalConfig { get; set; }
@@ -95,12 +98,13 @@ namespace Configuration
 		{
 			var savedDataService = ServiceLocator.GetService<ISavedDataService>();
 			var gameConfigModel = savedDataService.LoadData<GameConfigModel>();
-			gameConfigModel.EarnedCoinAtLevelEnd = root.EarnedCoinAtLevelEnd;
-			gameConfigModel.EarnedCoinPerMoveLeft = root.EarnedCoinPerMoveLeft;
-			gameConfigModel.HintCost = root.HintCost;
-			gameConfigModel.UndoCost = root.UndoCost;
-			gameConfigModel.JokerCost = root.JokerCost;
-			gameConfigModel.Layout = root.LayoutId;
+			gameConfigModel.earnedCoinAtLevelEnd = root.EarnedCoinAtLevelEnd;
+			gameConfigModel.earnedCoinPerMoveLeft = root.EarnedCoinPerMoveLeft;
+			gameConfigModel.hintCost = root.HintCost;
+			gameConfigModel.undoCost = root.UndoCost;
+			gameConfigModel.jokerCost = root.JokerCost;
+			gameConfigModel.layout = root.LayoutId;
+			gameConfigModel.backgroundImageId = root.BackgroundImageId;
 			savedDataService.SaveData(gameConfigModel);
 		}
 

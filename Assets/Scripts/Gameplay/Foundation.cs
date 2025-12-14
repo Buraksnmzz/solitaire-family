@@ -30,9 +30,7 @@ namespace Gameplay
             if (cardPresenter.CardView != null)
             {
                 cardPresenter.CardView.transform.SetAsLastSibling();
-                cardPresenter.MoveToLocalPosition(targetLocalPosition, MoveDuration, 0, Ease.OutQuad,
-                    () => EventDispatcherService.Dispatch(new CardMovementStateChangedSignal(false)));
-                UpdateLastCardContentCountText();
+                cardPresenter.MoveToLocalPosition(targetLocalPosition, MoveDuration, 0, Ease.OutQuad, () => EventDispatcherService.Dispatch(new CardMovementStateChangedSignal(false)));
                 var isCompleted = TryCollectCompletedPresenters(out var presentersToRemove);
                 if (isCompleted)
                 {
@@ -41,6 +39,7 @@ namespace Gameplay
             }
 
             OnCardAdded(null, cardPresenter);
+            UpdateLastCardContentCountText();
             TryUpdateCategoryAndTopContentStatesForStackCase();
         }
 

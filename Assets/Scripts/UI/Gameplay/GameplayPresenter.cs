@@ -110,9 +110,9 @@ namespace UI.Gameplay
                 collectibleModel.totalJokers--;
                 HandleJoker(collectibleModel.totalJokers);
             }
-            else if(collectibleModel.totalCoins >= gameConfigModel.JokerCost)
+            else if(collectibleModel.totalCoins >= gameConfigModel.jokerCost)
             {
-                collectibleModel.totalCoins -= gameConfigModel.JokerCost;
+                collectibleModel.totalCoins -= gameConfigModel.jokerCost;
                 View.SetCoinText(collectibleModel.totalCoins);
                 HandleJoker(collectibleModel.totalJokers);
             }
@@ -165,9 +165,9 @@ namespace UI.Gameplay
                 collectibleModel.totalUndo--;
                 HandleUndo(collectibleModel.totalUndo);
             }
-            else if(collectibleModel.totalCoins >= gameConfigModel.UndoCost)
+            else if(collectibleModel.totalCoins >= gameConfigModel.undoCost)
             {
-                collectibleModel.totalCoins -= gameConfigModel.UndoCost;
+                collectibleModel.totalCoins -= gameConfigModel.undoCost;
                 View.SetCoinText(collectibleModel.totalCoins);
                 HandleUndo(collectibleModel.totalUndo);
             }
@@ -192,9 +192,9 @@ namespace UI.Gameplay
                 _hintService.ShowHint(View.Board);
                 View.SetHintAmount(collectibleModel.totalHints);
             }
-            else if(collectibleModel.totalCoins >= gameConfigModel.UndoCost)
+            else if(collectibleModel.totalCoins >= gameConfigModel.undoCost)
             {
-                collectibleModel.totalCoins -= gameConfigModel.HintCost;
+                collectibleModel.totalCoins -= gameConfigModel.hintCost;
                 View.SetCoinText(collectibleModel.totalCoins);
                 _hintService.ShowHint(View.Board);
                 View.SetHintAmount(collectibleModel.totalHints);

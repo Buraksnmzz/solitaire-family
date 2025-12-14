@@ -13,15 +13,23 @@ public abstract class BaseView : MonoBehaviour, IView
     [SerializeField] private PopupAnimationType animationType = PopupAnimationType.Fade;
     [SerializeField] protected RectTransform panel;
     [SerializeField] private float fadeEndValue = 0.8f;
+    [SerializeField] private bool shouldMoveBackgroundToParent = false;
 
     private bool _isVisible;
     private Sequence _currentAnimation;
     private Vector2 _originalPanelPosition;
     private Vector3 _originalPanelScale;
     private float _moveOffset;
+    private RectTransform _backgroundRectTransform;
+    private bool _isBackgroundAttachedToCanvas;
 
     protected virtual void Awake()
     {
+        if (backgroundImage != null)
+        {
+            _backgroundRectTransform = backgroundImage.rectTransform;
+        }
+
         if (panel != null)
         {
             _originalPanelPosition = panel.anchoredPosition;
@@ -63,6 +71,9 @@ public abstract class BaseView : MonoBehaviour, IView
         transform.SetAsLastSibling();
         _currentAnimation?.Kill();
         gameObject.SetActive(true);
+
+        if (shouldMoveBackgroundToParent)
+            AttachBackgroundToCanvas();
 
         _currentAnimation = DOTween.Sequence()
             .OnStart(() =>
@@ -173,5 +184,27 @@ public abstract class BaseView : MonoBehaviour, IView
     protected virtual void OnDestroy()
     {
         _currentAnimation?.Kill();
+        if (backgroundImage != null)
+        {
+            Destroy(backgroundImage.gameObject);
+        }
+    }
+
+    private void AttachBackgroundToCanvas()
+    {
+        if (_backgroundRectTransform == null || _isBackgroundAttachedToCanvas)
+        {
+            return;
+        }
+
+        var canvas = backgroundImage.canvas;
+        if (canvas == null)
+        {
+            return;
+        }
+
+        _backgroundRectTransform.SetParent(canvas.transform, false);
+        _backgroundRectTransform.SetAsFirstSibling();
+        _isBackgroundAttachedToCanvas = true;
     }
 }

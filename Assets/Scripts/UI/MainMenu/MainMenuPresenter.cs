@@ -1,6 +1,9 @@
+using Collectible;
+using Configuration;
 using Levels;
 using Services;
 using UI.Gameplay;
+using UI.Settings;
 
 namespace UI.MainMenu
 {
@@ -15,26 +18,33 @@ namespace UI.MainMenu
             _uiService = ServiceLocator.GetService<IUIService>();
             _snapshotService = ServiceLocator.GetService<ISnapshotService>();
             _savedDataService = ServiceLocator.GetService<ISavedDataService>();
-            View.LevelButtonClicked += OnLevelButtonClicked;
+            View.SetBackgroundImageFromRemote(_savedDataService.GetModel<GameConfigModel>().backgroundImageId -1);
+            //View.LevelButtonClicked += OnLevelButtonClicked;
             View.ContinueButtonClicked += OnContinueButtonClicked;
+            View.SettingsButtonClicked += OnSettingsButtonClicked;
+        }
+
+        private void OnSettingsButtonClicked()
+        {
+            _uiService.ShowPopup<MainSettingsPresenter>();
         }
 
         public override void ViewShown()
         {
             var currentLevel = _savedDataService.GetModel<LevelProgressModel>().CurrentLevelIndex;
             base.ViewShown();
-            var hasSnapshot = _snapshotService.HasSnapShot();
-            View.continueButton.gameObject.SetActive(hasSnapshot);
-            View.levelButton.gameObject.SetActive(!hasSnapshot);
+            //var hasSnapshot = _snapshotService.HasSnapShot();
+            //View.continueButton.gameObject.SetActive(hasSnapshot);
+            //View.levelButton.gameObject.SetActive(!hasSnapshot);
             View.SetLevelText(currentLevel);
-           
+            View.SetCoinText(_savedDataService.GetModel<CollectibleModel>().totalCoins);
+
         }
 
         private void OnContinueButtonClicked()
         {
-            if (!_snapshotService.HasSnapShot())
-                return;
-
+            // if (!_snapshotService.HasSnapShot())
+            //     return;
             _uiService.HidePopup<MainMenuPresenter>();
             _uiService.ShowPopup<GameplayPresenter>();
         }

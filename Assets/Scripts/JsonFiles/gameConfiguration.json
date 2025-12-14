@@ -1,6 +1,7 @@
 {
   "levelDataUrl": "https://cdn.cloudflare.com/game/level_001.json",
   "layoutId": 2,
+  "backgroundImageId": 1,
   "totalHintGiven" : 3,
   "totalJokerGiven": 3,
   "totalUndoGiven": 3,

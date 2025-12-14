@@ -5227,6 +5227,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7868110731223202100, guid: 5e00244a9bfc9446b8feb7649af3f8ff, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7868110731223202100, guid: 5e00244a9bfc9446b8feb7649af3f8ff, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7868110731223202100, guid: 5e00244a9bfc9446b8feb7649af3f8ff, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8493961421456829881, guid: 5e00244a9bfc9446b8feb7649af3f8ff, type: 3}
       propertyPath: m_Sprite
       value: 
@@ -5324,6 +5336,7 @@ MonoBehaviour:
   animationType: 0
   panel: {fileID: 2249596092404895449}
   fadeEndValue: 1
+  shouldMoveBackgroundToParent: 1
   movesCount: {fileID: 2642544038244180677}
   board: {fileID: 3235187306076201371}
   undoButton: {fileID: 3511356221316189227}
