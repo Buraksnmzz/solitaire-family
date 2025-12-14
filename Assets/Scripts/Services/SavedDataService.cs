@@ -32,7 +32,7 @@ public class SavedDataService : ISavedDataService
             coinModel = new CollectibleModel();
             SaveData(coinModel);
         }
-        
+
         var levelProgressModel = LoadData<LevelProgressModel>();
         if (levelProgressModel == null)
         {
@@ -101,5 +101,12 @@ public class SavedDataService : ISavedDataService
         {
             models.Remove(typeof(T));
         }
+    }
+
+    public bool HasData<T>() where T : IModel
+    {
+        var fileName = typeof(T).Name;
+        var fullPath = Application.persistentDataPath + "/" + fileName;
+        return File.Exists(fullPath);
     }
 }

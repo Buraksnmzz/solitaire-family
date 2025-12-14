@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using UnityEngine;
 
 namespace Levels
 {
@@ -38,7 +40,6 @@ namespace Levels
 		public LevelMap ParseLevelsJson(string levelJson)
 		{
 			var levels = JsonConvert.DeserializeObject<List<LevelData>>(levelJson) ?? new List<LevelData>();
-
 			var map = new LevelMap
 			{
 				levelsList = levels

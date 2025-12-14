@@ -429,7 +429,7 @@ MonoBehaviour:
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 720, y: 1560}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0.85
+  m_MatchWidthOrHeight: 0.55
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
@@ -508,7 +508,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uiRoot: {fileID: 2043346631}
-  bootData: {fileID: 11400000, guid: aafade25d6cd44528a459620103fbfed, type: 2}
 --- !u!4 &1739003428
 Transform:
   m_ObjectHideFlags: 0

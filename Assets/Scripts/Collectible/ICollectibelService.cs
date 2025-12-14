@@ -1,7 +1,10 @@
 public interface ICollectibelService : IService
 {
-    int Total { get; }
-    bool TrySpend(int amount);
-    void Add(int amount);
-    void Set(int total);
+    int TotalCoin{ get; }
+    void AddCoin(int amount);
+    void AddHint(int amount);
+    void AddJoker(int amount);
+    bool TrySpendCoin(int amount);
+    bool TrySpendHint(int amount);
+    bool TrySpendJoker(int amount);
 }

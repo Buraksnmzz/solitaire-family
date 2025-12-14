@@ -33,6 +33,7 @@ namespace Gameplay
 
         public bool CanPlaceCard(CardPresenter sourceCardPresenter)
         {
+            if (!gameObject.activeInHierarchy) return false;
             var topCardModel = CardPresenters.LastOrDefault()?.CardModel;
             var isPlacable = _placableRule.IsPlaceable(topCardModel, sourceCardPresenter.CardModel);
             var placableError = _placableRule.ErrorMessage;
@@ -43,6 +44,7 @@ namespace Gameplay
 
         public bool CanPlaceCardSilently(CardPresenter sourceCardPresenter)
         {
+            if (!gameObject.activeInHierarchy) return false;
             var topCardModel = CardPresenters.LastOrDefault()?.CardModel;
             return _placableRule.IsPlaceable(topCardModel, sourceCardPresenter.CardModel);
         }
@@ -122,6 +124,18 @@ namespace Gameplay
         public IReadOnlyList<CardPresenter> GetAllCards()
         {
             return CardPresenters.ToList();
+        }
+
+        public virtual void ClearAllCards()
+        {
+            foreach (var presenter in CardPresenters)
+            {
+                if (presenter == null) continue;
+                if (presenter.CardView == null) continue;
+                Destroy(presenter.CardView.gameObject);
+            }
+
+            CardPresenters.Clear();
         }
 
         protected virtual void OnCardAdded(CardPresenter previousTop, CardPresenter newTop)

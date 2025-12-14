@@ -9,6 +9,7 @@ namespace UI.MainMenu
     {
         public Button levelButton;
         public Button continueButton;
+        public TextMeshProUGUI continueLevelText;
         public TextMeshProUGUI levelText;
         
         public event Action LevelButtonClicked;
@@ -18,6 +19,12 @@ namespace UI.MainMenu
             base.Awake();
             levelButton.onClick.AddListener(()=>LevelButtonClicked?.Invoke());
             continueButton.onClick.AddListener(()=>ContinueButtonClicked?.Invoke());
+        }
+
+        public void SetLevelText(int currentLevel)
+        {
+            continueLevelText.SetText("Level " + (currentLevel+1));
+            levelText.SetText("Level " + (currentLevel+1));
         }
     }
     

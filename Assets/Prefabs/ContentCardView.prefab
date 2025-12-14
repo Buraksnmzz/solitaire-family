@@ -539,11 +539,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 547415514168300484, guid: 27464e8aa71334990acb09cd95bfda59, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 6
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 547415514168300484, guid: 27464e8aa71334990acb09cd95bfda59, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 7
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 547415514168300484, guid: 27464e8aa71334990acb09cd95bfda59, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -551,15 +551,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 547415514168300484, guid: 27464e8aa71334990acb09cd95bfda59, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 894639251308726669, guid: 27464e8aa71334990acb09cd95bfda59, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 6
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 894639251308726669, guid: 27464e8aa71334990acb09cd95bfda59, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 7
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 894639251308726669, guid: 27464e8aa71334990acb09cd95bfda59, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -567,7 +567,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 894639251308726669, guid: 27464e8aa71334990acb09cd95bfda59, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2131780160517606997, guid: 27464e8aa71334990acb09cd95bfda59, type: 3}
       propertyPath: m_Pivot.x
@@ -690,6 +690,10 @@ PrefabInstance:
       value: 72
       objectReference: {fileID: 0}
     - target: {fileID: 7308387886467339791, guid: 27464e8aa71334990acb09cd95bfda59, type: 3}
+      propertyPath: m_fontSizeMin
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 7308387886467339791, guid: 27464e8aa71334990acb09cd95bfda59, type: 3}
       propertyPath: m_HorizontalAlignment
       value: 1
       objectReference: {fileID: 0}
@@ -748,6 +752,10 @@ PrefabInstance:
     - target: {fileID: 7848941141125623213, guid: 27464e8aa71334990acb09cd95bfda59, type: 3}
       propertyPath: m_fontColor.r
       value: 0.1254902
+      objectReference: {fileID: 0}
+    - target: {fileID: 7848941141125623213, guid: 27464e8aa71334990acb09cd95bfda59, type: 3}
+      propertyPath: m_fontSizeMin
+      value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 7848941141125623213, guid: 27464e8aa71334990acb09cd95bfda59, type: 3}
       propertyPath: m_fontColor32.rgba

@@ -1,10 +1,10 @@
 public class CoinChangedSignal : ISignal
 {
-    public int NewTotal;
+    public int Amount;
 
-    public CoinChangedSignal(int modelTotalCoins)
+    public CoinChangedSignal(int amount)
     {
-        NewTotal = modelTotalCoins;
+        Amount = amount;
     }
 }
 

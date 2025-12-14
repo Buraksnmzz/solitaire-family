@@ -73,36 +73,13 @@
     },
     {
         "LevelID": 2,
-        "Columns": 4,
+        "Columns": 3,
         "Categories": [
-            {
-                "TopicName": "Meteors",
-                "TopicType": "Text",
-                "ContentValues": [
-                    "Meteor shower",
-                    "Meteoroid",
-                    "Meteorite"
-                ]
-            },
-            {
-                "TopicName": "Speedy",
-                "TopicType": "Text",
-                "ContentValues": [
-                    "Supercar",
-                    "Sailfish",
-                    "Gadfly",
-                    "Ostrich",
-                    "Turbojet",
-                    "Kangaroo"
-                ]
-            },
             {
                 "TopicName": "Cakes",
                 "TopicType": "Text",
                 "ContentValues": [
                     "Doberge",
-                    "Bundt",
-                    "Devil’s Food",
                     "Madeira"
                 ]
             },
@@ -111,8 +88,6 @@
                 "TopicType": "Text",
                 "ContentValues": [
                     "Bryum",
-                    "Sphagnum",
-                    "Acrocarp",
                     "Funaria"
                 ]
             },
@@ -121,7 +96,6 @@
                 "TopicType": "Image",
                 "ContentValues": [
                     "Grandma1",
-                    "Grandma2",
                     "Grandma3"
                 ]
             },
@@ -130,12 +104,6 @@
                 "TopicType": "Text",
                 "ContentValues": [
                     "Actin",
-                    "Myosin",
-                    "Titin",
-                    "Nebulin",
-                    "Kinesin",
-                    "Dynein",
-                    "Elastin",
                     "Keratin"
                 ]
             },
@@ -143,13 +111,6 @@
                 "TopicName": "Doors",
                 "TopicType": "Text",
                 "ContentValues": [
-                    "Hinge",
-                    "Knob",
-                    "Lock",
-                    "Panel",
-                    "Frame",
-                    "Jamb",
-                    "Sill",
                     "Latch"
                 ]
             },
@@ -158,12 +119,6 @@
                 "TopicType": "Text",
                 "ContentValues": [
                     "Taxes",
-                    "Costs",
-                    "Consumer",
-                    "Brand",
-                    "Profit",
-                    "Company",
-                    "Finance",
                     "Revenue"
                 ]
             },
@@ -172,8 +127,6 @@
                 "TopicType": "Text",
                 "ContentValues": [
                     "Gear",
-                    "Pinion",
-                    "Ratchet",
                     "Sprocket"
                 ]
             },
@@ -193,7 +146,7 @@
     },
     {
         "LevelID": 3,
-        "Columns": 4,
+        "Columns": 5,
         "Categories": [
             {
                 "TopicName": "Rafters",
@@ -324,6 +277,30 @@
                     "Canoe yoke"
                 ]
             },
+          {
+            "TopicName": "Paradox",
+            "TopicType": "Text",
+            "ContentValues": [
+              "Fallacy",
+              "Opposite",
+              "Antinomy",
+              "Nonsense",
+              "Duality",
+              "Oxymoron",
+              "Absurd",
+              "Reverse"
+            ]
+          },
+          {
+            "TopicName": "Limb",
+            "TopicType": "Text",
+            "ContentValues": [
+              "Paw",
+              "Arm",
+              "Talon",
+              "Hoof"
+            ]
+          },
             {
                 "TopicName": "Hole",
                 "TopicType": "Text",

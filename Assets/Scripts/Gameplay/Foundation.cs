@@ -3,12 +3,15 @@ using Card;
 using DG.Tweening;
 using UI.Signals;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Gameplay
 {
     public class Foundation : CardContainer
     {
-        [SerializeField] private float completeScaleDuration = 0.25f;
+        private readonly float _completeScaleUpDuration = 0.3f;
+        private readonly float _completeScaleDownDuration = 0.4f;
+        [SerializeField] private Image glowImage;
 
         public override Vector3 GetCardLocalPosition(int index)
         {
@@ -27,7 +30,9 @@ namespace Gameplay
             if (cardPresenter.CardView != null)
             {
                 cardPresenter.CardView.transform.SetAsLastSibling();
-                cardPresenter.MoveToLocalPosition(targetLocalPosition, MoveDuration, 0, Ease.OutQuad, () => EventDispatcherService.Dispatch(new CardMovementStateChangedSignal(false)));
+                cardPresenter.MoveToLocalPosition(targetLocalPosition, MoveDuration, 0, Ease.OutQuad,
+                    () => EventDispatcherService.Dispatch(new CardMovementStateChangedSignal(false)));
+                UpdateLastCardContentCountText();
                 var isCompleted = TryCollectCompletedPresenters(out var presentersToRemove);
                 if (isCompleted)
                 {
@@ -36,7 +41,6 @@ namespace Gameplay
             }
 
             OnCardAdded(null, cardPresenter);
-            UpdateLastCardContentCountText();
             TryUpdateCategoryAndTopContentStatesForStackCase();
         }
 
@@ -120,13 +124,33 @@ namespace Gameplay
         {
             if (presentersToRemove == null || presentersToRemove.Count == 0) return;
 
+            glowImage.transform.SetAsLastSibling();
+            var glowSequence = DOTween.Sequence();
+
+            glowSequence.Append(glowImage.DOFade(1f, _completeScaleUpDuration/2));
+            glowSequence.Join(glowImage.transform.DOScale(Vector3.one * 1.14f, _completeScaleUpDuration));
+            glowSequence.Append(glowImage.transform.DOScale(Vector3.one, _completeScaleUpDuration));
+            glowSequence.Append(glowImage.DOFade(0f, _completeScaleDownDuration));
+
             foreach (var presenter in presentersToRemove)
             {
                 if (presenter.CardView == null) continue;
 
                 var cardTransform = presenter.CardView.transform;
-                cardTransform.DOScale(Vector3.zero, completeScaleDuration)
-                    .OnComplete(() => Destroy(cardTransform.gameObject));
+                var sequence = DOTween.Sequence();
+
+                sequence.Append(cardTransform
+                    .DOScale(Vector3.one * 1.14f, _completeScaleUpDuration)
+                    .SetEase(Ease.OutQuad));
+
+                sequence.Append(cardTransform
+                    .DOScale(Vector3.one * 1f, _completeScaleUpDuration)
+                    .SetEase(Ease.OutQuad));
+
+                sequence.Append(cardTransform
+                    .DOScale(Vector3.zero, _completeScaleDownDuration));
+
+                sequence.OnComplete(() => Destroy(cardTransform.gameObject));
             }
         }
 

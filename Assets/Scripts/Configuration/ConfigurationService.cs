@@ -1,5 +1,4 @@
-using System.Collections.Generic;
-using Core.Scripts.Helper;
+using Collectible;
 using Goal;
 using Newtonsoft.Json;
 using UnityEngine;
@@ -13,7 +12,6 @@ namespace Configuration
 			Initialize(bootDataConfigurationJson);
 		}
 
-		public ConfigLayoutModel LayoutConfig { get; private set; }
 		public GoalConfigModel GoalConfig { get; private set; }
 
 		[System.Serializable]
@@ -24,6 +22,33 @@ namespace Configuration
 
 			[JsonProperty("goalConfig")]
 			public GoalConfigModel GoalConfig { get; set; }
+
+			[JsonProperty("totalHintGiven")]
+			public int TotalHintGiven { get; set; }
+
+			[JsonProperty("totalJokerGiven")]
+			public int TotalJokerGiven { get; set; }
+			
+			[JsonProperty("totalUndoGiven")]
+			public int TotalUndoGiven { get; set; }
+
+			[JsonProperty("totalCoinGiven")]
+			public int TotalCoinGiven { get; set; }
+
+			[JsonProperty("earnedCoinAtLevelEnd")]
+			public int EarnedCoinAtLevelEnd { get; set; }
+
+			[JsonProperty("earnedCoinPerMoveLeft")]
+			public int EarnedCoinPerMoveLeft { get; set; }
+			
+			[JsonProperty("hintCost")]
+			public int HintCost { get; set; }
+			
+			[JsonProperty("undoCost")]
+			public int UndoCost { get; set; }
+			
+			[JsonProperty("jokerCost")]
+			public int JokerCost { get; set; }
 		}
 
 		public int GetLevelGoal(int levelIndex, int columnCount)
@@ -36,15 +61,47 @@ namespace Configuration
 
 			return GetProbabilisticGoal(columnCount);
 		}
-		
+
 		public void Initialize(string rawJson)
 		{
 			var root = JsonConvert.DeserializeObject<GameConfigurationJson>(rawJson);
-			LayoutConfig = new ConfigLayoutModel
+			if (root == null)
 			{
-				Layout = root.LayoutId
-			};
+				GoalConfig = null;
+				return;
+			}
 			GoalConfig = root.GoalConfig;
+			InitializeCollectibleModel(root);
+			InitializeConfigModel(root);
+		}
+
+		private void InitializeCollectibleModel(GameConfigurationJson root)
+		{
+			var savedDataService = ServiceLocator.GetService<ISavedDataService>();
+			if (savedDataService.HasData<CollectibleModel>())
+			{
+				return;
+			}
+
+			var collectibleModel = savedDataService.LoadData<CollectibleModel>();
+			collectibleModel.totalCoins = root.TotalCoinGiven;
+			collectibleModel.totalHints = root.TotalHintGiven;
+			collectibleModel.totalJokers = root.TotalJokerGiven;
+			collectibleModel.totalUndo = root.TotalUndoGiven;
+			savedDataService.SaveData(collectibleModel);
+		}
+
+		private void InitializeConfigModel(GameConfigurationJson root)
+		{
+			var savedDataService = ServiceLocator.GetService<ISavedDataService>();
+			var gameConfigModel = savedDataService.LoadData<GameConfigModel>();
+			gameConfigModel.EarnedCoinAtLevelEnd = root.EarnedCoinAtLevelEnd;
+			gameConfigModel.EarnedCoinPerMoveLeft = root.EarnedCoinPerMoveLeft;
+			gameConfigModel.HintCost = root.HintCost;
+			gameConfigModel.UndoCost = root.UndoCost;
+			gameConfigModel.JokerCost = root.JokerCost;
+			gameConfigModel.Layout = root.LayoutId;
+			savedDataService.SaveData(gameConfigModel);
 		}
 
 		private int? GetOverrideLevelGoal(int levelIndex)

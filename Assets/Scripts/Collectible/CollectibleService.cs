@@ -1,54 +1,73 @@
-using System;
-using Collectible;
-using UnityEngine;
-
-public class CollectibleService : ICollectibelService
+namespace Collectible
 {
-    private readonly ISavedDataService _savedDataService;
-    private readonly IEventDispatcherService _eventDispatcher;
-    private readonly CollectibleModel _model;
-
-    public CollectibleService()
+    public class CollectibleService : ICollectibelService
     {
-        _savedDataService = ServiceLocator.GetService<ISavedDataService>();
-        _eventDispatcher = ServiceLocator.GetService<IEventDispatcherService>();
-        _model = _savedDataService.LoadData<CollectibleModel>();
-        if (_model == null)
+        private readonly ISavedDataService _savedDataService;
+        private readonly IEventDispatcherService _eventDispatcher;
+        private readonly CollectibleModel _model;
+
+        public CollectibleService()
         {
-            _model = new CollectibleModel();
+            _savedDataService = ServiceLocator.GetService<ISavedDataService>();
+            _eventDispatcher = ServiceLocator.GetService<IEventDispatcherService>();
+            _model = _savedDataService.LoadData<CollectibleModel>();
+        }
+
+        public int Total => _model.totalCoins;
+        
+        private void PersistAndDispatchChangedCoin(int amount)
+        {
             _savedDataService.SaveData(_model);
+            _eventDispatcher.Dispatch(new CoinChangedSignal(amount));
+        }
+        
+        private void PersistAndDispatchChangedHint(int amount)
+        {
+            _savedDataService.SaveData(_model);
+            _eventDispatcher.Dispatch(new HintChangedSignal(amount));
+        }
+        
+        private void PersistAndDispatchChangedJoker(int amount)
+        {
+            _savedDataService.SaveData(_model);
+            _eventDispatcher.Dispatch(new JokerChangedSignal(amount));
+        }
+
+        public int TotalCoin { get; }
+        public void AddCoin(int amount)
+        {
+            if (amount <= 0) return;
+            checked { _model.totalCoins += amount; }
+            PersistAndDispatchChangedCoin(amount);
+        }
+
+        public void AddHint(int amount)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void AddJoker(int amount)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public bool TrySpendCoin(int amount)
+        {
+            if (amount <= 0) return true;
+            if (_model.totalCoins < amount) return false;
+            _model.totalCoins -= amount;
+            PersistAndDispatchChangedCoin(-amount);
+            return true;
+        }
+
+        public bool TrySpendHint(int amount)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public bool TrySpendJoker(int amount)
+        {
+            throw new System.NotImplementedException();
         }
     }
-
-    public int Total => _model.totalCoins;
-
-    public void Add(int amount)
-    {
-        if (amount <= 0) return;
-        checked { _model.totalCoins += amount; }
-        PersistAndDispatchChanged();
-    }
-
-    public bool TrySpend(int amount)
-    {
-        if (amount <= 0) return true;
-        if (_model.totalCoins < amount) return false;
-        _model.totalCoins -= amount;
-        PersistAndDispatchChanged();
-        return true;
-    }
-
-    public void Set(int total)
-    {
-        _model.totalCoins = Math.Max(0, total);
-        PersistAndDispatchChanged();
-    }
-
-    private void PersistAndDispatchChanged()
-    {
-        _savedDataService.SaveData(_model);
-        _eventDispatcher.Dispatch(new CoinChangedSignal(_model.totalCoins));
-    }
-
-    public void Dispose() { }
 }

@@ -18,9 +18,8 @@ namespace Gameplay
         public RectTransform foundationParent;
         public List<CardContainer> piles;
         public RectTransform pileParent;
-        [FormerlySerializedAs("dealer")] public RectTransform dealerRectTransform;
-        public Transform dealerCardsHolder;
-        [FormerlySerializedAs("openDealer")] public RectTransform openDealerRectTransform;
+        public RectTransform dealerRectTransform;
+        public RectTransform openDealerRectTransform;
         [SerializeField] private Transform goalCounterTransform;
         [SerializeField] private RectTransform dealerHint;
         [SerializeField] private RectTransform dealerEmptyImage;
@@ -30,11 +29,9 @@ namespace Gameplay
         private float _itemWidth;
         private float _itemHeight;
         private readonly List<int> _totalCardsCountHolder = new List<int> { 30, 54, 80 };
-        private int _categoryCardCount;
         public List<CardModel> CardModels = new();
         public List<CardView> cardViews = new();
         public List<CardPresenter> CardPresenters = new();
-        private LevelData _levelData;
         private List<CategoryData> _categoryDatas;
         public CardView contentCardView;
         public CardView categoryCardView;
@@ -43,7 +40,6 @@ namespace Gameplay
         private IPlacableRule _foundationRule;
         private IPlacableRule _noPlacableRule;
         IEventDispatcherService _eventDispatcher;
-        IUIService _uiService;
         private Transform _parent;
 
         public Dealer Dealer => dealer;
@@ -55,13 +51,9 @@ namespace Gameplay
 
         public void Setup(LevelData levelData, int currentLevelIndex, Transform parent, SnapShotModel snapshot = null)
         {
+            ResetBoardState();
             _parent = parent;
-            _eventDispatcher = ServiceLocator.GetService<IEventDispatcherService>();
-            _uiService = ServiceLocator.GetService<IUIService>();
-            _eventDispatcher.AddListener<MoveCountRequestedSignal>(OnMoveCountRequested);
-            _levelData = levelData;
             _foundationCount = levelData.columns;
-            _categoryCardCount = levelData.categories.Count;
             _categoryDatas = levelData.categories;
             SetContainerTransforms();
             InitializeContainers();
@@ -73,29 +65,24 @@ namespace Gameplay
             dealer.ShuffleDeck();
             dealer.DealInitialCards(piles, _foundationCount);
         }
-
-        private void OnDisable()
-        {
-            _eventDispatcher.RemoveListener<MoveCountRequestedSignal>(OnMoveCountRequested);
-        }
-
-        private void OnMoveCountRequested(MoveCountRequestedSignal _)
+        
+        public bool IsGameWon()
         {
             if (dealer.GetCardsCount() > 0)
-                return;
+                return false;
             if (openDealer.GetCardsCount() > 0)
-                return;
+                return false;
             if (piles.Any(pile => pile.GetCardsCountWithoutJoker() > 0))
             {
-                return;
+                return false;
             }
 
             if (foundations.Any(foundation => foundation.GetCardsCountWithoutJoker() > 0))
             {
-                return;
+                return false;
             }
-
-            _uiService.ShowPopup<WinPresenter>();
+            
+            return true;
         }
 
         private void InitializeContainers()
@@ -190,14 +177,15 @@ namespace Gameplay
 
         private void SetContainerTransforms()
         {
-            TrimContainerLists();
             foundationParent.anchoredPosition =
-                _foundationCount <= 4 ? new Vector3(0, -404, 0) : new Vector3(0, -355, 0);
+                _foundationCount <= 4 ? new Vector3(0, -390, 0) : new Vector3(0, -340, 0);
             pileParent.anchoredPosition =
-                _foundationCount <= 4 ? new Vector3(0, -642, 0) : new Vector3(0, -540, 0);
+                _foundationCount <= 4 ? new Vector3(0, -610, 0) : new Vector3(0, -510, 0);
 
-            _itemWidth = _foundationCount <= 4 ? 152f : 116f;
+            //_itemWidth = _foundationCount <= 4 ? 152f : 116f;
+            _itemWidth = _foundationCount <= 4 ? 142f : 108f;
             _itemHeight = _itemWidth / widhtHeightRatio;
+            
             for (var index = 0; index < piles.Count; index++)
             {
                 piles[index].gameObject.SetActive(index < _foundationCount);
@@ -217,31 +205,6 @@ namespace Gameplay
             SetDealer();
         }
 
-        void TrimContainerLists()
-        {
-            while (foundations.Count > _foundationCount)
-            {
-                var index = foundations.Count - 1;
-                var container = foundations[index];
-                if (container != null)
-                {
-                    Destroy(container.gameObject);
-                }
-                foundations.RemoveAt(index);
-            }
-
-            while (piles.Count > _foundationCount)
-            {
-                var index = piles.Count - 1;
-                var container = piles[index];
-                if (container != null)
-                {
-                    Destroy(container.gameObject);
-                }
-                piles.RemoveAt(index);
-            }
-        }
-
         private void SetDealer()
         {
             var openDealerWidthMultiplier = 1.737f;
@@ -250,7 +213,7 @@ namespace Gameplay
             dealerRectTransform.pivot = new Vector2(0.5f, 0.5f);
             dealerRectTransform.anchoredPosition = new Vector2(-_itemWidth / 2, -148 - _itemHeight / 2);
 
-            dealerHint.sizeDelta = dealerRectTransform.sizeDelta;
+            dealerHint.sizeDelta = dealerRectTransform.sizeDelta * 1.175f;
             dealerHint.anchoredPosition = dealerRectTransform.anchoredPosition;
             dealerEmptyImage.sizeDelta = dealerRectTransform.sizeDelta;
             dealerEmptyImage.anchoredPosition = dealerRectTransform.anchoredPosition;
@@ -427,6 +390,38 @@ namespace Gameplay
             return true;
         }
 
+        void ResetBoardState()
+        {
+            ClearContainerCards(dealer);
+            ClearContainerCards(openDealer);
+
+            if (foundations != null)
+            {
+                foreach (var foundation in foundations)
+                {
+                    ClearContainerCards(foundation);
+                }
+            }
+
+            if (piles != null)
+            {
+                foreach (var pile in piles)
+                {
+                    ClearContainerCards(pile);
+                }
+            }
+
+            CardModels.Clear();
+            CardPresenters.Clear();
+            cardViews.Clear();
+        }
+
+        void ClearContainerCards(CardContainer container)
+        {
+            if (container == null) return;
+            container.ClearAllCards();
+        }
+
         CardContainer ResolveContainer(SnapshotContainerType containerType, int containerIndex)
         {
             switch (containerType)
@@ -467,5 +462,7 @@ namespace Gameplay
                     Destroy(view.gameObject);
             }
         }
+
+        
     }
 }

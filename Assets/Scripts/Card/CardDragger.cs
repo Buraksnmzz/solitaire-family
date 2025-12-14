@@ -196,23 +196,43 @@ namespace Card
                     var worldTargetInStartParent = startParentRect.TransformPoint(targetLocalInStartParent);
                     var canvasLocalTarget = _canvasTransform.InverseTransformPoint(worldTargetInStartParent);
 
+                    var siblingIndex = _startSiblingIndex + i;
+                    var wrongDuration = 0.3f;
+                    var wrongOffset = 1f;
+
                     viewRectTransform.DOKill();
                     viewRectTransform.SetAsLastSibling();
                     viewRectTransform.DOLocalMove(canvasLocalTarget, _moveDuration)
-                        .SetEase(DG.Tweening.Ease.OutQuad)
+                        .SetEase(Ease.OutQuad)
                         .OnComplete(() =>
                         {
                             viewRectTransform.SetParent(_startParent, true);
                             viewRectTransform.localPosition = targetLocalInStartParent;
-                            viewRectTransform.SetSiblingIndex(_startSiblingIndex + i);
+                            viewRectTransform.SetSiblingIndex(siblingIndex);
 
-                            remainingAnimations--;
-                            if (remainingAnimations <= 0)
+                            var startWorldX = viewRectTransform.position.x;
+                            viewRectTransform.DOPunchPosition(Vector3.right * 10f, wrongDuration).OnComplete(() =>
                             {
-                                _eventDispatcherService.Dispatch(new CardMovementStateChangedSignal(false));
-                                _dragStateService.EndDrag();
-                                _isDragging = false;
-                            }
+                                remainingAnimations--;
+                                if (remainingAnimations <= 0)
+                                {
+                                    _eventDispatcherService.Dispatch(new CardMovementStateChangedSignal(false));
+                                    _dragStateService.EndDrag();
+                                    _isDragging = false;
+                                }
+                            });
+                            // viewRectTransform.DOMoveX(startWorldX + wrongOffset, wrongDuration)
+                            //     .SetLoops(2, LoopType.Yoyo)
+                            //     .OnComplete(() =>
+                            //     {
+                            //         remainingAnimations--;
+                            //         if (remainingAnimations <= 0)
+                            //         {
+                            //             _eventDispatcherService.Dispatch(new CardMovementStateChangedSignal(false));
+                            //             _dragStateService.EndDrag();
+                            //             _isDragging = false;
+                            //         }
+                            //     });
                         });
                 }
             }

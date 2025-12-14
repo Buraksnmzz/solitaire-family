@@ -109,6 +109,7 @@ namespace Gameplay
         public override void Setup(IPlacableRule placableRule)
         {
             base.Setup(placableRule);
+            dealerButton.onClick.RemoveAllListeners();
             _eventDispatcherService = ServiceLocator.GetService<IEventDispatcherService>();
             dealerButton.onClick.AddListener(OnDealerButtonClick);
         }

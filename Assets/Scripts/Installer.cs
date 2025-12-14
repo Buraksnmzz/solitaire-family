@@ -1,3 +1,4 @@
+using Collectible;
 using Configuration;
 using Core.Scripts.Services;
 using Levels;
@@ -12,7 +13,6 @@ public class Installer : MonoBehaviour
 {
     [Header("UI References")]
     public Transform uiRoot;
-    [SerializeField] private BootData bootData;
 
     void Awake()
     {
@@ -56,8 +56,8 @@ public class Installer : MonoBehaviour
         ServiceLocator.Register<IUIService>(new UIService(uiRoot));
         ServiceLocator.Register<ISnapshotService>(new SnapshotService());
         ServiceLocator.Register<ICollectibelService>(new CollectibleService());
-        ServiceLocator.Register<ILevelGeneratorService>(new LevelGeneratorService(bootData.levelsJson));
-        ServiceLocator.Register<IConfigurationService>(new ConfigurationService(bootData.configurationJson));
+        ServiceLocator.Register<ILevelGeneratorService>(new LevelGeneratorService(BootCache.LevelsJson));
+        ServiceLocator.Register<IConfigurationService>(new ConfigurationService(BootCache.ConfigurationJson));
         ServiceLocator.Register<IUndoService>(new UndoService());
         ServiceLocator.Register<IDragStateService>(new DragStateService());
         ServiceLocator.Register<IHintService>(new HintService());
