@@ -11,6 +11,9 @@
   "hintCost": 900,
   "undoCost": 800,
   "jokerCost": 900,
+  "extraMovesCost": 1500,
+  
+  "rateUsTrigger": [2,10,30],
   
   "goalConfig": {
     "ColumnGoals": {
@@ -32,7 +35,7 @@
     },
 
     "LevelGoals": [
-      { "level": 2, "goal": 60 },
+      { "level": 2, "goal": 10 },
       { "level": 7, "goal": 75 },
       { "level": 13, "goal": 80 }
     ]

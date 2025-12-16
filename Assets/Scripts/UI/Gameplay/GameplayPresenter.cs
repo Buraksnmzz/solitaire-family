@@ -6,6 +6,7 @@ using Services;
 using Services.Hint;
 using UI.NoMoreMoves;
 using UI.OutOfMoves;
+using UI.Settings;
 using UI.Signals;
 using UI.Win;
 
@@ -48,13 +49,54 @@ namespace UI.Gameplay
             _eventDispatcherService.AddListener<CardMovementStateChangedSignal>(OnCardMovementStateChanged);
             _eventDispatcherService.AddListener<RestartButtonClickSignal>(OnRestartButtonClick);
             _eventDispatcherService.AddListener<AddMovesClickedSignal>(OnAddMovesClicked);
+            _eventDispatcherService.AddListener<ContinueWithCoinAddMovesSignal>(OnContinueWithCoinAddMoves);
+            _eventDispatcherService.AddListener<ContinueWithCoinAddJokerSignal>(OnContinueWithCoinAddJoker);
+            _eventDispatcherService.AddListener<JokerClickedSignal>(OnJokerClickedFromNoMoreMoves);
             View.UndoButtonClicked += OnUndoClicked;
             View.HintButtonClicked += OnHintClicked;
             View.JokerButtonClicked += OnJokerClicked;
             View.ApplicationPaused += OnApplicationPaused;
             View.CoinButtonClicked += OnCoinButtonClicked;
             View.DegubNextButtonClicked += OnDebugNextButtonClicked;
-            View.DegubRestartButtonClicked += OnDegubRestartButtonClicked;
+            View.DegubRestartButtonClicked += OnDebugRestartButtonClicked;
+            View.SettingsButtonClicked += OnSettingsButtonClicked;
+            View.DegubCompleteButtonClicked += OnDebugCompleteButtonClicked;
+        }
+
+        private void OnDebugCompleteButtonClicked()
+        {
+            _isGameWon = true;
+            if (_snapshotService.HasSnapShot())
+            {
+                _snapshotService.ClearSnapshot();
+            }
+            _uiService.ShowPopup<WinPresenter>();
+        }
+
+        private void OnContinueWithCoinAddJoker(ContinueWithCoinAddJokerSignal _)
+        {
+            var collectibleModel = _savedDataService.GetModel<CollectibleModel>();
+            View.SetCoinText(collectibleModel.totalCoins);
+            HandleJoker(collectibleModel.totalJokers);
+        }
+
+        private void OnJokerClickedFromNoMoreMoves(JokerClickedSignal _)
+        {
+            var collectibleModel = _savedDataService.GetModel<CollectibleModel>();
+            HandleJoker(collectibleModel.totalJokers);
+        }
+
+        private void OnContinueWithCoinAddMoves(ContinueWithCoinAddMovesSignal _)
+        {
+            var collectibleModel = _savedDataService.GetModel<CollectibleModel>();
+            View.SetCoinText(collectibleModel.totalCoins);
+            _movesCount += 10;
+            View.SetMovesCount(_movesCount);
+        }
+
+        private void OnSettingsButtonClicked()
+        {
+            _uiService.ShowPopup<GameSettingsPresenter>();
         }
 
         private void OnAddMovesClicked(AddMovesClickedSignal _)
@@ -80,7 +122,7 @@ namespace UI.Gameplay
             _savedDataService.SaveData(collectibleModel);
         }
 
-        private void OnDegubRestartButtonClicked()
+        private void OnDebugRestartButtonClicked()
         {
             if (_snapshotService.HasSnapShot())
             {
@@ -152,7 +194,7 @@ namespace UI.Gameplay
                 if(_isGameWon)
                     return;
                 if (_hintService.GetPlayableMovements(View.Board).Count == 0)
-                    _uiService.ShowPopup<OutOfMovesPresenter>();
+                    _uiService.ShowPopup<NoMoreMovesPresenter>();
             }
         }
 
@@ -234,7 +276,7 @@ namespace UI.Gameplay
             _movesCount--;
             View.SetMovesCount(_movesCount);
             if (_movesCount == 0)
-                _uiService.ShowPopup<NoMoreMovesPresenter>();
+                _uiService.ShowPopup<OutOfMovesPresenter>();
 
             if(!View.Board.IsGameWon())
                 return;

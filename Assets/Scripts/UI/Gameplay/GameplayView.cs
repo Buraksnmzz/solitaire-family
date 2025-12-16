@@ -14,6 +14,7 @@ public class GameplayView : BaseView
     [SerializeField] private Button jokerButton;
     [SerializeField] private Button hintButton;
     [SerializeField] private Button coinButton;
+    [SerializeField] private Button settingsButton;
     [SerializeField] private CanvasGroup errorImage;
     [SerializeField] private TextMeshProUGUI errorText;
     [SerializeField] private CanvasGroup _inputBlocker;
@@ -42,6 +43,7 @@ public class GameplayView : BaseView
     [SerializeField] private Sprite jokerIconPassiveSprite;
     [SerializeField] private Button debugRestartButton;
     [SerializeField] private Button debugNextButton;
+    [SerializeField] private Button debugCompleteButton;
     
     private Sequence _sequence;
     private Sequence _inputBlockerSequence;
@@ -52,6 +54,9 @@ public class GameplayView : BaseView
     public event Action<bool> ApplicationPaused;
     public event Action DegubRestartButtonClicked;
     public event Action DegubNextButtonClicked;
+    public event Action SettingsButtonClicked;
+    public event Action DegubCompleteButtonClicked;
+    
 
     private void Start()
     {
@@ -60,7 +65,9 @@ public class GameplayView : BaseView
         hintButton.onClick.AddListener(() => HintButtonClicked?.Invoke());
         debugRestartButton.onClick.AddListener(() => DegubRestartButtonClicked?.Invoke());
         debugNextButton.onClick.AddListener(() => DegubNextButtonClicked?.Invoke());
+        debugCompleteButton.onClick.AddListener(() => DegubCompleteButtonClicked?.Invoke());
         coinButton.onClick.AddListener(() => CoinButtonClicked?.Invoke());
+        settingsButton.onClick.AddListener(() => SettingsButtonClicked?.Invoke());
         SetUndoButtonInteractable(false);
     }
 

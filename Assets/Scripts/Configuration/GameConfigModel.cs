@@ -11,6 +11,7 @@ namespace Configuration
         public int hintCost = 900;
         public int undoCost = 800;
         public int jokerCost = 900;
+        public int extraMovesCost = 1500;
         public int layout = 1;
         public int backgroundImageId = 1;
     }

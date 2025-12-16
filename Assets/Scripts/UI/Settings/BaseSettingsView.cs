@@ -15,7 +15,7 @@ namespace UI.Settings
         public event Action SoundToggled;
         public event Action HapticToggled;
         
-        private void Start()
+        protected virtual void Start()
         {
             closeButton.onClick.AddListener(Hide);
             soundButton.onClick.AddListener(()=>SoundToggled?.Invoke());

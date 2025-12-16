@@ -1,17 +1,17 @@
 namespace UI.Settings
 {
-    public class MainSettingsPresenter : BaseSettingsPresenter
+    public class MainSettingsPresenter : BaseSettingsPresenter<MainSettingsView>
     {
-        private IUIService _uiService;
         protected override void OnInitialize()
         {
             base.OnInitialize();
-            ((MainSettingsView)View).AboutToggled += OnAboutToggle;
+            View.AboutToggled += OnAboutToggle;
         }
 
         private void OnAboutToggle()
         {
-            _uiService.ShowPopup<AboutPresenter>();
+            UIService.ShowPopup<AboutPresenter>();
+            View.Hide();
         }
     }
 }

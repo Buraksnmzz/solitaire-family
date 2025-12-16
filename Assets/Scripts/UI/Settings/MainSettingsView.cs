@@ -10,8 +10,9 @@ namespace UI.Settings
         
         public event Action AboutToggled;
 
-        private void Start()
+        protected override void Start()
         {
+            base.Start();
             aboutButton.onClick.AddListener(()=>AboutToggled?.Invoke());
         }
     }

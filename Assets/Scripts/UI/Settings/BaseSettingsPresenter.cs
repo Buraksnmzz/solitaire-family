@@ -1,13 +1,14 @@
 namespace UI.Settings
 {
-    public class BaseSettingsPresenter: BasePresenter<BaseSettingsView>
+    public abstract class BaseSettingsPresenter<TView> : BasePresenter<TView> where TView : BaseSettingsView
     {
         private SettingsModel _settingsModel;
         private ISavedDataService _savedDataService;
-        private IUIService _uiService;
+        protected IUIService UIService;
         protected override void OnInitialize()
         {
             _savedDataService = ServiceLocator.GetService<ISavedDataService>();
+            UIService = ServiceLocator.GetService<IUIService>();
             base.OnInitialize();
             _settingsModel = _savedDataService.GetModel<SettingsModel>();
             View.SoundToggled += OnSoundToggle;

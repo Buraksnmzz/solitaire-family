@@ -52,6 +52,9 @@ namespace Configuration
 			
 			[JsonProperty("jokerCost")]
 			public int JokerCost { get; set; }
+			
+			[JsonProperty("extraMovesCost")]
+			public int ExtraMovesCost { get; set; }
 		}
 
 		public int GetLevelGoal(int levelIndex, int columnCount)
@@ -105,6 +108,7 @@ namespace Configuration
 			gameConfigModel.jokerCost = root.JokerCost;
 			gameConfigModel.layout = root.LayoutId;
 			gameConfigModel.backgroundImageId = root.BackgroundImageId;
+			gameConfigModel.extraMovesCost = root.ExtraMovesCost;
 			savedDataService.SaveData(gameConfigModel);
 		}
 

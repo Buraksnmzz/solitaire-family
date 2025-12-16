@@ -96,12 +96,12 @@ public class UIService : IUIService
 
     private IView CreateViewForPresenter(Type presenterType)
     {
-        var viewType = presenterType.BaseType?.GetGenericArguments()[0];
+        var viewType = GetViewTypeForPresenter(presenterType);
         if (viewType == null)
         {
             return null;
         }
-        
+
         var all = Resources.LoadAll<GameObject>("UI");
         foreach (var prefab in all)
         {
@@ -116,6 +116,26 @@ public class UIService : IUIService
                 }
             }
         }
+        return null;
+    }
+
+    private Type GetViewTypeForPresenter(Type presenterType)
+    {
+        var currentType = presenterType;
+        while (currentType != null && currentType != typeof(object))
+        {
+            if (currentType.IsGenericType && currentType.GetGenericTypeDefinition() == typeof(BasePresenter<>))
+            {
+                var genericArguments = currentType.GetGenericArguments();
+                if (genericArguments.Length == 1)
+                {
+                    return genericArguments[0];
+                }
+            }
+
+            currentType = currentType.BaseType;
+        }
+
         return null;
     }
 

@@ -3,9 +3,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 
-/// <summary>
-/// Base class for all UI views in the MVP pattern
-/// </summary>
 public abstract class BaseView : MonoBehaviour, IView
 {
     [SerializeField] protected Image backgroundImage;
@@ -176,9 +173,9 @@ public abstract class BaseView : MonoBehaviour, IView
             OnHidden();
         });
     }
-    
+
     protected virtual void OnShown() { }
-    
+
     protected virtual void OnHidden() { }
 
     protected virtual void OnDestroy()
