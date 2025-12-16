@@ -284,7 +284,7 @@ RectTransform:
   m_GameObject: {fileID: 3313039897535218170}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7662042173375870374}
@@ -359,7 +359,7 @@ RectTransform:
   m_GameObject: {fileID: 3931191596645871736}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7388511384293278807}
@@ -608,7 +608,7 @@ RectTransform:
   m_GameObject: {fileID: 5396015576501824374}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 612548804405629514}
@@ -925,7 +925,7 @@ RectTransform:
   m_GameObject: {fileID: 7549212797852350653}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6872726223368027562}
@@ -1121,7 +1121,7 @@ RectTransform:
   m_GameObject: {fileID: 8643807058146429941}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6172027125270758282}
@@ -1392,7 +1392,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6094165231872321799, guid: 037840c64689048859bc772f1ea58968, type: 3}
       propertyPath: m_Name
-      value: RateUsView Variant
+      value: RateUsView
       objectReference: {fileID: 0}
     - target: {fileID: 7181200270594505227, guid: 037840c64689048859bc772f1ea58968, type: 3}
       propertyPath: m_SizeDelta.y

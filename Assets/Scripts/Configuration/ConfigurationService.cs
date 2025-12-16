@@ -1,7 +1,8 @@
+using System;
 using Collectible;
 using Goal;
 using Newtonsoft.Json;
-using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Configuration
 {
@@ -13,13 +14,14 @@ namespace Configuration
 		}
 
 		public GoalConfigModel GoalConfig { get; private set; }
+		private int[] _rateUsTriggerLevels;
 
 		[System.Serializable]
 		private class GameConfigurationJson
 		{
 			[JsonProperty("layoutId")]
 			public int LayoutId { get; set; }
-			
+
 			[JsonProperty("backgroundImageId")]
 			public int BackgroundImageId { get; set; }
 
@@ -31,7 +33,7 @@ namespace Configuration
 
 			[JsonProperty("totalJokerGiven")]
 			public int TotalJokerGiven { get; set; }
-			
+
 			[JsonProperty("totalUndoGiven")]
 			public int TotalUndoGiven { get; set; }
 
@@ -43,18 +45,21 @@ namespace Configuration
 
 			[JsonProperty("earnedCoinPerMoveLeft")]
 			public int EarnedCoinPerMoveLeft { get; set; }
-			
+
 			[JsonProperty("hintCost")]
 			public int HintCost { get; set; }
-			
+
 			[JsonProperty("undoCost")]
 			public int UndoCost { get; set; }
-			
+
 			[JsonProperty("jokerCost")]
 			public int JokerCost { get; set; }
-			
+
 			[JsonProperty("extraMovesCost")]
 			public int ExtraMovesCost { get; set; }
+
+			[JsonProperty("rateUsTrigger")]
+			public string RateUsTrigger { get; set; }
 		}
 
 		public int GetLevelGoal(int levelIndex, int columnCount)
@@ -109,7 +114,30 @@ namespace Configuration
 			gameConfigModel.layout = root.LayoutId;
 			gameConfigModel.backgroundImageId = root.BackgroundImageId;
 			gameConfigModel.extraMovesCost = root.ExtraMovesCost;
+			_rateUsTriggerLevels = ParseRateUsTrigger(root.RateUsTrigger);
+			gameConfigModel.rateUsTriggerLevels = _rateUsTriggerLevels;
 			savedDataService.SaveData(gameConfigModel);
+		}
+
+		private int[] ParseRateUsTrigger(string rateUsTrigger)
+		{
+			if (string.IsNullOrEmpty(rateUsTrigger))
+			{
+				return Array.Empty<int>();
+			}
+
+			var parts = rateUsTrigger.Split(',');
+			var result = new int[parts.Length];
+			for (var i = 0; i < parts.Length; i++)
+			{
+				int level;
+				if (int.TryParse(parts[i], out level))
+				{
+					result[i] = level;
+				}
+			}
+
+			return result;
 		}
 
 		private int? GetOverrideLevelGoal(int levelIndex)

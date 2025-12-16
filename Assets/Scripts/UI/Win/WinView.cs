@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Analytics;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
@@ -39,7 +40,7 @@ namespace UI.Win
         private readonly float _coinMoveInterval = 0.1f;
 
         private int _earnedCoins;
-        private readonly int _coinAnimationCount = 10;
+        private readonly int _coinAnimationCount = 8;
         private int _coinBaseTotal;
         private Vector3 _flag1InitialPosition;
         private Vector3 _flag2InitialPosition;
@@ -51,6 +52,7 @@ namespace UI.Win
         public event Action ContinueButtonClicked;
         public event Action OnCoinCreated;
         public event Action OnIconMoved;
+        public event Action IntroAnimationFinished;
 
         private void Awake()
         {
@@ -126,9 +128,11 @@ namespace UI.Win
             }
 
             sequence.Insert(_jokerScaleDelay + 3 * slideStagger, jokerImage.DOScale(_jokerImageInitialScale, _jokerScaleDuration).SetEase(Ease.OutBack));
-            sequence.Insert(_jokerScaleDelay + _continueButtonDelayAfterJoker + 3 * slideStagger, continueButton.transform.DOScale(_continueButtonInitialScale, _continueButtonScaleDuration).SetEase(Ease.OutBack));
-
-            //sequence.OnComplete(PlayCoinAnimation);
+            sequence.Insert(_jokerScaleDelay + _continueButtonDelayAfterJoker + 3 * slideStagger,
+                continueButton.transform
+                    .DOScale(_continueButtonInitialScale, _continueButtonScaleDuration)
+                    .SetEase(Ease.OutBack)
+                    .OnStart(() => IntroAnimationFinished?.Invoke()));
         }
 
         private void InitializeViewsBeforeAnimation()
@@ -148,6 +152,7 @@ namespace UI.Win
             completedImage.localScale = _completedImageInitialScale;
             jokerImage.localScale = Vector3.zero;
             continueButton.transform.localScale = Vector3.zero;
+            continueButton.interactable = true;
             levelText.DOFade(0, 0);
         }
 
@@ -202,6 +207,12 @@ namespace UI.Win
             _completedImageInitialScale = completedImage.localScale;
             _jokerImageInitialScale = jokerImage.localScale;
             _continueButtonInitialScale = continueButton.transform.localScale;
+        }
+
+        public void DisableContinueButton()
+        {
+            continueButton.interactable = false;
+            continueButton.transform.DOScale(0, 0.3f).SetEase(Ease.InBack);
         }
     }
 }

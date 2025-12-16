@@ -13,7 +13,7 @@
   "jokerCost": 900,
   "extraMovesCost": 1500,
   
-  "rateUsTrigger": [2,10,30],
+  "rateUsTrigger": "2,4,7",
   
   "goalConfig": {
     "ColumnGoals": {

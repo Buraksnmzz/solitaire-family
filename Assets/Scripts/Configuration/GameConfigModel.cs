@@ -14,5 +14,6 @@ namespace Configuration
         public int extraMovesCost = 1500;
         public int layout = 1;
         public int backgroundImageId = 1;
+        public int[] rateUsTriggerLevels;
     }
 }

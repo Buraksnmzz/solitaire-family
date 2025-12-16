@@ -67,6 +67,9 @@ namespace UI.Gameplay
         private void OnDebugCompleteButtonClicked()
         {
             _isGameWon = true;
+            var levelProgressModel = _savedDataService.GetModel<LevelProgressModel>();
+            levelProgressModel.CurrentLevelIndex++;
+            _savedDataService.SaveData(levelProgressModel);
             if (_snapshotService.HasSnapShot())
             {
                 _snapshotService.ClearSnapshot();
