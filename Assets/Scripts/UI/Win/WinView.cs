@@ -128,7 +128,7 @@ namespace UI.Win
             sequence.Insert(_jokerScaleDelay + 3 * slideStagger, jokerImage.DOScale(_jokerImageInitialScale, _jokerScaleDuration).SetEase(Ease.OutBack));
             sequence.Insert(_jokerScaleDelay + _continueButtonDelayAfterJoker + 3 * slideStagger, continueButton.transform.DOScale(_continueButtonInitialScale, _continueButtonScaleDuration).SetEase(Ease.OutBack));
 
-            sequence.OnComplete(PlayCoinAnimation);
+            //sequence.OnComplete(PlayCoinAnimation);
         }
 
         private void InitializeViewsBeforeAnimation()
@@ -151,7 +151,7 @@ namespace UI.Win
             levelText.DOFade(0, 0);
         }
 
-        private void PlayCoinAnimation()
+        public void PlayCoinAnimation(Action onCompleted)
         {
             var icons = new List<RectTransform>();
             OnCoinCreated?.Invoke();
@@ -165,6 +165,7 @@ namespace UI.Win
             }
 
             var scaleSequence = DOTween.Sequence();
+            var remainingIcons = icons.Count;
 
             for (var i = 0; i < icons.Count; i++)
             {
@@ -182,41 +183,15 @@ namespace UI.Win
                                     topCoinImage.DOComplete();
                                     topCoinImage.DOPunchScale(Vector3.one * 0.2f, 0.08f);
                                     Destroy(icon.gameObject);
+                                    remainingIcons--;
+                                    if (remainingIcons == 0)
+                                    {
+                                        coinText.text = (int.Parse(coinText.text) + _earnedCoins).ToString();
+                                        onCompleted?.Invoke();
+                                    }
                                 });
                         }));
             }
-            scaleSequence.OnComplete(() =>
-            {
-                coinText.text = (int.Parse(coinText.text) + _earnedCoins).ToString();
-            });
-
-            // scaleSequence.OnComplete(() =>
-            // {
-            //     var moveSequence = DOTween.Sequence();
-            //
-            //     for (var i = 0; i < icons.Count; i++)
-            //     {
-            //         var icon = icons[i];
-            //         var index = i;
-            //         var moveStart = _coinMoveInterval * index;
-            //
-            //         moveSequence.Insert(moveStart,
-            //             icon.DOMove(topCoinImage.position, _coinMoveDuration)
-            //                 .SetEase(Ease.InBack)
-            //                 .OnComplete(() =>
-            //                 {
-            //                     OnIconMoved?.Invoke();
-            //                     topCoinImage.DOComplete();
-            //                     topCoinImage.DOPunchScale(Vector3.one * 0.2f, 0.08f);
-            //                     Destroy(icon.gameObject);
-            //                 }));
-            //     }
-            //
-            //     moveSequence.OnComplete(() =>
-            //     {
-            //         coinText.text = (int.Parse(coinText.text) + _earnedCoins).ToString();
-            //     });
-            // });
         }
 
         private void CacheInitialTransforms()

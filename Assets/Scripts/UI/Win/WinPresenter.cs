@@ -30,8 +30,11 @@ namespace UI.Win
 
         private void OnContinue()
         {
-            _uiService.ShowPopup<GameplayPresenter>();
-            View.Hide();
+            View.PlayCoinAnimation(() =>
+            {
+                _uiService.ShowPopup<GameplayPresenter>();
+                View.Hide();
+            });
         }
     }
 }

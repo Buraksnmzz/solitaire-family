@@ -1125,7 +1125,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4602104480934251915, guid: 037840c64689048859bc772f1ea58968, type: 3}
       propertyPath: m_Color.a
-      value: 0.9490196
+      value: 0.9019608
       objectReference: {fileID: 0}
     - target: {fileID: 5312963033532213833, guid: 037840c64689048859bc772f1ea58968, type: 3}
       propertyPath: m_Pivot.y
@@ -1269,7 +1269,7 @@ MonoBehaviour:
   animationDuration: 0.15
   animationType: 0
   panel: {fileID: 1220663156880636874}
-  fadeEndValue: 0.95
+  fadeEndValue: 0.9
   shouldMoveBackgroundToParent: 0
   continueButton: {fileID: 1488358694250559905}
   flag1: {fileID: 4901673911187901197}

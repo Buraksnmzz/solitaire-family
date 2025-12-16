@@ -1,5 +1,6 @@
 using Collectible;
 using Configuration;
+using DG.Tweening;
 using Gameplay;
 using Levels;
 using Services;
@@ -289,7 +290,8 @@ namespace UI.Gameplay
             {
                 _snapshotService.ClearSnapshot();
             }
-            _uiService.ShowPopup<WinPresenter>();
+
+            DOVirtual.DelayedCall(1f, () => _uiService.ShowPopup<WinPresenter>());
         }
 
         void StartNewLevel()
