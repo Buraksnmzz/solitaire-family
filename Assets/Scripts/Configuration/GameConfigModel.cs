@@ -15,5 +15,6 @@ namespace Configuration
         public int layout = 1;
         public int backgroundImageId = 1;
         public int[] rateUsTriggerLevels;
+        public int dailyAdsWatchAmount = 9;
     }
 }

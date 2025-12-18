@@ -1,0 +1,130 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb2edab94070a4fd58d9f4bd3d097bf2, type: 3}
+  m_Name: TutorialConfig
+  m_EditorClassIdentifier: 
+  deckConfig: {fileID: 11400000, guid: 4eccdffceba91482f988b2261b397265, type: 2}
+  steps:
+  - instructionText: 'The objective is to move all the cards to the foundations
+
+      -
+      Stack them by <color=#ffa84a>category</color>
+
+      - Start with a category
+      card
+
+      - To move a card, drag it.'
+    movements:
+    - cardName: Happy
+      isCategory: 1
+      toContainerType: 2
+      toContainerIndex: 0
+    - cardName: Joyful
+      isCategory: 0
+      toContainerType: 2
+      toContainerIndex: 0
+    - cardName: Medieval
+      isCategory: 1
+      toContainerType: 2
+      toContainerIndex: 1
+  - instructionText: 'Doing good!
+
+      - You can also move cards <color=#ffa84a>between
+      columns</color>
+
+      - You can stack them if they are in the <color=#ffa84a>same
+      category</color>'
+    movements:
+    - cardName: Pastry
+      isCategory: 0
+      toContainerType: 3
+      toContainerIndex: 1
+  - instructionText: "Needing more cards? \n- Check the <color=#ffa84a>draw pile</color>
+      by tapping on the top right"
+    movements:
+    - cardName: Delighted
+      isCategory: 0
+      toContainerType: 1
+      toContainerIndex: 0
+    - cardName: Delighted
+      isCategory: 0
+      toContainerType: 2
+      toContainerIndex: 0
+    - cardName: Cheerful
+      isCategory: 0
+      toContainerType: 2
+      toContainerIndex: 0
+  - instructionText: Once a category gets completed in the foundation, it gets <color=#ffa84a>cleared</color>
+      and you can <color=#ffa84a>start a new category</color> there.
+    movements:
+    - cardName: Desserts
+      isCategory: 1
+      toContainerType: 2
+      toContainerIndex: 0
+  - instructionText: Excellent! You now have an <color=#ffa84a>empty column.</color>
+      You can move a full stack of cards there.
+    movements:
+    - cardName: Sweet
+      isCategory: 0
+      toContainerType: 3
+      toContainerIndex: 0
+  - instructionText: Now finish all the categories to <color=#ffa84a>complete</color>
+      the level.
+    movements:
+    - cardName: Medieval3
+      isCategory: 0
+      toContainerType: 2
+      toContainerIndex: 1
+    - cardName: Medieval1
+      isCategory: 0
+      toContainerType: 2
+      toContainerIndex: 1
+    - cardName: Medieval2
+      isCategory: 0
+      toContainerType: 2
+      toContainerIndex: 1
+    - cardName: Cake
+      isCategory: 0
+      toContainerType: 2
+      toContainerIndex: 0
+    - cardName: Pie
+      isCategory: 0
+      toContainerType: 2
+      toContainerIndex: 0
+    - cardName: Sweet
+      isCategory: 0
+      toContainerType: 2
+      toContainerIndex: 0
+    - cardName: Medieval7
+      isCategory: 0
+      toContainerType: 1
+      toContainerIndex: 0
+    - cardName: Medieval7
+      isCategory: 0
+      toContainerType: 2
+      toContainerIndex: 1
+    - cardName: Cream
+      isCategory: 0
+      toContainerType: 1
+      toContainerIndex: 0
+    - cardName: Cream
+      isCategory: 0
+      toContainerType: 2
+      toContainerIndex: 0
+    - cardName: Chocolate
+      isCategory: 0
+      toContainerType: 1
+      toContainerIndex: 0
+    - cardName: Chocolate
+      isCategory: 0
+      toContainerType: 2
+      toContainerIndex: 0

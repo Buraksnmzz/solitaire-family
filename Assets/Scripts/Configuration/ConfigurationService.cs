@@ -57,6 +57,9 @@ namespace Configuration
 
 			[JsonProperty("extraMovesCost")]
 			public int ExtraMovesCost { get; set; }
+			
+			[JsonProperty("dailyAdsWatchAmount")]
+			public int DailyAdsWatchAmount { get; set; }
 
 			[JsonProperty("rateUsTrigger")]
 			public string RateUsTrigger { get; set; }
@@ -114,6 +117,7 @@ namespace Configuration
 			gameConfigModel.layout = root.LayoutId;
 			gameConfigModel.backgroundImageId = root.BackgroundImageId;
 			gameConfigModel.extraMovesCost = root.ExtraMovesCost;
+			gameConfigModel.dailyAdsWatchAmount = root.DailyAdsWatchAmount;
 			_rateUsTriggerLevels = ParseRateUsTrigger(root.RateUsTrigger);
 			gameConfigModel.rateUsTriggerLevels = _rateUsTriggerLevels;
 			savedDataService.SaveData(gameConfigModel);

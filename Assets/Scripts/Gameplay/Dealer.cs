@@ -16,10 +16,12 @@ namespace Gameplay
         private List<CardModel> _cardModels;
         private IEventDispatcherService _eventDispatcherService;
         private Sequence _hintSequence;
+        private ITutorialMoveRestrictionService _tutorialMoveRestrictionService;
 
         public void SetupDeck(List<CardModel> cardModels, List<CardPresenter> cardPresenters, List<CardView> cardViews)
         {
             _eventDispatcherService = ServiceLocator.GetService<IEventDispatcherService>();
+            _tutorialMoveRestrictionService =  ServiceLocator.GetService<ITutorialMoveRestrictionService>();
             _cardModels = new List<CardModel>(cardModels);
             CardPresenters = new List<CardPresenter>(cardPresenters);
 
@@ -133,6 +135,8 @@ namespace Gameplay
 
         private void OnDealerButtonClick()
         {
+            if (_tutorialMoveRestrictionService != null && _tutorialMoveRestrictionService.IsActive && !_tutorialMoveRestrictionService.IsDragAllowed(GetTopCard())) return;
+            
             var topCardPresenter = GetTopCard();
             if (topCardPresenter == null)
             {

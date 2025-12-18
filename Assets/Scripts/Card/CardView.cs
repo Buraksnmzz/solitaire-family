@@ -10,6 +10,8 @@ namespace Card
 {
     public class CardView : MonoBehaviour
     {
+        public const string MovementTweenId = "CardMovement";
+
         [SerializeField] TextMeshProUGUI contentCountText;
         [SerializeField] TextMeshProUGUI mainText;
         [SerializeField] TextMeshProUGUI rightText;
@@ -23,11 +25,18 @@ namespace Card
         [SerializeField] GameObject backSide;
         [SerializeField][CanBeNull] GameObject upCategoryInfoImage;
         [SerializeField][CanBeNull] TextMeshProUGUI upCategoryName;
+        [SerializeField][CanBeNull] GameObject handImage;
+        [SerializeField][CanBeNull] Image frontCardMainImage;
 
         public void SetContentCountText(int currentCount, int totalCount)
         {
             if (contentCountText == null) return;
             contentCountText.SetText(currentCount + "/" + totalCount);
+        }
+
+        public void SetRaycastTarget(bool isOn)
+        {
+            if (frontCardMainImage != null) frontCardMainImage.raycastTarget = isOn;
         }
 
         public void SetRightTextTransform()
@@ -55,7 +64,7 @@ namespace Card
                 if (upCategoryInfoImage != null) upCategoryInfoImage.SetActive(false);
                 SetCategoryTopState();
             }
-            else if(cardModel.Type == CardType.Content)
+            else if (cardModel.Type == CardType.Content)
             {
                 if (cardModel.CategoryType == CardCategoryType.Text)
                 {
@@ -75,8 +84,8 @@ namespace Card
 
                 if (crownImage != null) crownImage.gameObject.SetActive(false);
             }
-            
-            if(cardModel.Type == CardType.Joker)
+
+            if (cardModel.Type == CardType.Joker)
                 return;
 
             SetRotation(false);
@@ -85,6 +94,11 @@ namespace Card
         public void SetParent(Transform parent, bool worldPositionStays)
         {
             transform.SetParent(parent, worldPositionStays);
+        }
+
+        public void SetHandVisible(bool isVisible)
+        {
+            if (handImage != null) handImage.SetActive(isVisible);
         }
 
         public void SetRotation(bool isFront)
@@ -147,6 +161,7 @@ namespace Card
             transform.DOKill();
             transform.DOLocalMove(targetLocalPosition, duration)
                 .SetDelay(delay)
+                .SetId(MovementTweenId)
                 .SetEase(ease)
                 .OnComplete(() => { onComplete?.Invoke(); });
         }
@@ -216,20 +231,20 @@ namespace Card
         private void SetCategoryBelowWithTopTextState()
         {
             SetAllInactive();
-            if(upText != null) upText.gameObject.SetActive(true);
+            if (upText != null) upText.gameObject.SetActive(true);
         }
 
         private void SetJokerBelowState()
         {
             SetAllInactive();
-            if(upImage != null) upImage.gameObject.SetActive(true);
+            if (upImage != null) upImage.gameObject.SetActive(true);
         }
 
         private void SetJokerTopState()
         {
             SetAllInactive();
-            if(mainImage != null) mainImage.gameObject.SetActive(true);
-            if(mainText != null) mainText.gameObject.SetActive(true);
+            if (mainImage != null) mainImage.gameObject.SetActive(true);
+            if (mainText != null) mainText.gameObject.SetActive(true);
         }
 
         private void SetCategoryTopState()

@@ -4,6 +4,7 @@ using Card;
 using DG.Tweening;
 using Gameplay;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Services.Hint
 {
@@ -109,11 +110,19 @@ namespace Services.Hint
             return movements.FirstOrDefault();
         }
 
-        public void ShowHint(Board board)
+        public void ShowHint(Board board, bool showHand = false, Image handImage = null, float moveDuration = 0.4f, float fadeDuration = 0.25f)
         {
-            CleanupAnimation();
             var movement = GetBestMovement(board);
             if (movement == null) return;
+            ShowHintForMovement(board, movement, showHand, handImage, moveDuration, fadeDuration);
+        }
+
+        public void ShowHintForMovement(Board board, HintMovement movement, bool showHand = false, Image handImage = null, float moveDuration = 0.4f, float fadeDuration = 0.25f)
+        {
+            CleanupAnimation();
+
+            if (movement == null)
+                return;
 
             if (movement.IsReveal && movement.FromContainer is Dealer dealer)
             {
@@ -121,7 +130,7 @@ namespace Services.Hint
                 return;
             }
 
-            PlayAnimation(movement, board);
+            PlayAnimation(movement, board, showHand, handImage, moveDuration, fadeDuration);
         }
 
         private void AddOpenDealerMovements(Board board, List<HintMovement> movements)
@@ -471,7 +480,7 @@ namespace Services.Hint
             return null;
         }
 
-        private void PlayAnimation(HintMovement movement, Board board)
+        private void PlayAnimation(HintMovement movement, Board board, bool showHand, Image handImage, float moveDuration, float fadeDuration)
         {
             CleanupAnimation();
 
@@ -506,6 +515,7 @@ namespace Services.Hint
                 if (view == null) continue;
 
                 var copy = Object.Instantiate(view, parent);
+                copy.GetComponent<CardView>().SetRaycastTarget(false);
                 var copyRect = copy.transform as RectTransform;
                 var viewRect = view.transform as RectTransform;
                 if (copyRect == null || viewRect == null)
@@ -513,6 +523,13 @@ namespace Services.Hint
                     Object.Destroy(copy.gameObject);
                     continue;
                 }
+
+                // if (showHand && handImage != null)
+                // {
+                //     handImage.gameObject.SetActive(true);
+                //     handImage.transform.SetParent(copyRect);
+                //     handImage.transform.localPosition = Vector3.zero;
+                // }
 
                 if (firstBasePosition == null)
                 {
@@ -549,13 +566,13 @@ namespace Services.Hint
                 var rootTarget = i < targetPositions.Count ? targetPositions[0] : copyData[i].rect.position;
                 var offset = i < sourceOffsets.Count ? sourceOffsets[i] : Vector3.zero;
                 var moveTarget = rootTarget + offset;
-                _sequence.Join(copyData[i].rect.DOMove(moveTarget, 0.4f).SetEase(Ease.OutQuad));
+                _sequence.Join(copyData[i].rect.DOMove(moveTarget, moveDuration).SetEase(Ease.OutQuad));
             }
 
             var fadeSequence = DOTween.Sequence();
             for (var i = 0; i < copyData.Count; i++)
             {
-                fadeSequence.Join(copyData[i].group.DOFade(0f, 0.25f).SetEase(Ease.Linear));
+                fadeSequence.Join(copyData[i].group.DOFade(0f, fadeDuration).SetEase(Ease.Linear));
             }
 
             _sequence.Append(fadeSequence);

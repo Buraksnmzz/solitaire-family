@@ -8,6 +8,7 @@ using UnityEngine;
 using Loading;
 using Services.Drag;
 using UI.MainMenu;
+using UI.Gameplay;
 
 public class Installer : MonoBehaviour
 {
@@ -58,15 +59,21 @@ public class Installer : MonoBehaviour
         ServiceLocator.Register<ICollectibelService>(new CollectibleService());
         ServiceLocator.Register<ILevelGeneratorService>(new LevelGeneratorService(BootCache.LevelsJson));
         ServiceLocator.Register<IConfigurationService>(new ConfigurationService(BootCache.ConfigurationJson));
+        ServiceLocator.Register<IDailyAdsService>(new DailyAdsService());
         ServiceLocator.Register<IUndoService>(new UndoService());
         ServiceLocator.Register<IDragStateService>(new DragStateService());
         ServiceLocator.Register<IHintService>(new HintService());
+        ServiceLocator.Register<ITutorialMoveRestrictionService>(new TutorialMoveRestrictionService());
 
-        ServiceLocator.GetService<IUIService>().ShowPopup<MainMenuPresenter>();
-        // if (PlayerPrefs.GetInt(StringConstants.IsTutorialShown) == 0)
-        // {
-        //     ServiceLocator.GetService<IUIService>().ShowPopup<TutorialGamePresenter>();
-        // }
+        var uiService = ServiceLocator.GetService<IUIService>();
+         if (PlayerPrefs.GetInt(StringConstants.IsTutorialShown) == 0)
+         {
+             uiService.ShowPopup<TutorialGamePresenter>();
+         }
+         else
+         {
+             uiService.ShowPopup<MainMenuPresenter>();
+         }        
     }
 
 }

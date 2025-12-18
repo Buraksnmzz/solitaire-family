@@ -51,7 +51,9 @@ namespace UI.Win
             var levelProgressModel = _savedDataService.GetModel<LevelProgressModel>();
             View.SetCoinText(collectibleModel.totalCoins);
             View.SetLevelText(levelProgressModel.CurrentLevelIndex);
+            View.SetCoinAmountToCollectText(configModel.earnedCoinAtLevelEnd);
             collectibleModel.totalCoins += configModel.earnedCoinAtLevelEnd;
+            _savedDataService.SaveData(collectibleModel);
         }
 
         private void OnContinue()

@@ -861,6 +861,9 @@ MonoBehaviour:
   continueButton: {fileID: 7918020171274257456}
   jokerButton: {fileID: 176158469508939197}
   restartButton: {fileID: 7886898107562312370}
+  closeButton: {fileID: 3664667879169636994}
+  usageCountText: {fileID: 2903198347947927313}
+  jokerCostText: {fileID: 6476957099624237908}
 --- !u!1 &5714680389326085714
 GameObject:
   m_ObjectHideFlags: 0
@@ -1279,7 +1282,6 @@ GameObject:
   - component: {fileID: 6564384805821126141}
   - component: {fileID: 1205257626216091224}
   - component: {fileID: 8210127801260185346}
-  - component: {fileID: 3256477138883468612}
   m_Layer: 5
   m_Name: Background
   m_TagString: Untagged
@@ -1302,9 +1304,9 @@ RectTransform:
   m_Father: {fileID: 2672836672983111611}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 99}
+  m_SizeDelta: {x: 199.99998, y: 202}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1205257626216091224
 CanvasRenderer:
@@ -1344,20 +1346,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &3256477138883468612
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8087598908045642664}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 86710e43de46f6f4bac7c8e50813a599, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_AspectMode: 4
-  m_AspectRatio: 0.571
 --- !u!1 &8565444732418730971
 GameObject:
   m_ObjectHideFlags: 0

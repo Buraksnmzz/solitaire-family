@@ -24,6 +24,7 @@ namespace Card
         IDragStateService _dragStateService;
         bool _isDragging;
         private readonly float _moveDuration = 0.25f;
+        ITutorialMoveRestrictionService _tutorialMoveRestrictionService;
 
         public void Setup(CardPresenter presenter, Transform parent)
         {
@@ -31,6 +32,7 @@ namespace Card
             _dragStateService = ServiceLocator.GetService<IDragStateService>();
             _presenter = presenter;
             _canvasTransform = parent as RectTransform;
+            _tutorialMoveRestrictionService = ServiceLocator.GetService<ITutorialMoveRestrictionService>();
             var canvas = GetComponentInParent<Canvas>();
             if (canvas != null)
             {
@@ -43,6 +45,9 @@ namespace Card
             if (_dragStateService == null) return;
             if (!_dragStateService.CanStartDrag()) return;
             if (!IsDraggable()) return;
+            if (_tutorialMoveRestrictionService != null && _tutorialMoveRestrictionService.IsActive && !_tutorialMoveRestrictionService.IsDragAllowed(_presenter)) return;
+
+            DOTween.Complete(CardView.MovementTweenId);
 
             _dragStateService.StartDrag();
             _isDragging = true;
@@ -103,10 +108,10 @@ namespace Card
         {
             if (!_isDragging) return;
             if (_dragStateService == null) return;
+            _dragStateService.EndDrag();
+            _isDragging = false;
             if (!IsDraggable())
             {
-                _dragStateService.EndDrag();
-                _isDragging = false;
                 return;
             }
 
@@ -131,7 +136,12 @@ namespace Card
 
             if (closestContainer != null && closestDistance <= snapDistance)
             {
-                if (closestContainer.CanPlaceCard(_presenter))
+                if (_tutorialMoveRestrictionService != null && _tutorialMoveRestrictionService.IsActive && !_tutorialMoveRestrictionService.IsDropAllowed(_presenter, closestContainer))
+                {
+                    closestContainer = null;
+                }
+
+                if (closestContainer != null && closestContainer.CanPlaceCard(_presenter))
                 {
                     var currentContainer = _presenter.GetContainer();
                     if (currentContainer != null)
@@ -170,9 +180,6 @@ namespace Card
                         {
                             currentContainer.RevealTopCardIfNeeded();
                         }
-
-                        _dragStateService.EndDrag();
-                        _isDragging = false;
                     }
                     return;
                 }
@@ -203,6 +210,7 @@ namespace Card
                     viewRectTransform.DOKill();
                     viewRectTransform.SetAsLastSibling();
                     viewRectTransform.DOLocalMove(canvasLocalTarget, _moveDuration)
+                        .SetId(CardView.MovementTweenId)
                         .SetEase(Ease.OutQuad)
                         .OnComplete(() =>
                         {
@@ -211,14 +219,14 @@ namespace Card
                             viewRectTransform.SetSiblingIndex(siblingIndex);
 
                             var startWorldX = viewRectTransform.position.x;
-                            viewRectTransform.DOPunchPosition(Vector3.right * 10f, wrongDuration).OnComplete(() =>
+                            viewRectTransform.DOPunchPosition(Vector3.right * 10f, wrongDuration)
+                                .SetId(CardView.MovementTweenId)
+                                .OnComplete(() =>
                             {
                                 remainingAnimations--;
                                 if (remainingAnimations <= 0)
                                 {
                                     _eventDispatcherService.Dispatch(new CardMovementStateChangedSignal(false));
-                                    _dragStateService.EndDrag();
-                                    _isDragging = false;
                                 }
                             });
                             // viewRectTransform.DOMoveX(startWorldX + wrongOffset, wrongDuration)
@@ -239,7 +247,6 @@ namespace Card
 
             _draggedPresenters = null;
             _startLocalPositions = null;
-            _isDragging = false;
         }
 
         bool IsDraggable()

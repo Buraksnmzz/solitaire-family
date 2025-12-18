@@ -30,6 +30,7 @@ namespace UI.Gameplay
         private IHintService _hintService;
         private ISnapshotService _snapshotService;
         private bool _isGameWon;
+        private CollectibleModel _collectibleModel;
 
         protected override void OnInitialize()
         {
@@ -43,7 +44,7 @@ namespace UI.Gameplay
             _hintService = ServiceLocator.GetService<IHintService>();
             _snapshotService = ServiceLocator.GetService<ISnapshotService>();
             _currentLevelIndex = _savedDataService.GetModel<LevelProgressModel>().CurrentLevelIndex;
-             
+
             _eventDispatcherService.AddListener<MoveCountRequestedSignal>(OnMoveCountRequested);
             _eventDispatcherService.AddListener<CardMovePerformedSignal>(OnCardMovePerformed);
             _eventDispatcherService.AddListener<PlacableErrorSignal>(OnPlacableError);
@@ -67,6 +68,15 @@ namespace UI.Gameplay
         private void OnDebugCompleteButtonClicked()
         {
             _isGameWon = true;
+            var gameConfigModel = _savedDataService.GetModel<GameConfigModel>();
+            var earnedCoinsFromMoves = _movesCount * gameConfigModel.earnedCoinPerMoveLeft;
+            if (earnedCoinsFromMoves < 0)
+                earnedCoinsFromMoves = 0;
+
+            var initialCoins = _collectibleModel.totalCoins;
+            _collectibleModel.totalCoins += earnedCoinsFromMoves;
+            _savedDataService.SaveData(_collectibleModel);
+
             var levelProgressModel = _savedDataService.GetModel<LevelProgressModel>();
             levelProgressModel.CurrentLevelIndex++;
             _savedDataService.SaveData(levelProgressModel);
@@ -74,26 +84,27 @@ namespace UI.Gameplay
             {
                 _snapshotService.ClearSnapshot();
             }
-            _uiService.ShowPopup<WinPresenter>();
+
+            View.PlayEarnedMovesCoinAnimation(_movesCount, gameConfigModel.earnedCoinPerMoveLeft, initialCoins, () =>
+            {
+                _uiService.ShowPopup<WinPresenter>();
+            });
         }
 
         private void OnContinueWithCoinAddJoker(ContinueWithCoinAddJokerSignal _)
         {
-            var collectibleModel = _savedDataService.GetModel<CollectibleModel>();
-            View.SetCoinText(collectibleModel.totalCoins);
-            HandleJoker(collectibleModel.totalJokers);
+            View.SetCoinText(_collectibleModel.totalCoins);
+            HandleJoker(_collectibleModel.totalJokers);
         }
 
         private void OnJokerClickedFromNoMoreMoves(JokerClickedSignal _)
         {
-            var collectibleModel = _savedDataService.GetModel<CollectibleModel>();
-            HandleJoker(collectibleModel.totalJokers);
+            HandleJoker(_collectibleModel.totalJokers);
         }
 
         private void OnContinueWithCoinAddMoves(ContinueWithCoinAddMovesSignal _)
         {
-            var collectibleModel = _savedDataService.GetModel<CollectibleModel>();
-            View.SetCoinText(collectibleModel.totalCoins);
+            View.SetCoinText(_collectibleModel.totalCoins);
             _movesCount += 10;
             View.SetMovesCount(_movesCount);
         }
@@ -120,10 +131,9 @@ namespace UI.Gameplay
 
         private void OnCoinButtonClicked()
         {
-            var collectibleModel = _savedDataService.GetModel<CollectibleModel>();
-            collectibleModel.totalCoins += 1000;
-            View.SetCoinText(collectibleModel.totalCoins);
-            _savedDataService.SaveData(collectibleModel);
+            _collectibleModel.totalCoins += 1000;
+            View.SetCoinText(_collectibleModel.totalCoins);
+            _savedDataService.SaveData(_collectibleModel);
         }
 
         private void OnDebugRestartButtonClicked()
@@ -149,18 +159,17 @@ namespace UI.Gameplay
 
         private void OnJokerClicked()
         {
-            var collectibleModel = _savedDataService.GetModel<CollectibleModel>();
             var gameConfigModel = _savedDataService.GetModel<GameConfigModel>();
-            if (collectibleModel.totalJokers >= 1)
+            if (_collectibleModel.totalJokers >= 1)
             {
-                collectibleModel.totalJokers--;
-                HandleJoker(collectibleModel.totalJokers);
+                _collectibleModel.totalJokers--;
+                HandleJoker(_collectibleModel.totalJokers);
             }
-            else if(collectibleModel.totalCoins >= gameConfigModel.jokerCost)
+            else if (_collectibleModel.totalCoins >= gameConfigModel.jokerCost)
             {
-                collectibleModel.totalCoins -= gameConfigModel.jokerCost;
-                View.SetCoinText(collectibleModel.totalCoins);
-                HandleJoker(collectibleModel.totalJokers);
+                _collectibleModel.totalCoins -= gameConfigModel.jokerCost;
+                View.SetCoinText(_collectibleModel.totalCoins);
+                HandleJoker(_collectibleModel.totalJokers);
             }
         }
 
@@ -168,7 +177,8 @@ namespace UI.Gameplay
         {
             View.board.GenerateJokerCard();
             View.SetJokerAmount(totalJokers);
-            View.SetJokerButtonInteractable(false);
+            //View.SetJokerButtonInteractable(false);
+            _savedDataService.SaveData(_collectibleModel);
         }
 
         private void OnApplicationPaused(bool isPaused)
@@ -192,10 +202,9 @@ namespace UI.Gameplay
 
         private void OnCardMovementStateChanged(CardMovementStateChangedSignal signal)
         {
-            View.SetInputBlocked(signal.IsMoving);
             if (!signal.IsMoving)
             {
-                if(_isGameWon)
+                if (_isGameWon)
                     return;
                 if (_hintService.GetPlayableMovements(View.Board).Count == 0)
                     _uiService.ShowPopup<NoMoreMovesPresenter>();
@@ -204,18 +213,17 @@ namespace UI.Gameplay
 
         private void OnUndoClicked()
         {
-            var collectibleModel = _savedDataService.GetModel<CollectibleModel>();
             var gameConfigModel = _savedDataService.GetModel<GameConfigModel>();
-            if (collectibleModel.totalUndo >= 1)
+            if (_collectibleModel.totalUndo >= 1)
             {
-                collectibleModel.totalUndo--;
-                HandleUndo(collectibleModel.totalUndo);
+                _collectibleModel.totalUndo--;
+                HandleUndo(_collectibleModel.totalUndo);
             }
-            else if(collectibleModel.totalCoins >= gameConfigModel.undoCost)
+            else if (_collectibleModel.totalCoins >= gameConfigModel.undoCost)
             {
-                collectibleModel.totalCoins -= gameConfigModel.undoCost;
-                View.SetCoinText(collectibleModel.totalCoins);
-                HandleUndo(collectibleModel.totalUndo);
+                _collectibleModel.totalCoins -= gameConfigModel.undoCost;
+                View.SetCoinText(_collectibleModel.totalCoins);
+                HandleUndo(_collectibleModel.totalUndo);
             }
         }
 
@@ -226,25 +234,26 @@ namespace UI.Gameplay
             View.SetMovesCount(_movesCount);
             View.SetUndoButtonInteractable(false);
             View.SetUndoAmount(totalUndo);
+            _savedDataService.SaveData(_collectibleModel);
         }
 
         private void OnHintClicked()
         {
-            var collectibleModel = _savedDataService.GetModel<CollectibleModel>();
             var gameConfigModel = _savedDataService.GetModel<GameConfigModel>();
-            if (collectibleModel.totalHints >= 1)
+            if (_collectibleModel.totalHints >= 1)
             {
-                collectibleModel.totalHints--;
+                _collectibleModel.totalHints--;
                 _hintService.ShowHint(View.Board);
-                View.SetHintAmount(collectibleModel.totalHints);
+                View.SetHintAmount(_collectibleModel.totalHints);
             }
-            else if(collectibleModel.totalCoins >= gameConfigModel.undoCost)
+            else if (_collectibleModel.totalCoins >= gameConfigModel.undoCost)
             {
-                collectibleModel.totalCoins -= gameConfigModel.hintCost;
-                View.SetCoinText(collectibleModel.totalCoins);
+                _collectibleModel.totalCoins -= gameConfigModel.hintCost;
+                View.SetCoinText(_collectibleModel.totalCoins);
                 _hintService.ShowHint(View.Board);
-                View.SetHintAmount(collectibleModel.totalHints);
+                View.SetHintAmount(_collectibleModel.totalHints);
             }
+            _savedDataService.SaveData(_collectibleModel);
         }
 
         public override void ViewShown()
@@ -253,15 +262,15 @@ namespace UI.Gameplay
             _currentLevelIndex = _savedDataService.GetModel<LevelProgressModel>().CurrentLevelIndex;
             _totalColumnCount = _levelGeneratorService.GetLevelColumnCount(_currentLevelIndex);
             _categoryCardCount = _levelGeneratorService.GetLevelCategoryCardCount(_currentLevelIndex);
-            _totalGoalCount = _configurationService.GetLevelGoal(_currentLevelIndex, _totalColumnCount);
+            _totalGoalCount = _configurationService.GetLevelGoal(_currentLevelIndex + 1, _totalColumnCount);
             _levelData = _levelGeneratorService.GetLevelData(_currentLevelIndex);
             _movesCount = _totalGoalCount;
-            var collectibleModel = _savedDataService.GetModel<CollectibleModel>();
-            View.SetJokerAmount(collectibleModel.totalJokers);
-            View.SetHintAmount(collectibleModel.totalHints);
-            View.SetUndoAmount(collectibleModel.totalUndo);
-            View.SetCoinText(collectibleModel.totalCoins);
-            View.SetLevelText(_currentLevelIndex+1);
+            _collectibleModel = _savedDataService.GetModel<CollectibleModel>();
+            View.SetJokerAmount(_collectibleModel.totalJokers);
+            View.SetHintAmount(_collectibleModel.totalHints);
+            View.SetUndoAmount(_collectibleModel.totalUndo);
+            View.SetCoinText(_collectibleModel.totalCoins);
+            View.SetLevelText(_currentLevelIndex + 1);
             base.ViewShown();
             if (_snapshotService.HasSnapShot())
             {
@@ -282,10 +291,19 @@ namespace UI.Gameplay
             if (_movesCount == 0)
                 _uiService.ShowPopup<OutOfMovesPresenter>();
 
-            if(!View.Board.IsGameWon())
+            if (!View.Board.IsGameWon())
                 return;
-            
+
             _isGameWon = true;
+            var gameConfigModel = _savedDataService.GetModel<GameConfigModel>();
+            var earnedCoinsFromMoves = _movesCount * gameConfigModel.earnedCoinPerMoveLeft;
+            if (earnedCoinsFromMoves < 0)
+                earnedCoinsFromMoves = 0;
+
+            var initialCoins = _collectibleModel.totalCoins;
+            _collectibleModel.totalCoins += earnedCoinsFromMoves;
+            _savedDataService.SaveData(_collectibleModel);
+
             var levelProgressModel = _savedDataService.GetModel<LevelProgressModel>();
             levelProgressModel.CurrentLevelIndex++;
             _savedDataService.SaveData(levelProgressModel);
@@ -294,7 +312,10 @@ namespace UI.Gameplay
                 _snapshotService.ClearSnapshot();
             }
 
-            DOVirtual.DelayedCall(1f, () => _uiService.ShowPopup<WinPresenter>());
+            View.PlayEarnedMovesCoinAnimation(_movesCount, gameConfigModel.earnedCoinPerMoveLeft, initialCoins, () =>
+            {
+                _uiService.ShowPopup<WinPresenter>();
+            });
         }
 
         void StartNewLevel()

@@ -36,7 +36,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 22.1, y: 95.6}
+  m_AnchoredPosition: {x: 22.099976, y: 95.599976}
   m_SizeDelta: {x: 70, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6089520765191986653
@@ -2693,7 +2693,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 22.1, y: 162}
+  m_AnchoredPosition: {x: 22.099976, y: 162}
   m_SizeDelta: {x: 70, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3322824823959460642
@@ -5601,6 +5601,8 @@ MonoBehaviour:
   jokerButton: {fileID: 6045951598091361246}
   hintButton: {fileID: 1286044832631929016}
   coinButton: {fileID: 3807836473170016193}
+  coinImage: {fileID: 8105650323942164210}
+  earnedCoinIconPrefab: {fileID: 611373488224889559, guid: 3bfc68eea2ff34d1294b8bf5116c850e, type: 3}
   settingsButton: {fileID: 2473347870008906223}
   errorImage: {fileID: 6020840223791496586}
   errorText: {fileID: 1279586330919714968}
@@ -5739,6 +5741,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4998549832606677705, guid: 1dabc0c1dd139444396c33c7a4442eb0, type: 3}
+      propertyPath: m_Pivot.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4998549832606677705, guid: 1dabc0c1dd139444396c33c7a4442eb0, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 32.5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -5771,3 +5781,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!224 &8105650323942164210 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 4998549832606677705, guid: 1dabc0c1dd139444396c33c7a4442eb0, type: 3}
+  m_PrefabInstance: {fileID: 3829014681935264827}
+  m_PrefabAsset: {fileID: 0}

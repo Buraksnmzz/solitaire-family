@@ -11,7 +11,8 @@
   "hintCost": 900,
   "undoCost": 800,
   "jokerCost": 900,
-  "extraMovesCost": 1500,
+  "extraMovesCost": 1200,
+  "dailyAdsWatchAmount": 9,
   
   "rateUsTrigger": "2,4,7",
   
@@ -35,7 +36,7 @@
     },
 
     "LevelGoals": [
-      { "level": 2, "goal": 10 },
+      { "level": 1, "goal": 3 },
       { "level": 7, "goal": 75 },
       { "level": 13, "goal": 80 }
     ]

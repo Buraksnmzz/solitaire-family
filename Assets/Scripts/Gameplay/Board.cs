@@ -7,6 +7,7 @@ using UI.Signals;
 using UI.Win;
 using UnityEngine;
 using UnityEngine.Serialization;
+using Tutorial;
 
 namespace Gameplay
 {
@@ -20,7 +21,6 @@ namespace Gameplay
         public RectTransform pileParent;
         public RectTransform dealerRectTransform;
         public RectTransform openDealerRectTransform;
-        [SerializeField] private Transform goalCounterTransform;
         [SerializeField] private RectTransform dealerHint;
         [SerializeField] private RectTransform dealerEmptyImage;
         private int _foundationCount;
@@ -49,7 +49,7 @@ namespace Gameplay
         public Transform BoardParent => _parent;
 
 
-        public void Setup(LevelData levelData, int currentLevelIndex, Transform parent, SnapShotModel snapshot = null)
+        public void Setup(LevelData levelData, int currentLevelIndex, Transform parent, SnapShotModel snapshot = null, bool shuffleDeck = true, TutorialDeckConfig deckConfig = null)
         {
             ResetBoardState();
             _parent = parent;
@@ -60,12 +60,15 @@ namespace Gameplay
             if (snapshot != null && TryRestoreSnapshot(snapshot, currentLevelIndex))
                 return;
             GenerateCardModelsAndPresenters();
+            if (deckConfig != null)
+                ApplyDeckOrder(deckConfig);
             InstantiateCardViews();
             dealer.SetupDeck(CardModels, CardPresenters, cardViews);
-            dealer.ShuffleDeck();
+            if (shuffleDeck)
+                dealer.ShuffleDeck();
             dealer.DealInitialCards(piles, _foundationCount);
         }
-        
+
         public bool IsGameWon()
         {
             if (dealer.GetCardsCount() > 0)
@@ -81,7 +84,7 @@ namespace Gameplay
             {
                 return false;
             }
-            
+
             return true;
         }
 
@@ -140,6 +143,98 @@ namespace Gameplay
             }
         }
 
+        void ApplyDeckOrder(TutorialDeckConfig deckConfig)
+        {
+            if (deckConfig == null || deckConfig.orderedCardNames == null || deckConfig.orderedCardNames.Count == 0)
+                return;
+
+            var contentMap = new Dictionary<string, Queue<CardModel>>();
+            var categoryMap = new Dictionary<string, Queue<CardModel>>();
+
+            foreach (var model in CardModels)
+            {
+                if (model == null)
+                    continue;
+
+                if (model.Type == CardType.Content)
+                {
+                    if (!contentMap.TryGetValue(model.ContentName, out var queue))
+                    {
+                        queue = new Queue<CardModel>();
+                        contentMap.Add(model.ContentName, queue);
+                    }
+
+                    queue.Enqueue(model);
+                }
+                else if (model.Type == CardType.Category)
+                {
+                    if (!categoryMap.TryGetValue(model.CategoryName, out var queue))
+                    {
+                        queue = new Queue<CardModel>();
+                        categoryMap.Add(model.CategoryName, queue);
+                    }
+
+                    queue.Enqueue(model);
+                }
+            }
+
+            var modelToPresenter = new Dictionary<CardModel, CardPresenter>();
+            for (var i = 0; i < CardModels.Count && i < CardPresenters.Count; i++)
+            {
+                var model = CardModels[i];
+                var presenter = CardPresenters[i];
+                if (model != null && presenter != null && !modelToPresenter.ContainsKey(model))
+                {
+                    modelToPresenter.Add(model, presenter);
+                }
+            }
+
+            var newModels = new List<CardModel>(CardModels.Count);
+            var newPresenters = new List<CardPresenter>(CardPresenters.Count);
+
+            void AddPair(CardModel model)
+            {
+                if (model == null)
+                    return;
+                if (!modelToPresenter.TryGetValue(model, out var presenter))
+                    return;
+                newModels.Add(model);
+                newPresenters.Add(presenter);
+            }
+
+            foreach (var name in deckConfig.orderedCardNames)
+            {
+                if (string.IsNullOrEmpty(name))
+                    continue;
+
+                CardModel model = null;
+
+                if (categoryMap.TryGetValue(name, out var categoryQueue) && categoryQueue.Count > 0)
+                    model = categoryQueue.Dequeue();
+                else if (contentMap.TryGetValue(name, out var contentQueue) && contentQueue.Count > 0)
+                    model = contentQueue.Dequeue();
+
+                AddPair(model);
+            }
+
+            foreach (var pair in modelToPresenter)
+            {
+                if (!newModels.Contains(pair.Key))
+                {
+                    newModels.Add(pair.Key);
+                    newPresenters.Add(pair.Value);
+                }
+            }
+
+            if (newModels.Count != CardModels.Count || newPresenters.Count != CardPresenters.Count)
+                return;
+
+            CardModels.Clear();
+            CardModels.AddRange(newModels);
+            CardPresenters.Clear();
+            CardPresenters.AddRange(newPresenters);
+        }
+
         private void InstantiateCardViews()
         {
             for (var index = 0; index < CardModels.Count; index++)
@@ -185,7 +280,7 @@ namespace Gameplay
             //_itemWidth = _foundationCount <= 4 ? 152f : 116f;
             _itemWidth = _foundationCount <= 4 ? 142f : 108f;
             _itemHeight = _itemWidth / widhtHeightRatio;
-            
+
             for (var index = 0; index < piles.Count; index++)
             {
                 piles[index].gameObject.SetActive(index < _foundationCount);
@@ -463,6 +558,6 @@ namespace Gameplay
             }
         }
 
-        
+
     }
 }

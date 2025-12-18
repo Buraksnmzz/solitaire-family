@@ -14,6 +14,8 @@ public class GameplayView : BaseView
     [SerializeField] private Button jokerButton;
     [SerializeField] private Button hintButton;
     [SerializeField] private Button coinButton;
+    [SerializeField] private Transform coinImage;
+    [SerializeField] private RectTransform earnedCoinIconPrefab;
     [SerializeField] private Button settingsButton;
     [SerializeField] private CanvasGroup errorImage;
     [SerializeField] private TextMeshProUGUI errorText;
@@ -44,9 +46,10 @@ public class GameplayView : BaseView
     [SerializeField] private Button debugRestartButton;
     [SerializeField] private Button debugNextButton;
     [SerializeField] private Button debugCompleteButton;
-    
+
     private Sequence _sequence;
     private Sequence _inputBlockerSequence;
+    private Sequence _coinSequence;
     public event Action UndoButtonClicked;
     public event Action HintButtonClicked;
     public event Action JokerButtonClicked;
@@ -56,7 +59,7 @@ public class GameplayView : BaseView
     public event Action DegubNextButtonClicked;
     public event Action SettingsButtonClicked;
     public event Action DegubCompleteButtonClicked;
-    
+
 
     private void Start()
     {
@@ -85,16 +88,17 @@ public class GameplayView : BaseView
         undoButtonImage.sprite = interactable ? undoButtonActiveSprite : undoButtonPassiveSprite;
     }
 
-    public void SetJokerButtonInteractable(bool interactable)
-    {
-        jokerButton.interactable = interactable;
-        jokerButtonIcon.sprite = interactable ? jokerIconActiveSprite : jokerIconPassiveSprite;
-        jokerButtonImage.sprite = interactable ? jokerButtonActiveSprite : jokerButtonPassiveSprite;
-    }
+    // public void SetJokerButtonInteractable(bool interactable)
+    // {
+    //     jokerButton.interactable = interactable;
+    //     jokerButtonIcon.sprite = interactable ? jokerIconActiveSprite : jokerIconPassiveSprite;
+    //     jokerButtonImage.sprite = interactable ? jokerButtonActiveSprite : jokerButtonPassiveSprite;
+    // }
 
     public void SetMovesCount(int totalMovesCount)
     {
         movesCount.SetText(totalMovesCount.ToString());
+        movesCount.transform.DOKill(true);
         movesCount.transform.DOPunchScale(Vector3.one * 0.2f, 0.3f, 5);
     }
 
@@ -146,12 +150,82 @@ public class GameplayView : BaseView
         _sequence.AppendInterval(2.4f);
         _sequence.Append(errorImage.DOFade(0f, 0.2f));
         _sequence.OnComplete(() => errorImage.gameObject.SetActive(false));
-
     }
 
     public void SetCoinText(int totalCoins)
     {
         coinText.SetText(totalCoins.ToString());
+    }
+
+    public void PlayEarnedMovesCoinAnimation(int remainingMoves, int coinsPerMoveLeft, int startingCoins, Action onCompleted)
+    {
+        if (remainingMoves <= 0)
+        {
+            SetCoinText(startingCoins);
+            onCompleted?.Invoke();
+            return;
+        }
+
+        if (_coinSequence != null && _coinSequence.IsActive())
+        {
+            _coinSequence.Kill();
+        }
+
+        _coinSequence = DOTween.Sequence();
+
+        const float coinMoveDuration = 0.4f;
+        const float coinScaleDuration = 0.2f;
+
+        var currentCoins = startingCoins;
+        var currentMoves = remainingMoves;
+
+        for (var i = 0; i < remainingMoves; i++)
+        {
+            var icon = Instantiate(earnedCoinIconPrefab, panel);
+            icon.localScale = Vector3.zero;
+            icon.position = movesCount.transform.position;
+
+            float delay;
+            if (i < 10)
+            {
+                delay = 0.3f * i;
+            }
+            else if (i < 20)
+            {
+                delay = 0.3f * 10 + 0.15f * (i - 10);
+            }
+            else
+            {
+                delay = 0.3f * 10 + 0.15f * 10 + 0.05f * (i - 20);
+            }
+
+            var scaleTween = icon.DOScale(Vector3.one, coinScaleDuration).SetEase(Ease.OutBack);
+            var moveTween = icon.DOMove(coinImage.position, coinMoveDuration).OnComplete(() =>
+            {
+                currentCoins += coinsPerMoveLeft;
+                SetCoinText(currentCoins);
+                if (currentMoves > 0)
+                {
+                    currentMoves--;
+                    if (currentMoves < 0)
+                        currentMoves = 0;
+                    SetMovesCount(currentMoves);
+                }
+
+                coinImage.DOKill(true);
+                coinImage.DOPunchScale(Vector3.one * 0.2f, 0.08f);
+                Destroy(icon.gameObject);
+            });
+
+            _coinSequence.Insert(delay, scaleTween);
+            _coinSequence.Insert(delay, moveTween);
+        }
+
+        _coinSequence.OnComplete(() =>
+        {
+            SetCoinText(startingCoins + remainingMoves * coinsPerMoveLeft);
+            onCompleted?.Invoke();
+        });
     }
 
     public void SetUndoAmount(int totalUndo)

@@ -1269,7 +1269,7 @@ MonoBehaviour:
   animationDuration: 0.15
   animationType: 0
   panel: {fileID: 1220663156880636874}
-  fadeEndValue: 0.9
+  fadeEndValue: 0.99
   shouldMoveBackgroundToParent: 0
   continueButton: {fileID: 1488358694250559905}
   flag1: {fileID: 4901673911187901197}

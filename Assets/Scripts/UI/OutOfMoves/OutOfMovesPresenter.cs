@@ -4,18 +4,29 @@ using UI.NoMoreMoves;
 
 namespace UI.OutOfMoves
 {
-    public class OutOfMovesPresenter: BasePresenter<OutOfMovesView>
+    public class OutOfMovesPresenter : BasePresenter<OutOfMovesView>
     {
         IEventDispatcherService _eventDispatcher;
         ISavedDataService _savedDataService;
+        IDailyAdsService _dailyAdsService;
         protected override void OnInitialize()
         {
             base.OnInitialize();
             _eventDispatcher = ServiceLocator.GetService<IEventDispatcherService>();
             _savedDataService = ServiceLocator.GetService<ISavedDataService>();
+            _dailyAdsService = ServiceLocator.GetService<IDailyAdsService>();
             View.RestartButtonClicked += OnRestartButtonClick;
             View.AddMovesClicked += OnAddMovesClick;
             View.ContinueButtonClicked += OnContinueClick;
+            View.CloseButtonClicked += OnRestartButtonClick;
+        }
+
+        public override void ViewShown()
+        {
+            base.ViewShown();
+            UpdateUsage();
+            var gameConfigModel = _savedDataService.GetModel<GameConfigModel>();
+            View.SetExtraMovesCostText(gameConfigModel.extraMovesCost);
         }
 
         private void OnContinueClick()
@@ -24,12 +35,21 @@ namespace UI.OutOfMoves
             var gameConfigModel = _savedDataService.GetModel<GameConfigModel>();
             if (collectibleModel.totalCoins < gameConfigModel.extraMovesCost) return;
             collectibleModel.totalCoins -= gameConfigModel.extraMovesCost;
+            _savedDataService.SaveData(collectibleModel);
             _eventDispatcher.Dispatch(new ContinueWithCoinAddMovesSignal());
             View.Hide();
         }
 
         private void OnAddMovesClick()
         {
+            if (!_dailyAdsService.CanUseAd())
+            {
+                UpdateUsage();
+                return;
+            }
+
+            _dailyAdsService.UseAd();
+            UpdateUsage();
             _eventDispatcher.Dispatch(new AddMovesClickedSignal());
             View.Hide();
         }
@@ -38,6 +58,14 @@ namespace UI.OutOfMoves
         {
             _eventDispatcher.Dispatch(new RestartButtonClickSignal());
             View.Hide();
+        }
+
+        private void UpdateUsage()
+        {
+            var total = _dailyAdsService.DailyLimit;
+            var remaining = _dailyAdsService.Remaining;
+            View.SetUsageText(remaining, total);
+            View.SetAddMovesButtonActive(_dailyAdsService.CanUseAd());
         }
     }
 }
