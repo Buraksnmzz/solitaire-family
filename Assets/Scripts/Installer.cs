@@ -9,6 +9,7 @@ using Loading;
 using Services.Drag;
 using UI.MainMenu;
 using UI.Gameplay;
+using UI.Shop;
 
 public class Installer : MonoBehaviour
 {
@@ -64,6 +65,7 @@ public class Installer : MonoBehaviour
         ServiceLocator.Register<IDragStateService>(new DragStateService());
         ServiceLocator.Register<IHintService>(new HintService());
         ServiceLocator.Register<ITutorialMoveRestrictionService>(new TutorialMoveRestrictionService());
+        ServiceLocator.Register<IShopService>(new ShopService());
 
         var uiService = ServiceLocator.GetService<IUIService>();
          if (PlayerPrefs.GetInt(StringConstants.IsTutorialShown) == 0)
