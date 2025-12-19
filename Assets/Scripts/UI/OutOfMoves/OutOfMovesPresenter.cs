@@ -1,6 +1,7 @@
 using Collectible;
 using Configuration;
 using UI.NoMoreMoves;
+using UI.Shop;
 
 namespace UI.OutOfMoves
 {
@@ -9,12 +10,14 @@ namespace UI.OutOfMoves
         IEventDispatcherService _eventDispatcher;
         ISavedDataService _savedDataService;
         IDailyAdsService _dailyAdsService;
+        IUIService _uiService;
         protected override void OnInitialize()
         {
             base.OnInitialize();
             _eventDispatcher = ServiceLocator.GetService<IEventDispatcherService>();
             _savedDataService = ServiceLocator.GetService<ISavedDataService>();
             _dailyAdsService = ServiceLocator.GetService<IDailyAdsService>();
+            _uiService = ServiceLocator.GetService<IUIService>();
             View.RestartButtonClicked += OnRestartButtonClick;
             View.AddMovesClicked += OnAddMovesClick;
             View.ContinueButtonClicked += OnContinueClick;
@@ -33,7 +36,11 @@ namespace UI.OutOfMoves
         {
             var collectibleModel = _savedDataService.GetModel<CollectibleModel>();
             var gameConfigModel = _savedDataService.GetModel<GameConfigModel>();
-            if (collectibleModel.totalCoins < gameConfigModel.extraMovesCost) return;
+            if (collectibleModel.totalCoins < gameConfigModel.extraMovesCost)
+            {
+                _uiService.ShowPopup<ShopPresenter>();
+                return;
+            }
             collectibleModel.totalCoins -= gameConfigModel.extraMovesCost;
             _savedDataService.SaveData(collectibleModel);
             _eventDispatcher.Dispatch(new ContinueWithCoinAddMovesSignal());

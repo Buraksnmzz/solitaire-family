@@ -410,6 +410,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 4321566838441522332, guid: 1dabc0c1dd139444396c33c7a4442eb0, type: 3}
   m_PrefabInstance: {fileID: 4399408879423305616}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &4392861871819668586 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 142782064831400954, guid: 1dabc0c1dd139444396c33c7a4442eb0, type: 3}
+  m_PrefabInstance: {fileID: 4399408879423305616}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &7506470674308273247 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6134325316131333071, guid: 1dabc0c1dd139444396c33c7a4442eb0, type: 3}
@@ -650,6 +661,7 @@ MonoBehaviour:
   backgroundSprites:
   - {fileID: 21300000, guid: 9764f2949129c45abaedd08af424f5f2, type: 3}
   - {fileID: 21300000, guid: bb12da3be4a3344f4ac56fc757827317, type: 3}
+  coinButton: {fileID: 4392861871819668586}
 --- !u!1001 &6858348829696377872
 PrefabInstance:
   m_ObjectHideFlags: 0

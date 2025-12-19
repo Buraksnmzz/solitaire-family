@@ -8,6 +8,7 @@ using Services.Hint;
 using UI.NoMoreMoves;
 using UI.OutOfMoves;
 using UI.Settings;
+using UI.Shop;
 using UI.Signals;
 using UI.Win;
 
@@ -131,9 +132,7 @@ namespace UI.Gameplay
 
         private void OnCoinButtonClicked()
         {
-            _collectibleModel.totalCoins += 1000;
-            View.SetCoinText(_collectibleModel.totalCoins);
-            _savedDataService.SaveData(_collectibleModel);
+            _uiService.ShowPopup<ShopPresenter>();
         }
 
         private void OnDebugRestartButtonClicked()
@@ -170,6 +169,10 @@ namespace UI.Gameplay
                 _collectibleModel.totalCoins -= gameConfigModel.jokerCost;
                 View.SetCoinText(_collectibleModel.totalCoins);
                 HandleJoker(_collectibleModel.totalJokers);
+            }
+            else
+            {
+                _uiService.ShowPopup<ShopPresenter>();
             }
         }
 
@@ -225,6 +228,10 @@ namespace UI.Gameplay
                 View.SetCoinText(_collectibleModel.totalCoins);
                 HandleUndo(_collectibleModel.totalUndo);
             }
+            else
+            {
+                _uiService.ShowPopup<ShopPresenter>();
+            }
         }
 
         private void HandleUndo(int totalUndo)
@@ -245,6 +252,7 @@ namespace UI.Gameplay
                 _collectibleModel.totalHints--;
                 _hintService.ShowHint(View.Board);
                 View.SetHintAmount(_collectibleModel.totalHints);
+                _savedDataService.SaveData(_collectibleModel);
             }
             else if (_collectibleModel.totalCoins >= gameConfigModel.undoCost)
             {
@@ -252,8 +260,12 @@ namespace UI.Gameplay
                 View.SetCoinText(_collectibleModel.totalCoins);
                 _hintService.ShowHint(View.Board);
                 View.SetHintAmount(_collectibleModel.totalHints);
+                _savedDataService.SaveData(_collectibleModel);
             }
-            _savedDataService.SaveData(_collectibleModel);
+            else
+            {
+                _uiService.ShowPopup<ShopPresenter>();
+            }
         }
 
         public override void ViewShown()

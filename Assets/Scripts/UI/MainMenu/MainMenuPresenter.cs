@@ -4,6 +4,7 @@ using Levels;
 using Services;
 using UI.Gameplay;
 using UI.Settings;
+using UI.Shop;
 
 namespace UI.MainMenu
 {
@@ -19,9 +20,14 @@ namespace UI.MainMenu
             _snapshotService = ServiceLocator.GetService<ISnapshotService>();
             _savedDataService = ServiceLocator.GetService<ISavedDataService>();
             View.SetBackgroundImageFromRemote(_savedDataService.GetModel<GameConfigModel>().backgroundImageId -1);
-            //View.LevelButtonClicked += OnLevelButtonClicked;
             View.ContinueButtonClicked += OnContinueButtonClicked;
             View.SettingsButtonClicked += OnSettingsButtonClicked;
+            View.CoinButtonClicked += OnCoinButtonCLicked;
+        }
+
+        private void OnCoinButtonCLicked()
+        {
+            _uiService.ShowPopup<ShopPresenter>();
         }
 
         private void OnSettingsButtonClicked()
@@ -33,9 +39,6 @@ namespace UI.MainMenu
         {
             var currentLevel = _savedDataService.GetModel<LevelProgressModel>().CurrentLevelIndex;
             base.ViewShown();
-            //var hasSnapshot = _snapshotService.HasSnapShot();
-            //View.continueButton.gameObject.SetActive(hasSnapshot);
-            //View.levelButton.gameObject.SetActive(!hasSnapshot);
             View.SetLevelText(currentLevel);
             View.SetCoinText(_savedDataService.GetModel<CollectibleModel>().totalCoins);
 
@@ -43,8 +46,6 @@ namespace UI.MainMenu
 
         private void OnContinueButtonClicked()
         {
-            // if (!_snapshotService.HasSnapShot())
-            //     return;
             _uiService.HidePopup<MainMenuPresenter>();
             _uiService.ShowPopup<GameplayPresenter>();
         }
