@@ -1,6 +1,7 @@
 using Collectible;
 using Configuration;
 using Core.Scripts.Services;
+using IAP;
 using Levels;
 using Services;
 using Services.Hint;
@@ -65,7 +66,7 @@ public class Installer : MonoBehaviour
         ServiceLocator.Register<IDragStateService>(new DragStateService());
         ServiceLocator.Register<IHintService>(new HintService());
         ServiceLocator.Register<ITutorialMoveRestrictionService>(new TutorialMoveRestrictionService());
-        ServiceLocator.Register<IShopService>(new ShopService());
+        ServiceLocator.Register<IIAPService>(new IAPService());
 
         var uiService = ServiceLocator.GetService<IUIService>();
          if (PlayerPrefs.GetInt(StringConstants.IsTutorialShown) == 0)

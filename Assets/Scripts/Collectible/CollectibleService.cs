@@ -14,19 +14,19 @@ namespace Collectible
         }
 
         public int Total => _model.totalCoins;
-        
+
         private void PersistAndDispatchChangedCoin(int amount)
         {
             _savedDataService.SaveData(_model);
             _eventDispatcher.Dispatch(new CoinChangedSignal(amount));
         }
-        
+
         private void PersistAndDispatchChangedHint(int amount)
         {
             _savedDataService.SaveData(_model);
             _eventDispatcher.Dispatch(new HintChangedSignal(amount));
         }
-        
+
         private void PersistAndDispatchChangedJoker(int amount)
         {
             _savedDataService.SaveData(_model);
@@ -43,12 +43,16 @@ namespace Collectible
 
         public void AddHint(int amount)
         {
-            throw new System.NotImplementedException();
+            if (amount <= 0) return;
+            checked { _model.totalHints += amount; }
+            PersistAndDispatchChangedHint(amount);
         }
 
         public void AddJoker(int amount)
         {
-            throw new System.NotImplementedException();
+            if (amount <= 0) return;
+            checked { _model.totalJokers += amount; }
+            PersistAndDispatchChangedJoker(amount);
         }
 
         public bool TrySpendCoin(int amount)
@@ -62,12 +66,20 @@ namespace Collectible
 
         public bool TrySpendHint(int amount)
         {
-            throw new System.NotImplementedException();
+            if (amount <= 0) return true;
+            if (_model.totalHints < amount) return false;
+            _model.totalHints -= amount;
+            PersistAndDispatchChangedHint(-amount);
+            return true;
         }
 
         public bool TrySpendJoker(int amount)
         {
-            throw new System.NotImplementedException();
+            if (amount <= 0) return true;
+            if (_model.totalJokers < amount) return false;
+            _model.totalJokers -= amount;
+            PersistAndDispatchChangedJoker(-amount);
+            return true;
         }
     }
 }
