@@ -1,5 +1,6 @@
 using Collectible;
 using Configuration;
+using Core.Scripts.Services;
 using UI.NoMoreMoves;
 using UI.Shop;
 
@@ -11,6 +12,7 @@ namespace UI.OutOfMoves
         ISavedDataService _savedDataService;
         IDailyAdsService _dailyAdsService;
         IUIService _uiService;
+        ISoundService _soundService;
         protected override void OnInitialize()
         {
             base.OnInitialize();
@@ -18,6 +20,7 @@ namespace UI.OutOfMoves
             _savedDataService = ServiceLocator.GetService<ISavedDataService>();
             _dailyAdsService = ServiceLocator.GetService<IDailyAdsService>();
             _uiService = ServiceLocator.GetService<IUIService>();
+            _soundService = ServiceLocator.GetService<ISoundService>();
             View.RestartButtonClicked += OnRestartButtonClick;
             View.AddMovesClicked += OnAddMovesClick;
             View.ContinueButtonClicked += OnContinueClick;
@@ -27,6 +30,7 @@ namespace UI.OutOfMoves
         public override void ViewShown()
         {
             base.ViewShown();
+            _soundService.PlaySound(ClipName.Lose);
             UpdateUsage();
             var gameConfigModel = _savedDataService.GetModel<GameConfigModel>();
             View.SetExtraMovesCostText(gameConfigModel.extraMovesCost);

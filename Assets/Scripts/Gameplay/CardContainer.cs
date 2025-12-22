@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Card;
+using Core.Scripts.Services;
 using DG.Tweening;
 using Gameplay.PlacableRules;
 using UI.Signals;
@@ -16,6 +17,7 @@ namespace Gameplay
         protected readonly float MoveDuration = 0.25f;
         protected readonly float FlipDuration = 0.1f;
         protected IEventDispatcherService EventDispatcherService;
+        protected ISoundService SoundService;
 
         public abstract Vector3 GetCardLocalPosition(int index);
 
@@ -24,6 +26,7 @@ namespace Gameplay
             _placableRule = placableRule;
             EventDispatcherService = ServiceLocator.GetService<IEventDispatcherService>();
             _placableErrorPersistence = ServiceLocator.GetService<IPlacableErrorPersistenceService>();
+            SoundService = ServiceLocator.GetService<ISoundService>();
         }
 
         public int GetCardsCount() => CardPresenters.Count;
@@ -77,7 +80,6 @@ namespace Gameplay
             {
                 cardPresenter.CardView.transform.SetAsLastSibling();
             }
-
             OnCardAdded(previousTop, cardPresenter);
         }
 

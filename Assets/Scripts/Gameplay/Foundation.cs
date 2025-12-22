@@ -38,6 +38,7 @@ namespace Gameplay
                 var isCompleted = TryCollectCompletedPresenters(out var presentersToRemove);
                 if (isCompleted)
                 {
+                    SoundService.PlaySound(ClipName.FoundationCompleted);
                     DOVirtual.DelayedCall(MoveDuration, () => CheckAndHandleCompletion(presentersToRemove));
                 }
             }

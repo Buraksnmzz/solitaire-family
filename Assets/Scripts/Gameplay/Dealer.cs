@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Card;
+using Core.Scripts.Services;
 using DG.Tweening;
 using Gameplay.PlacableRules;
 using UI.Signals;
@@ -15,6 +16,7 @@ namespace Gameplay
         [SerializeField] private CanvasGroup dealerHint;
         private List<CardModel> _cardModels;
         private IEventDispatcherService _eventDispatcherService;
+        private ISoundService _soundService;
         private Sequence _hintSequence;
         private ITutorialMoveRestrictionService _tutorialMoveRestrictionService;
 
@@ -22,6 +24,7 @@ namespace Gameplay
         {
             _eventDispatcherService = ServiceLocator.GetService<IEventDispatcherService>();
             _tutorialMoveRestrictionService =  ServiceLocator.GetService<ITutorialMoveRestrictionService>();
+            _soundService  = ServiceLocator.GetService<ISoundService>();
             _cardModels = new List<CardModel>(cardModels);
             CardPresenters = new List<CardPresenter>(cardPresenters);
 
@@ -64,7 +67,8 @@ namespace Gameplay
 
             var pileCounts = GetInitialPileCounts(foundationCount);
             if (pileCounts == null) return;
-
+            _soundService.PlaySound(ClipName.InitialDeal);
+            
             for (var pileIndex = 0; pileIndex < pileCounts.Length && pileIndex < piles.Count; pileIndex++)
             {
                 var targetPile = piles[pileIndex];
@@ -144,6 +148,7 @@ namespace Gameplay
                 return;
             }
             EventDispatcherService.Dispatch(new CardMovementStateChangedSignal(true));
+            _soundService.PlaySound(ClipName.DealerToOpenDealer);
             var removedPresenter = RemoveCard(topCardPresenter);
             if (removedPresenter == null) return;
             var moved = new List<CardPresenter> { removedPresenter };
@@ -161,7 +166,6 @@ namespace Gameplay
 
             var openDealerCards = openDealer.GetAllCardPresenters();
             if (openDealerCards == null || openDealerCards.Count == 0) return;
-            // Snapshot: hamle öncesi OpenDealer kartları ve yüz durumları
             var movedPresenters = new List<CardPresenter>(openDealerCards);
             var movedStates = new List<bool>();
             for (var i = 0; i < movedPresenters.Count; i++)
@@ -170,8 +174,8 @@ namespace Gameplay
             }
 
             _eventDispatcherService.Dispatch(new MoveCountRequestedSignal());
-
-            // Gerçek taşıma: OpenDealer -> Dealer, kartları faceDown yap
+            _soundService.PlaySound(ClipName.OpenDealerToDealer);
+            
             for (var i = movedPresenters.Count - 1; i >= 0; i--)
             {
                 var presenter = movedPresenters[i];

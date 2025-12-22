@@ -31,8 +31,6 @@ public class UIService : IUIService
             {
                 existingView.Show();
                 ((T)existingPresenter).ViewShown();
-                if (shouldPlaySound)
-                    PlayPopupSoundAndHaptic();
             }
 
             return (T)existingPresenter;
@@ -49,8 +47,6 @@ public class UIService : IUIService
 
         view.Show();
         presenter.ViewShown();
-        if (shouldPlaySound)
-            PlayPopupSoundAndHaptic();
         return presenter;
     }
 
@@ -86,11 +82,6 @@ public class UIService : IUIService
                 view.Hide();
                 presenterPair.Value.ViewHidden();
             }
-        }
-
-        if (_activePresenters.Count > 0)
-        {
-            PlayPopupSoundAndHaptic();
         }
     }
 
@@ -149,15 +140,6 @@ public class UIService : IUIService
             return null;
         }
         return view;
-    }
-
-    private void PlayPopupSoundAndHaptic()
-    {
-        if (_soundService != null)
-        {
-            _soundService.PlaySound(ClipName.Popup);
-        }
-        _hapticService.HapticLow();
     }
 
     public void Dispose()

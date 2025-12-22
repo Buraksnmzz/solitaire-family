@@ -1,7 +1,9 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+using Core.Scripts.Services;
 
 public abstract class BaseView : MonoBehaviour, IView
 {
@@ -20,6 +22,8 @@ public abstract class BaseView : MonoBehaviour, IView
     private RectTransform _backgroundRectTransform;
     private bool _isBackgroundAttachedToCanvas;
     private CanvasGroup _panelCanvasGroup;
+    private ISoundService _soundService;
+    private List<Button> _subscribedButtons;
 
     protected virtual void Awake()
     {
@@ -41,7 +45,6 @@ public abstract class BaseView : MonoBehaviour, IView
             {
                 _panelCanvasGroup = panel.gameObject.AddComponent<CanvasGroup>();
             }
-            // By default, don't allow interaction until fully shown
             _panelCanvasGroup.interactable = false;
             _panelCanvasGroup.blocksRaycasts = false;
         }
@@ -67,6 +70,62 @@ public abstract class BaseView : MonoBehaviour, IView
                     break;
             }
         }
+
+        RegisterButtonClickSounds();
+    }
+
+    private void RegisterButtonClickSounds()
+    {
+        _subscribedButtons = new List<Button>();
+        try
+        {
+            _soundService = ServiceLocator.GetService<ISoundService>();
+        }
+        catch
+        {
+            _soundService = null;
+        }
+
+        if (_soundService == null) return;
+
+        var buttons = GetComponentsInChildren<Button>(true);
+        foreach (var btn in buttons)
+        {
+            if (btn == null) continue;
+            if (_subscribedButtons.Contains(btn)) continue;
+            btn.onClick.AddListener(PlayButtonClickSound);
+            _subscribedButtons.Add(btn);
+        }
+    }
+
+    private void PlayButtonClickSound()
+    {
+        _soundService?.PlaySound(ClipName.ButtonClick);
+    }
+
+    /// <summary>
+    /// Exclude a specific button from the automatic click sound behavior.
+    /// Call this from derived views (e.g., in Start) for buttons that should remain silent.
+    /// </summary>
+    public void ExcludeButtonFromClickSound(Button btn)
+    {
+        if (btn == null || _subscribedButtons == null) return;
+        try
+        {
+            btn.onClick.RemoveListener(PlayButtonClickSound);
+        }
+        catch { }
+        _subscribedButtons.Remove(btn);
+    }
+
+    /// <summary>
+    /// Exclude multiple buttons from automatic click sound.
+    /// </summary>
+    public void ExcludeButtonsFromClickSound(params Button[] buttons)
+    {
+        if (buttons == null) return;
+        foreach (var b in buttons)
+            ExcludeButtonFromClickSound(b);
     }
 
     public virtual void Show()
@@ -207,6 +266,16 @@ public abstract class BaseView : MonoBehaviour, IView
         if (backgroundImage != null)
         {
             Destroy(backgroundImage.gameObject);
+        }
+        if (_subscribedButtons != null)
+        {
+            foreach (var btn in _subscribedButtons)
+            {
+                if (btn != null)
+                    btn.onClick.RemoveListener(PlayButtonClickSound);
+            }
+            _subscribedButtons.Clear();
+            _subscribedButtons = null;
         }
     }
 

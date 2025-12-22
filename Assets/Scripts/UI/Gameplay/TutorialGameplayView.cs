@@ -14,6 +14,7 @@ namespace UI.Gameplay
         [SerializeField] private TextMeshProUGUI errorText;
         [SerializeField] private TutorialConfig tutorialConfig;
         public Image handImage;
+        [SerializeField] private ParticleSystem confettiParticle;
         public Board Board => board;
         public TutorialConfig TutorialConfig => tutorialConfig;
 
@@ -33,6 +34,11 @@ namespace UI.Gameplay
         public void SetErrorImage(bool isShow)
         {
             errorImage.gameObject.SetActive(isShow);
+        }
+
+        public void PlayConfetti()
+        {
+            confettiParticle.Play();
         }
     }
 }

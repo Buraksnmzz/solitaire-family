@@ -49,7 +49,7 @@ public class GameplayView : BaseView
     [SerializeField] private ParticleSystem coinParticle;
     [SerializeField] private ParticleSystem confettiParticle;
     [SerializeField] private ParticleSystem getMovesParticle;
-    
+
     private Sequence _sequence;
     private Sequence _inputBlockerSequence;
     private Sequence _coinSequence;
@@ -74,6 +74,9 @@ public class GameplayView : BaseView
         debugCompleteButton.onClick.AddListener(() => DegubCompleteButtonClicked?.Invoke());
         coinButton.onClick.AddListener(() => CoinButtonClicked?.Invoke());
         settingsButton.onClick.AddListener(() => SettingsButtonClicked?.Invoke());
+        // Exclude some gameplay buttons from playing the global click sound
+        ExcludeButtonsFromClickSound(undoButton, jokerButton, hintButton);
+
         SetUndoButtonInteractable(false);
     }
 

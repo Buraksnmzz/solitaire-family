@@ -1,5 +1,6 @@
 using Collectible;
 using Configuration;
+using Core.Scripts.Services;
 using DG.Tweening;
 using Gameplay;
 using Levels;
@@ -24,6 +25,7 @@ namespace UI.Gameplay
         IConfigurationService _configurationService;
         ISavedDataService _savedDataService;
         IEventDispatcherService _eventDispatcherService;
+        ISoundService _soundService;
         LevelData _levelData;
         int _movesCount;
         private IUIService _uiService;
@@ -40,6 +42,7 @@ namespace UI.Gameplay
             _configurationService = ServiceLocator.GetService<IConfigurationService>();
             _savedDataService = ServiceLocator.GetService<ISavedDataService>();
             _eventDispatcherService = ServiceLocator.GetService<IEventDispatcherService>();
+            _soundService  = ServiceLocator.GetService<ISoundService>();
             _uiService = ServiceLocator.GetService<IUIService>();
             _undoService = ServiceLocator.GetService<IUndoService>();
             _hintService = ServiceLocator.GetService<IHintService>();
@@ -118,9 +121,7 @@ namespace UI.Gameplay
         private void OnContinueWithCoinAddMoves(ContinueWithCoinAddMovesSignal _)
         {
             View.SetCoinText(_collectibleModel.totalCoins);
-            _movesCount += 10;
-            View.SetMovesCount(_movesCount);
-            View.PlayGetMovesParticle();
+            HandleAddMoves();
         }
 
         private void OnSettingsButtonClicked()
@@ -130,6 +131,12 @@ namespace UI.Gameplay
 
         private void OnAddMovesClicked(AddMovesClickedSignal _)
         {
+            HandleAddMoves();
+        }
+
+        private void HandleAddMoves()
+        {
+            _soundService.PlaySound(ClipName.PowerUp);
             _movesCount += 10;
             View.SetMovesCount(_movesCount);
             View.PlayGetMovesParticle();
@@ -192,6 +199,7 @@ namespace UI.Gameplay
 
         private void HandleJoker(int totalJokers)
         {
+            _soundService.PlaySound(ClipName.PowerUp);
             View.board.GenerateJokerCard();
             View.SetJokerAmount(totalJokers);
             //View.SetJokerButtonInteractable(false);
@@ -250,6 +258,7 @@ namespace UI.Gameplay
 
         private void HandleUndo(int totalUndo)
         {
+            _soundService.PlaySound(ClipName.Undo);
             _eventDispatcherService.Dispatch(new UndoClickedSignal());
             _movesCount++;
             View.SetMovesCount(_movesCount);
@@ -263,13 +272,15 @@ namespace UI.Gameplay
             var gameConfigModel = _savedDataService.GetModel<GameConfigModel>();
             if (_collectibleModel.totalHints >= 1)
             {
+                _soundService.PlaySound(ClipName.PowerUp);
                 _collectibleModel.totalHints--;
                 _hintService.ShowHint(View.Board);
                 View.SetHintAmount(_collectibleModel.totalHints);
                 _savedDataService.SaveData(_collectibleModel);
             }
-            else if (_collectibleModel.totalCoins >= gameConfigModel.undoCost)
+            else if (_collectibleModel.totalCoins >= gameConfigModel.hintCost)
             {
+                _soundService.PlaySound(ClipName.PowerUp);
                 _collectibleModel.totalCoins -= gameConfigModel.hintCost;
                 View.SetCoinText(_collectibleModel.totalCoins);
                 _hintService.ShowHint(View.Board);
@@ -340,6 +351,7 @@ namespace UI.Gameplay
 
             DOVirtual.DelayedCall(1.2f, () =>
             {
+                _soundService.PlaySound(ClipName.GameWon);
                 View.PlayConfetti();
                 View.PlayEarnedMovesCoinAnimation(_movesCount, gameConfigModel.earnedCoinPerMoveLeft, initialCoins, () =>
                 {
@@ -378,6 +390,7 @@ namespace UI.Gameplay
             View.SetupBoard(_levelData, _currentLevelIndex, snapshot);
             View.SetMovesCount(_movesCount);
             View.SetUndoButtonInteractable(false);
+            _soundService.PlaySound(ClipName.InitialDeal);
             return true;
         }
 

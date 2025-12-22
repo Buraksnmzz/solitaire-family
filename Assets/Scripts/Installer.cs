@@ -70,14 +70,14 @@ public class Installer : MonoBehaviour
         ServiceLocator.Register<IIAPService>(new IAPService());
 
         var uiService = ServiceLocator.GetService<IUIService>();
-         if (PlayerPrefs.GetInt(StringConstants.IsTutorialShown) == 0)
-         {
-             uiService.ShowPopup<TutorialGamePresenter>();
-         }
-         else
-         {
-             uiService.ShowPopup<MainMenuPresenter>();
-         }        
+        if (PlayerPrefs.GetInt(StringConstants.IsTutorialShown) == 0)
+        {
+            uiService.ShowPopup<TutorialGamePresenter>();
+        }
+        else
+        {
+            uiService.ShowPopup<MainMenuPresenter>();
+        }
     }
 
 }

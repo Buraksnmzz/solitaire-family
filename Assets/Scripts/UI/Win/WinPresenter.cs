@@ -1,5 +1,6 @@
 using Collectible;
 using Configuration;
+using Core.Scripts.Services;
 using DG.Tweening;
 using Levels;
 using UI.Gameplay;
@@ -12,6 +13,7 @@ namespace UI.Win
     {
         IUIService _uiService;
         ISavedDataService _savedDataService;
+        ISoundService _soundService;
         IConfigurationService _configurationService;
         protected override void OnInitialize()
         {
@@ -19,6 +21,7 @@ namespace UI.Win
             _uiService = ServiceLocator.GetService<IUIService>();
             _savedDataService = ServiceLocator.GetService<ISavedDataService>();
             _configurationService = ServiceLocator.GetService<IConfigurationService>();
+            _soundService = ServiceLocator.GetService<ISoundService>();
             View.ContinueButtonClicked += OnContinue;
             View.IntroAnimationFinished += OnIntroAnimationFinished;
             View.OnIconMoved += OnIconMoved;
@@ -62,6 +65,7 @@ namespace UI.Win
             collectibleModel.totalCoins += configModel.earnedCoinAtLevelEnd;
             View.finalCoins = collectibleModel.totalCoins;
             _savedDataService.SaveData(collectibleModel);
+            _soundService.PlaySound(ClipName.WinView);
         }
 
         private void OnContinue()

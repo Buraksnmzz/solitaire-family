@@ -1,3 +1,4 @@
+using Core.Scripts.Services;
 using DG.Tweening;
 using Gameplay;
 using Services;
@@ -25,11 +26,13 @@ namespace Card
         bool _isDragging;
         private readonly float _moveDuration = 0.25f;
         ITutorialMoveRestrictionService _tutorialMoveRestrictionService;
+        ISoundService _soundService;
 
         public void Setup(CardPresenter presenter, Transform parent)
         {
             _eventDispatcherService = ServiceLocator.GetService<IEventDispatcherService>();
             _dragStateService = ServiceLocator.GetService<IDragStateService>();
+            _soundService = ServiceLocator.GetService<ISoundService>();
             _presenter = presenter;
             _canvasTransform = parent as RectTransform;
             _tutorialMoveRestrictionService = ServiceLocator.GetService<ITutorialMoveRestrictionService>();
@@ -159,6 +162,20 @@ namespace Card
                         var previousCardWasFaceUp = previousCard is { IsFaceUp: true };
 
                         currentContainer.RemoveCardsFrom(_presenter);
+
+                        if (_soundService != null)
+                        {
+                            var destType = closestContainer.GetType();
+                            if (destType == typeof(Pile))
+                            {
+                                _soundService.PlaySound(ClipName.MoveToPile);
+                            }
+                            else if (destType == typeof(Foundation))
+                            {
+                                _soundService.PlaySound(ClipName.MoveToFoundation);
+                            }
+                        }
+
                         for (var i = 0; i < stack.Length; i++)
                         {
                             var presenter = stack[i];
@@ -207,6 +224,7 @@ namespace Card
                     var wrongDuration = 0.3f;
                     var wrongOffset = 1f;
 
+                    _soundService.PlaySound(ClipName.WrongMove);
                     viewRectTransform.DOKill();
                     viewRectTransform.SetAsLastSibling();
                     viewRectTransform.DOLocalMove(canvasLocalTarget, _moveDuration)

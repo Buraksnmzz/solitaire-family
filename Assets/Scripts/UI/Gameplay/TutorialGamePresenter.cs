@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Card;
 using Configuration;
+using Core.Scripts.Services;
 using DG.Tweening;
 using Gameplay;
 using Levels;
@@ -23,6 +24,7 @@ namespace UI.Gameplay
         ITutorialMoveRestrictionService _tutorialMoveRestrictionService;
         IDragStateService _dragStateService;
         ISavedDataService _savedDataService;
+        ISoundService _soundService;
         int _currentLevelIndex;
         bool _isGameWon;
         Tween _hintLoopTween;
@@ -43,6 +45,7 @@ namespace UI.Gameplay
             _tutorialMoveRestrictionService = ServiceLocator.GetService<ITutorialMoveRestrictionService>();
             _dragStateService = ServiceLocator.GetService<IDragStateService>();
             _savedDataService = ServiceLocator.GetService<ISavedDataService>();
+            _soundService = ServiceLocator.GetService<ISoundService>();
         }
 
         public override void ViewShown()
@@ -150,8 +153,16 @@ namespace UI.Gameplay
                 PlayerPrefs.SetInt(StringConstants.IsTutorialShown, 1);
                 PlayerPrefs.Save();
                 View.SetErrorImage(false);
-                _savedDataService.GetModel<LevelProgressModel>().CurrentLevelIndex++;
-                _uiService.ShowPopup<TutorialCompletedPresenter>();
+                var levelProgressModel = _savedDataService.GetModel<LevelProgressModel>();
+                levelProgressModel.CurrentLevelIndex++;
+                _savedDataService.SaveData(levelProgressModel);
+                
+                DOVirtual.DelayedCall(0.8f, () =>
+                {
+                    _soundService.PlaySound(ClipName.GameWon);
+                    View.PlayConfetti();
+                    DOVirtual.DelayedCall(0.5f, () => _uiService.ShowPopup<TutorialCompletedPresenter>());
+                });
                 return;
             }
 
