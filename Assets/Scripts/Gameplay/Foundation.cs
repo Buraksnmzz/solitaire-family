@@ -12,6 +12,7 @@ namespace Gameplay
         private readonly float _completeScaleUpDuration = 0.3f;
         private readonly float _completeScaleDownDuration = 0.4f;
         [SerializeField] private Image glowImage;
+        [SerializeField] private ParticleSystem completeParticle;
 
         public override Vector3 GetCardLocalPosition(int index)
         {
@@ -30,7 +31,10 @@ namespace Gameplay
             if (cardPresenter.CardView != null)
             {
                 cardPresenter.CardView.transform.SetAsLastSibling();
-                cardPresenter.MoveToLocalPosition(targetLocalPosition, MoveDuration, 0, Ease.OutQuad, () => EventDispatcherService.Dispatch(new CardMovementStateChangedSignal(false)));
+                cardPresenter.MoveToLocalPosition(targetLocalPosition, MoveDuration, 0, Ease.OutQuad, () =>
+                {
+                    EventDispatcherService.Dispatch(new CardMovementStateChangedSignal(false));
+                });
                 var isCompleted = TryCollectCompletedPresenters(out var presentersToRemove);
                 if (isCompleted)
                 {
@@ -131,6 +135,7 @@ namespace Gameplay
             glowSequence.Append(glowImage.transform.DOScale(Vector3.one, _completeScaleUpDuration));
             glowSequence.Append(glowImage.DOFade(0f, _completeScaleDownDuration));
 
+            DOVirtual.DelayedCall(_completeScaleUpDuration + _completeScaleDownDuration, () => completeParticle.Play());
             foreach (var presenter in presentersToRemove)
             {
                 if (presenter.CardView == null) continue;

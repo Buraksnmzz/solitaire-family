@@ -55,6 +55,8 @@ namespace UI.Gameplay
             _eventDispatcherService.AddListener<ContinueWithCoinAddMovesSignal>(OnContinueWithCoinAddMoves);
             _eventDispatcherService.AddListener<ContinueWithCoinAddJokerSignal>(OnContinueWithCoinAddJoker);
             _eventDispatcherService.AddListener<JokerClickedSignal>(OnJokerClickedFromNoMoreMoves);
+            _eventDispatcherService.AddListener<RewardGivenSignal>(OnRewardGiven);
+            _eventDispatcherService.AddListener<MainMenuButtonClickSignal>(OnMainMenuButtonClick);
             View.UndoButtonClicked += OnUndoClicked;
             View.HintButtonClicked += OnHintClicked;
             View.JokerButtonClicked += OnJokerClicked;
@@ -64,6 +66,16 @@ namespace UI.Gameplay
             View.DegubRestartButtonClicked += OnDebugRestartButtonClicked;
             View.SettingsButtonClicked += OnSettingsButtonClicked;
             View.DegubCompleteButtonClicked += OnDebugCompleteButtonClicked;
+        }
+
+        private void OnMainMenuButtonClick(MainMenuButtonClickSignal _)
+        {
+            SaveSnapshot();
+        }
+
+        private void OnRewardGiven(RewardGivenSignal _)
+        {
+            View.SetCoinText(_savedDataService.GetModel<CollectibleModel>().totalCoins);
         }
 
         private void OnDebugCompleteButtonClicked()
@@ -108,6 +120,7 @@ namespace UI.Gameplay
             View.SetCoinText(_collectibleModel.totalCoins);
             _movesCount += 10;
             View.SetMovesCount(_movesCount);
+            View.PlayGetMovesParticle();
         }
 
         private void OnSettingsButtonClicked()
@@ -119,6 +132,7 @@ namespace UI.Gameplay
         {
             _movesCount += 10;
             View.SetMovesCount(_movesCount);
+            View.PlayGetMovesParticle();
         }
 
         private void OnRestartButtonClick(RestartButtonClickSignal _)
@@ -324,10 +338,15 @@ namespace UI.Gameplay
                 _snapshotService.ClearSnapshot();
             }
 
-            View.PlayEarnedMovesCoinAnimation(_movesCount, gameConfigModel.earnedCoinPerMoveLeft, initialCoins, () =>
+            DOVirtual.DelayedCall(1.2f, () =>
             {
-                _uiService.ShowPopup<WinPresenter>();
+                View.PlayConfetti();
+                View.PlayEarnedMovesCoinAnimation(_movesCount, gameConfigModel.earnedCoinPerMoveLeft, initialCoins, () =>
+                {
+                    _uiService.ShowPopup<WinPresenter>();
+                });
             });
+            
         }
 
         void StartNewLevel()

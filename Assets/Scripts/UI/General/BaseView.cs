@@ -19,6 +19,7 @@ public abstract class BaseView : MonoBehaviour, IView
     private float _moveOffset;
     private RectTransform _backgroundRectTransform;
     private bool _isBackgroundAttachedToCanvas;
+    private CanvasGroup _panelCanvasGroup;
 
     protected virtual void Awake()
     {
@@ -34,6 +35,15 @@ public abstract class BaseView : MonoBehaviour, IView
 
             var rect = panel.rect;
             _moveOffset = rect.height;
+
+            _panelCanvasGroup = panel.GetComponent<CanvasGroup>();
+            if (_panelCanvasGroup == null)
+            {
+                _panelCanvasGroup = panel.gameObject.AddComponent<CanvasGroup>();
+            }
+            // By default, don't allow interaction until fully shown
+            _panelCanvasGroup.interactable = false;
+            _panelCanvasGroup.blocksRaycasts = false;
         }
 
         if (panel != null)
@@ -41,12 +51,10 @@ public abstract class BaseView : MonoBehaviour, IView
             switch (animationType)
             {
                 case PopupAnimationType.Fade:
-                    var panelCanvasGroup = panel.GetComponent<CanvasGroup>();
-                    if (panelCanvasGroup == null)
+                    if (_panelCanvasGroup != null)
                     {
-                        panelCanvasGroup = panel.gameObject.AddComponent<CanvasGroup>();
+                        _panelCanvasGroup.alpha = 0f;
                     }
-                    panelCanvasGroup.alpha = 0f;
                     break;
                 case PopupAnimationType.MoveUp:
                     panel.anchoredPosition = _originalPanelPosition + Vector2.down * _moveOffset;
@@ -76,6 +84,11 @@ public abstract class BaseView : MonoBehaviour, IView
             .OnStart(() =>
             {
                 backgroundImage.raycastTarget = true;
+                if (_panelCanvasGroup != null)
+                {
+                    _panelCanvasGroup.interactable = false;
+                    _panelCanvasGroup.blocksRaycasts = false;
+                }
             });
 
         _currentAnimation.Join(backgroundImage.DOFade(fadeEndValue, animationDuration));
@@ -117,6 +130,11 @@ public abstract class BaseView : MonoBehaviour, IView
         _currentAnimation.OnComplete(() =>
         {
             backgroundImage.raycastTarget = true;
+            if (_panelCanvasGroup != null)
+            {
+                _panelCanvasGroup.interactable = true;
+                _panelCanvasGroup.blocksRaycasts = true;
+            }
             _isVisible = true;
             OnShown();
         });
@@ -132,6 +150,11 @@ public abstract class BaseView : MonoBehaviour, IView
             .OnStart(() =>
             {
                 backgroundImage.raycastTarget = false;
+                if (_panelCanvasGroup != null)
+                {
+                    _panelCanvasGroup.interactable = false;
+                    _panelCanvasGroup.blocksRaycasts = false;
+                }
             });
 
         _currentAnimation.Join(backgroundImage.DOFade(0, animationDuration));

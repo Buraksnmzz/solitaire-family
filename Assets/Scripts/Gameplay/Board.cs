@@ -329,6 +329,7 @@ namespace Gameplay
             cardViews.Add(cardView);
             cardPresenter.Initialize(cardModel, cardView, _parent);
             piles[0].AddCard(cardPresenter);
+            cardView.AnimateGlow();
         }
 
         public SnapShotModel CreateSnapshot(int movesCount, int levelIndex)

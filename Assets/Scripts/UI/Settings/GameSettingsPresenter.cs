@@ -20,6 +20,7 @@ namespace UI.Settings
             UIService.HidePopup<GameplayPresenter>();
             View.Hide();
             UIService.ShowPopup<MainMenuPresenter>();
+            _eventDispatcher.Dispatch(new MainMenuButtonClickSignal());
         }
 
         private void OnRestartButtonClicked()

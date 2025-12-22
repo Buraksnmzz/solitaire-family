@@ -28,7 +28,7 @@ namespace Gameplay.PlacableRules
 
             var sameCategory = targetCardModel.CategoryName == sourceCardModel.CategoryName;
             if (!sameCategory)
-                ErrorMessage = null;
+                ErrorMessage = StringConstants.ErrorStackCardsOfSameCategory;
             return sameCategory;
         }
 

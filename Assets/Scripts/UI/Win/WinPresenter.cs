@@ -1,5 +1,6 @@
 using Collectible;
 using Configuration;
+using DG.Tweening;
 using Levels;
 using UI.Gameplay;
 using UI.RateUs;
@@ -20,6 +21,12 @@ namespace UI.Win
             _configurationService = ServiceLocator.GetService<IConfigurationService>();
             View.ContinueButtonClicked += OnContinue;
             View.IntroAnimationFinished += OnIntroAnimationFinished;
+            View.OnIconMoved += OnIconMoved;
+        }
+
+        private void OnIconMoved()
+        {
+            
         }
 
         private void OnIntroAnimationFinished()
@@ -53,6 +60,7 @@ namespace UI.Win
             View.SetLevelText(levelProgressModel.CurrentLevelIndex);
             View.SetCoinAmountToCollectText(configModel.earnedCoinAtLevelEnd);
             collectibleModel.totalCoins += configModel.earnedCoinAtLevelEnd;
+            View.finalCoins = collectibleModel.totalCoins;
             _savedDataService.SaveData(collectibleModel);
         }
 
@@ -61,8 +69,12 @@ namespace UI.Win
             View.DisableContinueButton();
             View.PlayCoinAnimation(() =>
             {
-                _uiService.ShowPopup<GameplayPresenter>();
-                View.Hide();
+                DOVirtual.DelayedCall(0.5f, () =>
+                {
+                    _uiService.ShowPopup<GameplayPresenter>();
+                    View.Hide();
+                });
+                
             });
         }
     }

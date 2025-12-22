@@ -52,6 +52,7 @@ public class Installer : MonoBehaviour
     {
         Debug.Log("Installing Services");
         ServiceLocator.Register<ISavedDataService>(new SavedDataService());
+        ServiceLocator.Register<IPlacableErrorPersistenceService>(new PlacableErrorPersistenceService());
         ServiceLocator.Register<IEventDispatcherService>(new EventDispatcherService());
         ServiceLocator.Register<IStyleService>(new StyleService());
         ServiceLocator.Register<ISoundService>(new SoundService());

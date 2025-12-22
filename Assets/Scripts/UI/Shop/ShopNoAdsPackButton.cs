@@ -16,26 +16,26 @@ namespace UI.Shop
         {
             if (string.IsNullOrEmpty(productId)) return;
 
-            if (coinAmountText != null) coinAmountText.SetText(_catalogProduct.Coins.ToString());
-            if (jokerAmountText != null) jokerAmountText.SetText(_catalogProduct.Jokers.ToString());
-            if (hintAmountText != null) hintAmountText.SetText(_catalogProduct.Hints.ToString());
-            if (undoAmountText != null) undoAmountText.SetText(_catalogProduct.Undos.ToString());
+            if (coinAmountText != null) coinAmountText.SetText(CatalogProduct.Coins.ToString());
+            if (jokerAmountText != null) jokerAmountText.SetText(CatalogProduct.Jokers.ToString());
+            if (hintAmountText != null) hintAmountText.SetText(CatalogProduct.Hints.ToString());
+            if (undoAmountText != null) undoAmountText.SetText(CatalogProduct.Undos.ToString());
         }
 
         protected override void GiveReward(bool success)
         {
             if (success)
             {
-                var collectibleModel = _savedDataService.GetModel<CollectibleModel>();
-                var settingsModel = _savedDataService.GetModel<SettingsModel>();
-                collectibleModel.totalCoins += _catalogProduct.Coins;
-                collectibleModel.totalHints += _catalogProduct.Hints;
-                collectibleModel.totalUndo += _catalogProduct.Undos;
-                collectibleModel.totalJokers += _catalogProduct.Jokers;
+                var collectibleModel = SavedDataService.GetModel<CollectibleModel>();
+                var settingsModel = SavedDataService.GetModel<SettingsModel>();
+                collectibleModel.totalCoins += CatalogProduct.Coins;
+                collectibleModel.totalHints += CatalogProduct.Hints;
+                collectibleModel.totalUndo += CatalogProduct.Undos;
+                collectibleModel.totalJokers += CatalogProduct.Jokers;
                 settingsModel.IsNoAds = true;
-                //todo: Rise event to remove banner ads and hide shopView buttons
-                _savedDataService.SaveData(collectibleModel);
-                _savedDataService.SaveData(settingsModel);
+                SavedDataService.SaveData(collectibleModel);
+                SavedDataService.SaveData(settingsModel);
+                EventDispatcherService.Dispatch(new RewardGivenSignal(transform));
             }
         }
     }

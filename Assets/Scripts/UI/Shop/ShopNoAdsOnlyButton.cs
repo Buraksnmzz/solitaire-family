@@ -4,10 +4,10 @@ namespace UI.Shop
     {
         protected override void GiveReward(bool success)
         {
-            var settingsModel = _savedDataService.GetModel<SettingsModel>();
+            var settingsModel = SavedDataService.GetModel<SettingsModel>();
             settingsModel.IsNoAds = true;
-            _savedDataService.SaveData(settingsModel);
-            //todo: Rise event to remove banner ads and hide shopView buttons
+            SavedDataService.SaveData(settingsModel);
+            EventDispatcherService.Dispatch(new RewardGivenSignal(transform));
         }
 
         public override void SetRewardValue()

@@ -4,6 +4,7 @@ using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Analytics;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
@@ -24,7 +25,9 @@ namespace UI.Win
         [SerializeField] private CanvasGroup completedImageCanvasGroup;
         [SerializeField] private RectTransform earnedCoinIconPrefab;
         [SerializeField] private ParticleSystem coinParticle;
-        [SerializeField] private ParticleSystem confettiParticle;
+        [SerializeField] private ParticleSystem fireworkParticle1;
+        [SerializeField] private ParticleSystem fireworkParticle2;
+        [SerializeField] private ParticleSystem fireworkParticle3;
         private readonly float _introSlideOffset = 600f;
         private readonly float _introSlideDuration = 0.8f;
         private readonly float _completedScaleDuration = 0.8f;
@@ -36,10 +39,10 @@ namespace UI.Win
         private readonly float _continueButtonScaleDuration = 0.35f;
         private readonly float _coinScaleDuration = 0.2f;
         private readonly float _coinSpawnInterval = 0.08f;
-        private readonly float _coinMoveDuration = 0.5f;
-        private readonly float _coinMoveInterval = 0.1f;
+        private readonly float _coinMoveDuration = 1.2f;
+        private readonly float _coinMoveInterval = 0.2f;
 
-        private int _earnedCoins;
+        public int finalCoins;
         private readonly int _coinAnimationCount = 8;
         private int _coinBaseTotal;
         private Vector3 _flag1InitialPosition;
@@ -94,6 +97,8 @@ namespace UI.Win
 
         private void PlayIntroAnimation()
         {
+            PlayParticles();
+            
             var slideStagger = 0.08f;
             var sequence = DOTween.Sequence();
 
@@ -133,6 +138,14 @@ namespace UI.Win
                     .DOScale(_continueButtonInitialScale, _continueButtonScaleDuration)
                     .SetEase(Ease.OutBack)
                     .OnStart(() => IntroAnimationFinished?.Invoke()));
+        }
+
+        [ContextMenu("Continue")]
+        private void PlayParticles()
+        {
+            DOVirtual.DelayedCall(0.5f, () => fireworkParticle1.Play());
+            DOVirtual.DelayedCall(0.8f, () => fireworkParticle2.Play());
+            DOVirtual.DelayedCall(1.1f, () => fireworkParticle3.Play());
         }
 
         private void InitializeViewsBeforeAnimation()
@@ -189,9 +202,13 @@ namespace UI.Win
                                     topCoinImage.DOPunchScale(Vector3.one * 0.2f, 0.08f);
                                     Destroy(icon.gameObject);
                                     remainingIcons--;
+                                    if (remainingIcons == icons.Count-1)
+                                    {
+                                        coinParticle.Play();
+                                    }
                                     if (remainingIcons == 0)
                                     {
-                                        coinText.text = (int.Parse(coinText.text) + _earnedCoins).ToString();
+                                        coinText.text = finalCoins.ToString();
                                         onCompleted?.Invoke();
                                     }
                                 });

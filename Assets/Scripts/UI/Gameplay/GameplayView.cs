@@ -46,7 +46,10 @@ public class GameplayView : BaseView
     [SerializeField] private Button debugRestartButton;
     [SerializeField] private Button debugNextButton;
     [SerializeField] private Button debugCompleteButton;
-
+    [SerializeField] private ParticleSystem coinParticle;
+    [SerializeField] private ParticleSystem confettiParticle;
+    [SerializeField] private ParticleSystem getMovesParticle;
+    
     private Sequence _sequence;
     private Sequence _inputBlockerSequence;
     private Sequence _coinSequence;
@@ -87,13 +90,6 @@ public class GameplayView : BaseView
         undoButtonIcon.sprite = interactable ? undoIconActiveSprite : undoIconPassiveSprite;
         undoButtonImage.sprite = interactable ? undoButtonActiveSprite : undoButtonPassiveSprite;
     }
-
-    // public void SetJokerButtonInteractable(bool interactable)
-    // {
-    //     jokerButton.interactable = interactable;
-    //     jokerButtonIcon.sprite = interactable ? jokerIconActiveSprite : jokerIconPassiveSprite;
-    //     jokerButtonImage.sprite = interactable ? jokerButtonActiveSprite : jokerButtonPassiveSprite;
-    // }
 
     public void SetMovesCount(int totalMovesCount)
     {
@@ -209,6 +205,8 @@ public class GameplayView : BaseView
                     currentMoves--;
                     if (currentMoves < 0)
                         currentMoves = 0;
+                    if (currentMoves == remainingMoves - 1)
+                        coinParticle.Play();
                     SetMovesCount(currentMoves);
                 }
 
@@ -271,5 +269,15 @@ public class GameplayView : BaseView
             jokerCountImage.SetActive(false);
             jokerRewardedImage.SetActive(true);
         }
+    }
+
+    public void PlayConfetti()
+    {
+        confettiParticle.Play();
+    }
+
+    public void PlayGetMovesParticle()
+    {
+        getMovesParticle.Play();
     }
 }

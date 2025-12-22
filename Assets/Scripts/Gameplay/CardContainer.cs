@@ -12,6 +12,7 @@ namespace Gameplay
     {
         protected List<CardPresenter> CardPresenters = new();
         private IPlacableRule _placableRule;
+        private IPlacableErrorPersistenceService _placableErrorPersistence;
         protected readonly float MoveDuration = 0.25f;
         protected readonly float FlipDuration = 0.1f;
         protected IEventDispatcherService EventDispatcherService;
@@ -22,6 +23,7 @@ namespace Gameplay
         {
             _placableRule = placableRule;
             EventDispatcherService = ServiceLocator.GetService<IEventDispatcherService>();
+            _placableErrorPersistence = ServiceLocator.GetService<IPlacableErrorPersistenceService>();
         }
 
         public int GetCardsCount() => CardPresenters.Count;
@@ -38,7 +40,19 @@ namespace Gameplay
             var isPlacable = _placableRule.IsPlaceable(topCardModel, sourceCardPresenter.CardModel);
             var placableError = _placableRule.ErrorMessage;
             if (!isPlacable && placableError != null)
-                EventDispatcherService.Dispatch(new PlacableErrorSignal(placableError));
+            {
+                var shouldShow = true;
+                if (_placableErrorPersistence != null)
+                {
+                    shouldShow = _placableErrorPersistence.ShouldShow(placableError);
+                }
+
+                if (shouldShow)
+                {
+                    EventDispatcherService.Dispatch(new PlacableErrorSignal(placableError));
+                    _placableErrorPersistence?.RecordShown(placableError);
+                }
+            }
             return isPlacable;
         }
 

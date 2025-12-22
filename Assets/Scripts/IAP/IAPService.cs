@@ -1,5 +1,6 @@
 using Collectible;
 using System;
+using System.Collections.Generic;
 using Unity.Services.Core;
 using Unity.Services.Core.Environments;
 using UnityEngine;
@@ -19,6 +20,7 @@ namespace IAP
         private IExtensionProvider m_StoreExtensionProvider;
         private bool _isInitialized;
         private Action<bool> _purchaseCallback;
+        private HashSet<string> _processedTransactions = new HashSet<string>();
 
         public IAPService()
         {
@@ -36,6 +38,7 @@ namespace IAP
                 Debug.LogError("IAP not initialized");
                 _purchaseCallback?.Invoke(false);
                 _purchaseCallback = null;
+                return;
             }
             if (_isInitialized && m_StoreController != null)
             {
@@ -50,7 +53,7 @@ namespace IAP
                 Debug.LogError($"Product not available for purchase: {productId}");
                 _purchaseCallback?.Invoke(false);
                 _purchaseCallback = null;
-
+                return;
             }
             Debug.Log("IAPService: falling back to simulated purchase: " + productId);
             _purchaseCallback?.Invoke(false);
@@ -111,9 +114,15 @@ namespace IAP
         public PurchaseProcessingResult ProcessPurchase(PurchaseEventArgs args)
         {
             var product = args.purchasedProduct;
+            string transactionId = product.transactionID;
+            if (_processedTransactions.Contains(transactionId))
+            {
+                return PurchaseProcessingResult.Complete;
+            }
             var hasReceipt = !string.IsNullOrEmpty(product.receipt);
             if (hasReceipt)
             {
+                _processedTransactions.Add(transactionId);
                 Debug.Log("Purchase successful: " + args.purchasedProduct.definition.id);
                 _purchaseCallback.Invoke(true);
                 _purchaseCallback = null;

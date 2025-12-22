@@ -286,6 +286,10 @@ PrefabInstance:
       propertyPath: m_text
       value: restart
       objectReference: {fileID: 0}
+    - target: {fileID: 8815078052603082043, guid: dd54232767b114ad4a40c51723bdff4e, type: 3}
+      propertyPath: m_Transition
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 5850216988642183488, guid: dd54232767b114ad4a40c51723bdff4e, type: 3}
     m_RemovedGameObjects: []

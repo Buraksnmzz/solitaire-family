@@ -27,11 +27,17 @@ namespace Card
         [SerializeField][CanBeNull] TextMeshProUGUI upCategoryName;
         [SerializeField][CanBeNull] GameObject handImage;
         [SerializeField][CanBeNull] Image frontCardMainImage;
+        [SerializeField][CanBeNull] CanvasGroup glowImage;
 
         public void SetContentCountText(int currentCount, int totalCount)
         {
             if (contentCountText == null) return;
             contentCountText.SetText(currentCount + "/" + totalCount);
+        }
+
+        public void AnimateGlow()
+        {
+            glowImage.DOFade(1, 0.2f).OnComplete(() => glowImage.DOFade(0, 0.2f).SetDelay(0.3f));
         }
 
         public void SetRaycastTarget(bool isOn)
