@@ -27,12 +27,14 @@ namespace Card
         private readonly float _moveDuration = 0.25f;
         ITutorialMoveRestrictionService _tutorialMoveRestrictionService;
         ISoundService _soundService;
+        IHapticService _hapticService;
 
         public void Setup(CardPresenter presenter, Transform parent)
         {
             _eventDispatcherService = ServiceLocator.GetService<IEventDispatcherService>();
             _dragStateService = ServiceLocator.GetService<IDragStateService>();
             _soundService = ServiceLocator.GetService<ISoundService>();
+            _hapticService = ServiceLocator.GetService<IHapticService>();
             _presenter = presenter;
             _canvasTransform = parent as RectTransform;
             _tutorialMoveRestrictionService = ServiceLocator.GetService<ITutorialMoveRestrictionService>();
@@ -169,10 +171,12 @@ namespace Card
                             if (destType == typeof(Pile))
                             {
                                 _soundService.PlaySound(ClipName.MoveToPile);
+                                _hapticService.HapticLow();
                             }
                             else if (destType == typeof(Foundation))
                             {
                                 _soundService.PlaySound(ClipName.MoveToFoundation);
+                                _hapticService.HapticLow();
                             }
                         }
 
@@ -225,6 +229,7 @@ namespace Card
                     var wrongOffset = 1f;
 
                     _soundService.PlaySound(ClipName.WrongMove);
+                    _hapticService.HapticLow();
                     viewRectTransform.DOKill();
                     viewRectTransform.SetAsLastSibling();
                     viewRectTransform.DOLocalMove(canvasLocalTarget, _moveDuration)

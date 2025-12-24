@@ -19,7 +19,7 @@ namespace Gameplay
             return Vector3.zero;
         }
 
-        public override void AddCard(CardPresenter cardPresenter)
+        public override void AddCard(CardPresenter cardPresenter, float delay = 0, float moveDuration = 0.25f)
         {
             var index = CardPresenters.Count;
             CardPresenters.Add(cardPresenter);
@@ -31,7 +31,7 @@ namespace Gameplay
             if (cardPresenter.CardView != null)
             {
                 cardPresenter.CardView.transform.SetAsLastSibling();
-                cardPresenter.MoveToLocalPosition(targetLocalPosition, MoveDuration, 0, Ease.OutQuad, () =>
+                cardPresenter.MoveToLocalPosition(targetLocalPosition, moveDuration, 0, Ease.OutQuad, () =>
                 {
                     EventDispatcherService.Dispatch(new CardMovementStateChangedSignal(false));
                 });
@@ -39,7 +39,8 @@ namespace Gameplay
                 if (isCompleted)
                 {
                     SoundService.PlaySound(ClipName.FoundationCompleted);
-                    DOVirtual.DelayedCall(MoveDuration, () => CheckAndHandleCompletion(presentersToRemove));
+                    HapticService.HapticMedium();
+                    DOVirtual.DelayedCall(moveDuration, () => CheckAndHandleCompletion(presentersToRemove));
                 }
             }
 

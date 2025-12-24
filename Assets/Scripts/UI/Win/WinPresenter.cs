@@ -15,6 +15,7 @@ namespace UI.Win
         ISavedDataService _savedDataService;
         ISoundService _soundService;
         IConfigurationService _configurationService;
+        IHapticService _hapticService;
         protected override void OnInitialize()
         {
             base.OnInitialize();
@@ -22,6 +23,7 @@ namespace UI.Win
             _savedDataService = ServiceLocator.GetService<ISavedDataService>();
             _configurationService = ServiceLocator.GetService<IConfigurationService>();
             _soundService = ServiceLocator.GetService<ISoundService>();
+            _hapticService = ServiceLocator.GetService<IHapticService>();
             View.ContinueButtonClicked += OnContinue;
             View.IntroAnimationFinished += OnIntroAnimationFinished;
             View.OnIconMoved += OnIconMoved;
@@ -29,7 +31,7 @@ namespace UI.Win
 
         private void OnIconMoved()
         {
-            
+            _soundService.PlaySound(ClipName.CoinIncrease);
         }
 
         private void OnIntroAnimationFinished()
@@ -71,6 +73,8 @@ namespace UI.Win
         private void OnContinue()
         {
             View.DisableContinueButton();
+            _soundService.PlaySound(ClipName.CoinCreate);
+            _hapticService.HapticLow();
             View.PlayCoinAnimation(() =>
             {
                 DOVirtual.DelayedCall(0.5f, () =>

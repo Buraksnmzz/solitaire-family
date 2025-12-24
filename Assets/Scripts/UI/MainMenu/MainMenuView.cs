@@ -1,6 +1,7 @@
 
 using System;
 using System.Collections.Generic;
+using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -25,6 +26,18 @@ namespace UI.MainMenu
             continueButton.onClick.AddListener(()=>ContinueButtonClicked?.Invoke());
             settingsButton.onClick.AddListener(()=>SettingsButtonClicked?.Invoke());
             coinButton.onClick.AddListener(()=>CoinButtonClicked?.Invoke());
+        }
+
+        protected override void OnShown()
+        {
+            base.OnShown();
+            continueButton.transform.DOScale(1, 0.4f).SetEase(Ease.OutBack);
+        }
+
+        public override void Show()
+        {
+            base.Show();
+            continueButton.transform.localScale = Vector3.zero;
         }
 
         public void SetLevelText(int currentLevel)

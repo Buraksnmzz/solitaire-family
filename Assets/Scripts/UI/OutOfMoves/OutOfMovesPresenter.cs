@@ -1,6 +1,7 @@
 using Collectible;
 using Configuration;
 using Core.Scripts.Services;
+using Services;
 using UI.NoMoreMoves;
 using UI.Shop;
 
@@ -13,6 +14,7 @@ namespace UI.OutOfMoves
         IDailyAdsService _dailyAdsService;
         IUIService _uiService;
         ISoundService _soundService;
+        IAdsService _adsService;
         protected override void OnInitialize()
         {
             base.OnInitialize();
@@ -21,6 +23,7 @@ namespace UI.OutOfMoves
             _dailyAdsService = ServiceLocator.GetService<IDailyAdsService>();
             _uiService = ServiceLocator.GetService<IUIService>();
             _soundService = ServiceLocator.GetService<ISoundService>();
+            _adsService = ServiceLocator.GetService<IAdsService>();
             View.RestartButtonClicked += OnRestartButtonClick;
             View.AddMovesClicked += OnAddMovesClick;
             View.ContinueButtonClicked += OnContinueClick;
@@ -53,6 +56,9 @@ namespace UI.OutOfMoves
 
         private void OnAddMovesClick()
         {
+            if(!_adsService.IsRewardedAvailable())
+                return;
+            
             if (!_dailyAdsService.CanUseAd())
             {
                 UpdateUsage();

@@ -43,7 +43,7 @@ namespace Gameplay
             return Vector3.zero;
         }
 
-        public override void AddCard(CardPresenter cardPresenter)
+        public override void AddCard(CardPresenter cardPresenter, float delay = 0, float moveDuration = 0.25f)
         {
             var previousTop = GetTopCardPresenter();
 
@@ -57,7 +57,7 @@ namespace Gameplay
             for (var i = startIndex; i < CardPresenters.Count; i++)
             {
                 var targetLocalPosition = GetCardLocalPosition(i - startIndex);
-                CardPresenters[i].MoveToLocalPosition(targetLocalPosition, MoveDuration, 0, Ease.OutQuad, () => EventDispatcherService.Dispatch(new CardMovementStateChangedSignal(false)));
+                CardPresenters[i].MoveToLocalPosition(targetLocalPosition, moveDuration, 0, Ease.OutQuad, () => EventDispatcherService.Dispatch(new CardMovementStateChangedSignal(false)));
             }
 
             if (cardPresenter.CardView != null)

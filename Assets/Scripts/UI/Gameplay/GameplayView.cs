@@ -43,7 +43,6 @@ public class GameplayView : BaseView
     [SerializeField] private Sprite jokerIconActiveSprite;
     [SerializeField] private Sprite jokerButtonPassiveSprite;
     [SerializeField] private Sprite jokerIconPassiveSprite;
-    [SerializeField] private Button debugRestartButton;
     [SerializeField] private Button debugNextButton;
     [SerializeField] private Button debugCompleteButton;
     [SerializeField] private ParticleSystem coinParticle;
@@ -58,10 +57,10 @@ public class GameplayView : BaseView
     public event Action JokerButtonClicked;
     public event Action CoinButtonClicked;
     public event Action<bool> ApplicationPaused;
-    public event Action DegubRestartButtonClicked;
     public event Action DegubNextButtonClicked;
     public event Action SettingsButtonClicked;
     public event Action DegubCompleteButtonClicked;
+    public event Action OnCoinMoved;
 
 
     private void Start()
@@ -69,7 +68,6 @@ public class GameplayView : BaseView
         undoButton.onClick.AddListener(() => UndoButtonClicked?.Invoke());
         jokerButton.onClick.AddListener(() => JokerButtonClicked?.Invoke());
         hintButton.onClick.AddListener(() => HintButtonClicked?.Invoke());
-        debugRestartButton.onClick.AddListener(() => DegubRestartButtonClicked?.Invoke());
         debugNextButton.onClick.AddListener(() => DegubNextButtonClicked?.Invoke());
         debugCompleteButton.onClick.AddListener(() => DegubCompleteButtonClicked?.Invoke());
         coinButton.onClick.AddListener(() => CoinButtonClicked?.Invoke());
@@ -109,31 +107,6 @@ public class GameplayView : BaseView
     public void SetupBoard(LevelData levelData, int currentLevelIndex, SnapShotModel snapshot = null)
     {
         board.Setup(levelData, currentLevelIndex, panel, snapshot);
-    }
-
-    public void SetInputBlocked(bool blocked)
-    {
-        if (_inputBlocker == null) return;
-        if (_inputBlockerSequence != null && _inputBlockerSequence.IsActive())
-        {
-            _inputBlockerSequence.Kill();
-            _inputBlockerSequence = null;
-        }
-
-        _inputBlocker.blocksRaycasts = blocked;
-        _inputBlocker.interactable = blocked;
-
-        if (blocked)
-        {
-            _inputBlockerSequence = DOTween.Sequence();
-            _inputBlockerSequence.AppendInterval(2f);
-            _inputBlockerSequence.OnComplete(() =>
-            {
-                _inputBlocker.blocksRaycasts = false;
-                _inputBlocker.interactable = false;
-                _inputBlockerSequence = null;
-            });
-        }
     }
 
     public void ShowErrorMessage(string errorMessage)
@@ -201,6 +174,7 @@ public class GameplayView : BaseView
             var scaleTween = icon.DOScale(Vector3.one, coinScaleDuration).SetEase(Ease.OutBack);
             var moveTween = icon.DOMove(coinImage.position, coinMoveDuration).OnComplete(() =>
             {
+                OnCoinMoved?.Invoke();
                 currentCoins += coinsPerMoveLeft;
                 SetCoinText(currentCoins);
                 if (currentMoves > 0)

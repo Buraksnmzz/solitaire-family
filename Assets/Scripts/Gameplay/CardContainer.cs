@@ -18,6 +18,7 @@ namespace Gameplay
         protected readonly float FlipDuration = 0.1f;
         protected IEventDispatcherService EventDispatcherService;
         protected ISoundService SoundService;
+        protected IHapticService HapticService;
 
         public abstract Vector3 GetCardLocalPosition(int index);
 
@@ -27,6 +28,7 @@ namespace Gameplay
             EventDispatcherService = ServiceLocator.GetService<IEventDispatcherService>();
             _placableErrorPersistence = ServiceLocator.GetService<IPlacableErrorPersistenceService>();
             SoundService = ServiceLocator.GetService<ISoundService>();
+            HapticService = ServiceLocator.GetService<IHapticService>();
         }
 
         public int GetCardsCount() => CardPresenters.Count;
@@ -66,7 +68,7 @@ namespace Gameplay
             return _placableRule.IsPlaceable(topCardModel, sourceCardPresenter.CardModel);
         }
 
-        public virtual void AddCard(CardPresenter cardPresenter)
+        public virtual void AddCard(CardPresenter cardPresenter, float delay = 0, float moveDuration = 0.25f)
         {
             var previousTop = GetTopCardPresenter();
             CardPresenters.Add(cardPresenter);
@@ -74,7 +76,7 @@ namespace Gameplay
             cardPresenter.SetParent(transform, true);
             cardPresenter.SetContainer(this);
             var targetLocalPosition = GetCardLocalPosition(index);
-            cardPresenter.MoveToLocalPosition(targetLocalPosition, MoveDuration, 0, Ease.OutQuad, () => EventDispatcherService.Dispatch(new CardMovementStateChangedSignal(false)));
+            cardPresenter.MoveToLocalPosition(targetLocalPosition, moveDuration, delay, Ease.OutQuad, () => EventDispatcherService.Dispatch(new CardMovementStateChangedSignal(false)));
 
             if (cardPresenter.CardView != null)
             {

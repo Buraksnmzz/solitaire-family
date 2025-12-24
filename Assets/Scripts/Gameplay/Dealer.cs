@@ -19,12 +19,14 @@ namespace Gameplay
         private ISoundService _soundService;
         private Sequence _hintSequence;
         private ITutorialMoveRestrictionService _tutorialMoveRestrictionService;
+        IHapticService _hapticService;
 
         public void SetupDeck(List<CardModel> cardModels, List<CardPresenter> cardPresenters, List<CardView> cardViews)
         {
             _eventDispatcherService = ServiceLocator.GetService<IEventDispatcherService>();
             _tutorialMoveRestrictionService =  ServiceLocator.GetService<ITutorialMoveRestrictionService>();
             _soundService  = ServiceLocator.GetService<ISoundService>();
+            _hapticService = ServiceLocator.GetService<IHapticService>();
             _cardModels = new List<CardModel>(cardModels);
             CardPresenters = new List<CardPresenter>(cardPresenters);
 
@@ -80,7 +82,7 @@ namespace Gameplay
                     if (topCardPresenter == null) return;
 
                     RemoveCard(topCardPresenter);
-                    targetPile.AddCard(topCardPresenter);
+                    targetPile.AddCard(topCardPresenter, pileIndex * 0.02f * pileCounts.Length + i * 0.02f, 0.5f);
                 }
             }
 
@@ -115,8 +117,10 @@ namespace Gameplay
         public override void Setup(IPlacableRule placableRule)
         {
             base.Setup(placableRule);
-            dealerButton.onClick.RemoveAllListeners();
+            _soundService  = ServiceLocator.GetService<ISoundService>();
+            _hapticService = ServiceLocator.GetService<IHapticService>();
             _eventDispatcherService = ServiceLocator.GetService<IEventDispatcherService>();
+            dealerButton.onClick.RemoveAllListeners();
             dealerButton.onClick.AddListener(OnDealerButtonClick);
         }
 
@@ -139,6 +143,7 @@ namespace Gameplay
 
         private void OnDealerButtonClick()
         {
+            Debug.Log("OnDealerButtonClick");
             if (_tutorialMoveRestrictionService != null && _tutorialMoveRestrictionService.IsActive && !_tutorialMoveRestrictionService.IsDragAllowed(GetTopCard())) return;
             
             var topCardPresenter = GetTopCard();
@@ -149,6 +154,7 @@ namespace Gameplay
             }
             EventDispatcherService.Dispatch(new CardMovementStateChangedSignal(true));
             _soundService.PlaySound(ClipName.DealerToOpenDealer);
+            _hapticService.HapticLow();
             var removedPresenter = RemoveCard(topCardPresenter);
             if (removedPresenter == null) return;
             var moved = new List<CardPresenter> { removedPresenter };
@@ -175,6 +181,7 @@ namespace Gameplay
 
             _eventDispatcherService.Dispatch(new MoveCountRequestedSignal());
             _soundService.PlaySound(ClipName.OpenDealerToDealer);
+            _hapticService.HapticLow();
             
             for (var i = movedPresenters.Count - 1; i >= 0; i--)
             {

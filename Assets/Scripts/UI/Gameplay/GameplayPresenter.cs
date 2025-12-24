@@ -26,6 +26,8 @@ namespace UI.Gameplay
         ISavedDataService _savedDataService;
         IEventDispatcherService _eventDispatcherService;
         ISoundService _soundService;
+        IAdsService _adsService;
+        IHapticService _hapticService;
         LevelData _levelData;
         int _movesCount;
         private IUIService _uiService;
@@ -34,6 +36,7 @@ namespace UI.Gameplay
         private ISnapshotService _snapshotService;
         private bool _isGameWon;
         private CollectibleModel _collectibleModel;
+        private GameConfigModel _gameConfigModel;
 
         protected override void OnInitialize()
         {
@@ -48,6 +51,9 @@ namespace UI.Gameplay
             _hintService = ServiceLocator.GetService<IHintService>();
             _snapshotService = ServiceLocator.GetService<ISnapshotService>();
             _currentLevelIndex = _savedDataService.GetModel<LevelProgressModel>().CurrentLevelIndex;
+            _adsService = ServiceLocator.GetService<IAdsService>();
+            _gameConfigModel = _savedDataService.GetModel<GameConfigModel>();
+            _hapticService = ServiceLocator.GetService<IHapticService>();
 
             _eventDispatcherService.AddListener<MoveCountRequestedSignal>(OnMoveCountRequested);
             _eventDispatcherService.AddListener<CardMovePerformedSignal>(OnCardMovePerformed);
@@ -66,9 +72,14 @@ namespace UI.Gameplay
             View.ApplicationPaused += OnApplicationPaused;
             View.CoinButtonClicked += OnCoinButtonClicked;
             View.DegubNextButtonClicked += OnDebugNextButtonClicked;
-            View.DegubRestartButtonClicked += OnDebugRestartButtonClicked;
             View.SettingsButtonClicked += OnSettingsButtonClicked;
             View.DegubCompleteButtonClicked += OnDebugCompleteButtonClicked;
+            View.OnCoinMoved += CoinMoved;
+        }
+
+        private void CoinMoved()
+        {
+            _soundService.PlaySound(ClipName.CoinIncrease);
         }
 
         private void OnMainMenuButtonClick(MainMenuButtonClickSignal _)
@@ -115,7 +126,17 @@ namespace UI.Gameplay
 
         private void OnJokerClickedFromNoMoreMoves(JokerClickedSignal _)
         {
-            HandleJoker(_collectibleModel.totalJokers);
+            _adsService.GetReward(CallbackJoker);
+        }
+
+        private void CallbackJoker(bool success)
+        {
+            if(success)
+                HandleJoker(_collectibleModel.totalJokers);
+            else
+            {
+                RestartGame();
+            }
         }
 
         private void OnContinueWithCoinAddMoves(ContinueWithCoinAddMovesSignal _)
@@ -131,12 +152,23 @@ namespace UI.Gameplay
 
         private void OnAddMovesClicked(AddMovesClickedSignal _)
         {
-            HandleAddMoves();
+            _adsService.GetReward(CallbackAddMoves);
+        }
+
+        private void CallbackAddMoves(bool success)
+        {
+            if(success)
+                HandleAddMoves();
+            else
+            {
+                RestartGame();
+            }
         }
 
         private void HandleAddMoves()
         {
             _soundService.PlaySound(ClipName.PowerUp);
+            _hapticService.HapticLow();
             _movesCount += 10;
             View.SetMovesCount(_movesCount);
             View.PlayGetMovesParticle();
@@ -144,25 +176,22 @@ namespace UI.Gameplay
 
         private void OnRestartButtonClick(RestartButtonClickSignal _)
         {
+            RestartGame();
+        }
+
+        private void RestartGame()
+        {
             if (_snapshotService.HasSnapShot())
             {
                 _snapshotService.ClearSnapshot();
             }
+
             _uiService.ShowPopup<GameplayPresenter>();
         }
 
         private void OnCoinButtonClicked()
         {
             _uiService.ShowPopup<ShopPresenter>();
-        }
-
-        private void OnDebugRestartButtonClicked()
-        {
-            if (_snapshotService.HasSnapShot())
-            {
-                _snapshotService.ClearSnapshot();
-            }
-            _uiService.ShowPopup<GameplayPresenter>();
         }
 
         private void OnDebugNextButtonClicked()
@@ -193,13 +222,25 @@ namespace UI.Gameplay
             }
             else
             {
-                _uiService.ShowPopup<ShopPresenter>();
+                _adsService.GetReward(CallbackAddJoker);
             }
         }
+
+        private void CallbackAddJoker(bool success)
+        {
+            if (success)
+            {
+                _collectibleModel.totalJokers++;
+                View.SetJokerAmount(_collectibleModel.totalJokers);
+                _savedDataService.SaveData(_collectibleModel);
+            }
+        }
+
 
         private void HandleJoker(int totalJokers)
         {
             _soundService.PlaySound(ClipName.PowerUp);
+            _hapticService.HapticLow();
             View.board.GenerateJokerCard();
             View.SetJokerAmount(totalJokers);
             //View.SetJokerButtonInteractable(false);
@@ -252,13 +293,24 @@ namespace UI.Gameplay
             }
             else
             {
-                _uiService.ShowPopup<ShopPresenter>();
+                _adsService.GetReward(CallbackAddUndo);
+            }
+        }
+
+        private void CallbackAddUndo(bool success)
+        {
+            if (success)
+            {
+                _collectibleModel.totalUndo++;
+                View.SetUndoAmount(_collectibleModel.totalUndo);
+                _savedDataService.SaveData(_collectibleModel);
             }
         }
 
         private void HandleUndo(int totalUndo)
         {
             _soundService.PlaySound(ClipName.Undo);
+            _hapticService.HapticLow();
             _eventDispatcherService.Dispatch(new UndoClickedSignal());
             _movesCount++;
             View.SetMovesCount(_movesCount);
@@ -269,6 +321,7 @@ namespace UI.Gameplay
 
         private void OnHintClicked()
         {
+            
             var gameConfigModel = _savedDataService.GetModel<GameConfigModel>();
             if (_collectibleModel.totalHints >= 1)
             {
@@ -289,7 +342,17 @@ namespace UI.Gameplay
             }
             else
             {
-                _uiService.ShowPopup<ShopPresenter>();
+                _adsService.GetReward(CallbackAddHint);
+            }
+        }
+
+        private void CallbackAddHint(bool success)
+        {
+            if (success)
+            {
+                _collectibleModel.totalHints++;
+                View.SetHintAmount(_collectibleModel.totalHints);
+                _savedDataService.SaveData(_collectibleModel);
             }
         }
 
@@ -352,6 +415,7 @@ namespace UI.Gameplay
             DOVirtual.DelayedCall(1.2f, () =>
             {
                 _soundService.PlaySound(ClipName.GameWon);
+                _hapticService.HapticMedium();
                 View.PlayConfetti();
                 View.PlayEarnedMovesCoinAnimation(_movesCount, gameConfigModel.earnedCoinPerMoveLeft, initialCoins, () =>
                 {

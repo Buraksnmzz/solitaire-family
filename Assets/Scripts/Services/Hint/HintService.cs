@@ -21,8 +21,74 @@ namespace Services.Hint
             AddOpenDealerMovements(board, movements);
             AddPileMovements(board, movements);
             AddRevealMovement(board, movements);
+            movements.RemoveAll(m => m != null
+                                      && m.FromPile
+                                      && m.LeavesColumnEmpty
+                                      && m.ToContainer is Pile targetPile
+                                      && targetPile.GetCardsCount() == 0);
+
+            movements.RemoveAll(IsRedundantSubStackPileMove);
 
             return movements;
+        }
+
+        private bool IsRedundantSubStackPileMove(HintMovement movement)
+        {
+            if (movement == null) return false;
+            if (!movement.FromPile) return false;
+            if (!movement.IsStandardMove) return false;
+
+            var fromPile = movement.FromContainer as Pile;
+            if (fromPile == null) return false;
+
+            var toPile = movement.ToContainer as Pile;
+            if (toPile == null) return false;
+
+            var startPresenter = movement.Presenters?.FirstOrDefault();
+            if (startPresenter == null) return false;
+            if (!startPresenter.IsFaceUp) return false;
+
+            var startModel = startPresenter.CardModel;
+            if (startModel == null) return false;
+            if (startModel.Type != CardType.Content) return false;
+            if (string.IsNullOrEmpty(startModel.CategoryName)) return false;
+
+            var cards = fromPile.GetAllCards();
+            var startIndex = GetIndex(cards, startPresenter);
+            if (startIndex <= 0) return false;
+
+            for (var i = startIndex - 1; i >= 0; i--)
+            {
+                var abovePresenter = cards[i];
+                if (abovePresenter == null) break;
+                if (!abovePresenter.IsFaceUp) break;
+
+                var aboveModel = abovePresenter.CardModel;
+                if (aboveModel == null) break;
+                if (aboveModel.Type != CardType.Content) break;
+                if (aboveModel.CategoryName != startModel.CategoryName) break;
+
+                if (!fromPile.CanDrag(abovePresenter))
+                {
+                    continue;
+                }
+
+                return movement.ToContainer.CanPlaceCardSilently(abovePresenter);
+            }
+
+            return false;
+        }
+
+        private int GetIndex(IReadOnlyList<CardPresenter> cards, CardPresenter presenter)
+        {
+            if (cards == null || presenter == null) return -1;
+
+            for (var i = 0; i < cards.Count; i++)
+            {
+                if (cards[i] == presenter) return i;
+            }
+
+            return -1;
         }
 
         public HintMovement GetBestMovement(Board board)
@@ -39,7 +105,7 @@ namespace Services.Hint
                 return movement;
             }
 
-            movement = movements.FirstOrDefault(x => x.FromPile && x.IsStandardMove && x.LeavesColumnEmpty);
+            movement = movements.FirstOrDefault(x => x.FromPile && x.IsStandardMove && x.LeavesColumnEmpty && !(x.ToContainer is Pile targetPile && targetPile.GetCardsCount() == 0));
             if (movement != null)
             {
                 movement.Priority = HintPriority.EmptyColumn;

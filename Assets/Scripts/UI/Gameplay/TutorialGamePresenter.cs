@@ -25,6 +25,7 @@ namespace UI.Gameplay
         IDragStateService _dragStateService;
         ISavedDataService _savedDataService;
         ISoundService _soundService;
+        IHapticService _hapticService;
         int _currentLevelIndex;
         bool _isGameWon;
         Tween _hintLoopTween;
@@ -46,6 +47,7 @@ namespace UI.Gameplay
             _dragStateService = ServiceLocator.GetService<IDragStateService>();
             _savedDataService = ServiceLocator.GetService<ISavedDataService>();
             _soundService = ServiceLocator.GetService<ISoundService>();
+            _hapticService = ServiceLocator.GetService<IHapticService>();
         }
 
         public override void ViewShown()
@@ -160,6 +162,7 @@ namespace UI.Gameplay
                 DOVirtual.DelayedCall(0.8f, () =>
                 {
                     _soundService.PlaySound(ClipName.GameWon);
+                    _hapticService.HapticLow();
                     View.PlayConfetti();
                     DOVirtual.DelayedCall(0.5f, () => _uiService.ShowPopup<TutorialCompletedPresenter>());
                 });
@@ -317,7 +320,7 @@ namespace UI.Gameplay
             var pile = fromContainer as Pile;
             var stack = pile != null
                 ? pile.GetCardsFrom(presenter)
-                : new System.Collections.Generic.List<CardPresenter> { presenter };
+                : new List<CardPresenter> { presenter };
 
             var movement = new HintMovement(fromContainer, toContainer, stack, true);
             return movement;

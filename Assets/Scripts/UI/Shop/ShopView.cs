@@ -14,15 +14,17 @@ namespace UI.Shop
         [SerializeField] private Button closeButton;
         [SerializeField] private ShopNoAdsPackButton shopNoAdsPackButton;
         [SerializeField] private ShopNoAdsOnlyButton noAdsButton;
+        [SerializeField] private Transform shopNoAdsPack;
+        [SerializeField] private Transform noAdsOnly;
+        [SerializeField] private Transform coinOffers;
         [SerializeField] private TextMeshProUGUI coinText;
         [SerializeField] private Transform coinImage;
         [SerializeField] private RectTransform earnedCoinIconPrefab;
         private readonly int _coinAnimationCount = 8;
-        
+
         private readonly float _coinScaleDuration = 0.2f;
         private readonly float _coinSpawnInterval = 0.08f;
         private readonly float _coinMoveDuration = 0.8f;
-        private readonly float _coinMoveInterval = 0.1f;
         public int totalCoins;
 
         public event Action OnIconMoved;
@@ -31,6 +33,54 @@ namespace UI.Shop
         {
             closeButton.onClick.AddListener(Hide);
             CatalogService.LoadCatalog();
+        }
+
+        private readonly float _showScaleDuration = 0.2f;
+        private readonly float _showSpawnInterval = 0.12f;
+
+        public void AnimateOnShow(bool isNoAds)
+        {
+            if (shopNoAdsPack != null) shopNoAdsPack.localScale = Vector3.zero;
+            if (noAdsOnly != null) noAdsOnly.localScale = Vector3.zero;
+            if (coinOffers != null) coinOffers.localScale = Vector3.zero;
+
+            if (isNoAds)
+            {
+                coinOffers.position = shopNoAdsPack.position;
+                if (shopNoAdsPack != null)
+                    shopNoAdsPack.gameObject.SetActive(false);
+
+                if (noAdsOnly != null)
+                    noAdsOnly.gameObject.SetActive(false);
+            }
+            else
+            {
+                if (shopNoAdsPack != null)
+                    shopNoAdsPack.gameObject.SetActive(true);
+
+                if (noAdsOnly != null)
+                    noAdsOnly.gameObject.SetActive(true);
+            }
+
+            var seq = DOTween.Sequence();
+            var step = 0;
+
+            if (shopNoAdsPack != null && shopNoAdsPack.gameObject.activeSelf)
+            {
+                seq.Insert(step * _showSpawnInterval, shopNoAdsPack.DOScale(Vector3.one, _showScaleDuration).SetEase(Ease.OutBack));
+                step++;
+            }
+
+            if (noAdsOnly != null && noAdsOnly.gameObject.activeSelf)
+            {
+                seq.Insert(step * _showSpawnInterval, noAdsOnly.DOScale(Vector3.one, _showScaleDuration).SetEase(Ease.OutBack));
+                step++;
+            }
+
+            if (coinOffers != null && coinOffers.gameObject.activeSelf)
+            {
+                seq.Insert(step * _showSpawnInterval, coinOffers.DOScale(Vector3.one, _showScaleDuration).SetEase(Ease.OutBack));
+            }
         }
 
         public void SetNoAdsButtons(bool isNoAds)
@@ -46,11 +96,11 @@ namespace UI.Shop
         {
             coinText.text = coin.ToString();
         }
-        
+
         public void PlayCoinAnimation(Action onCompleted, Transform buttonTransform)
         {
             var icons = new List<RectTransform>();
-        
+
             for (var i = 0; i < _coinAnimationCount; i++)
             {
                 var icon = Instantiate(earnedCoinIconPrefab, panel);
@@ -59,10 +109,10 @@ namespace UI.Shop
                 icon.transform.position = buttonTransform.position;
                 icon.position += new Vector3(Random.Range(-3f, 3f), Random.Range(-3f, 3f));
             }
-        
+
             var scaleSequence = DOTween.Sequence();
             var remainingIcons = icons.Count;
-        
+
             for (var i = 0; i < icons.Count; i++)
             {
                 var startTime = _coinSpawnInterval * i;
