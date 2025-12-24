@@ -190,6 +190,14 @@ PrefabInstance:
       propertyPath: m_SizeDelta.x
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4737031901231803748, guid: dd54232767b114ad4a40c51723bdff4e, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4737031901231803748, guid: dd54232767b114ad4a40c51723bdff4e, type: 3}
+      propertyPath: m_RaycastTarget
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5256168661990818603, guid: dd54232767b114ad4a40c51723bdff4e, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
