@@ -14,7 +14,7 @@ public enum ClipName
     Lose,
     GameWon,
     WinView,
+    ShopPurchase,
     CoinIncrease,
     CoinCreate,
-    ScoreShown,
 }
