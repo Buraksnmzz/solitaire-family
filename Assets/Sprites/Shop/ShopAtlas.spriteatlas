@@ -1,0 +1,90 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!687078895 &4343727234628468602
+SpriteAtlas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: ShopAtlas
+  m_EditorData:
+    serializedVersion: 2
+    textureSettings:
+      serializedVersion: 2
+      anisoLevel: 1
+      compressionQuality: 50
+      maxTextureSize: 2048
+      textureCompression: 0
+      filterMode: 1
+      generateMipMaps: 0
+      readable: 0
+      crunchedCompression: 0
+      sRGB: 1
+    platformSettings: []
+    packingSettings:
+      serializedVersion: 2
+      padding: 8
+      blockOffset: 1
+      allowAlphaSplitting: 0
+      enableRotation: 1
+      enableTightPacking: 0
+      enableAlphaDilation: 0
+    secondaryTextureSettings: {}
+    variantMultiplier: 1
+    packables:
+    - {fileID: 102900000, guid: 25b80222dab0046e8b19e1595eceee9b, type: 3}
+    bindAsDefault: 1
+    isAtlasV2: 0
+    cachedData: {fileID: 0}
+    packedSpriteRenderDataKeys:
+    - dfcd2fc0449b24a9c9f4cd4e7c87737e: 21300000
+    - ae45e3129dbc44d228a0792cce31b808: 21300000
+    - dd7232e4d35f047468e2f376220af242: 21300000
+    - 0301a7b69c50842b881c9e1cb197cf70: 21300000
+    - cf5e7b1843caf4ec2aa82980356dc9db: 21300000
+    - 1047f438f647d4f3f95c6b81f0dbf7ca: 21300000
+    - 69a98fb8f7bf048daa1ef122ca84f8b9: 21300000
+    - 4e6d00d99116140b6a260b432495ea04: 21300000
+    - 91abbb2a40e1347f89c55ec7fc696f0c: 21300000
+    - 8e2684bad1573413e80cc39fa0d5212e: 21300000
+    - 3b748eba2f7dd4c3a9c3fc830a3f3529: 21300000
+    - 8d41f80bae83649b0b8498d1c4efd3e6: 21300000
+    - 4c4a81eb92d8a4398a9d6eaadfe16185: 21300000
+    - c07598bd8c2814faa98f1663d036a4d1: 21300000
+    - 616b8ccfdbec5479fae5a9b24a923202: 21300000
+  m_MasterAtlas: {fileID: 0}
+  m_PackedSprites:
+  - {fileID: 21300000, guid: dfcd2fc0449b24a9c9f4cd4e7c87737e, type: 3}
+  - {fileID: 21300000, guid: ae45e3129dbc44d228a0792cce31b808, type: 3}
+  - {fileID: 21300000, guid: dd7232e4d35f047468e2f376220af242, type: 3}
+  - {fileID: 21300000, guid: 0301a7b69c50842b881c9e1cb197cf70, type: 3}
+  - {fileID: 21300000, guid: cf5e7b1843caf4ec2aa82980356dc9db, type: 3}
+  - {fileID: 21300000, guid: 1047f438f647d4f3f95c6b81f0dbf7ca, type: 3}
+  - {fileID: 21300000, guid: 69a98fb8f7bf048daa1ef122ca84f8b9, type: 3}
+  - {fileID: 21300000, guid: 4e6d00d99116140b6a260b432495ea04, type: 3}
+  - {fileID: 21300000, guid: 91abbb2a40e1347f89c55ec7fc696f0c, type: 3}
+  - {fileID: 21300000, guid: 8e2684bad1573413e80cc39fa0d5212e, type: 3}
+  - {fileID: 21300000, guid: 3b748eba2f7dd4c3a9c3fc830a3f3529, type: 3}
+  - {fileID: 21300000, guid: 8d41f80bae83649b0b8498d1c4efd3e6, type: 3}
+  - {fileID: 21300000, guid: 4c4a81eb92d8a4398a9d6eaadfe16185, type: 3}
+  - {fileID: 21300000, guid: c07598bd8c2814faa98f1663d036a4d1, type: 3}
+  - {fileID: 21300000, guid: 616b8ccfdbec5479fae5a9b24a923202, type: 3}
+  m_PackedSpriteNamesToIndex:
+  - c_1
+  - ads_layout
+  - bundle
+  - bundle_layout
+  - popular_tag
+  - c_2
+  - noads_pack_text
+  - c_4
+  - bundle_frame
+  - c_3
+  - coin_layout
+  - ads_icon
+  - c_5
+  - shop_awning
+  - off_tag
+  m_RenderDataMap: {}
+  m_Tag: ShopAtlas
+  m_IsVariant: 0

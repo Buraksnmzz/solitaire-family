@@ -171,7 +171,7 @@ MonoBehaviour:
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
-  m_fontSizeMin: 18
+  m_fontSizeMin: 11
   m_fontSizeMax: 72
   m_fontStyle: 0
   m_HorizontalAlignment: 2
@@ -498,7 +498,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 5.9}
+  m_AnchoredPosition: {x: 0, y: 5.9000015}
   m_SizeDelta: {x: -30, y: -13}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &724408847090581258
@@ -832,7 +832,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7848941141125623213, guid: 27464e8aa71334990acb09cd95bfda59, type: 3}
       propertyPath: m_fontSizeMin
-      value: 14
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 7848941141125623213, guid: 27464e8aa71334990acb09cd95bfda59, type: 3}
       propertyPath: m_RaycastTarget
@@ -918,6 +918,7 @@ MonoBehaviour:
   upCategoryName: {fileID: 3361962937952873778}
   handImage: {fileID: 0}
   frontCardMainImage: {fileID: 6399777479632853987}
+  glowImage: {fileID: 0}
 --- !u!114 &1948928605317787037 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7308387886467339791, guid: 27464e8aa71334990acb09cd95bfda59, type: 3}

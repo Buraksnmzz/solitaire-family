@@ -37,7 +37,7 @@
 
     "LevelGoals": [
       { "level": 1, "goal": 15 },
-      { "level": 7, "goal": 75 },
+      { "level": 2, "goal": 45 },
       { "level": 13, "goal": 80 }
     ]
   }

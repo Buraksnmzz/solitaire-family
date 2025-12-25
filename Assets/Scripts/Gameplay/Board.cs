@@ -260,7 +260,7 @@ namespace Gameplay
 
                 var cardView = Instantiate(prefab, dealerRectTransform);
                 cardViews.Add(cardView);
-
+                cardView.SetRightTextParentSize(_itemWidth * 1.1f, _itemWidth * 0.37f);
                 if (index < CardPresenters.Count)
                 {
                     var presenter = CardPresenters[index];
@@ -445,6 +445,7 @@ namespace Gameplay
                 tempModels.Add(cardModel);
                 tempPresenters.Add(presenter);
                 tempViews.Add(cardView);
+                cardView.SetRightTextParentSize(_itemWidth * 1.1f, _itemWidth * 0.37f);
             }
 
             for (var index = 0; index < snapshot.Cards.Count; index++)

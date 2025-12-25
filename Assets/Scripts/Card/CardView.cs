@@ -35,6 +35,11 @@ namespace Card
             contentCountText.SetText(currentCount + "/" + totalCount);
         }
 
+        public void SetRightTextParentSize(float x, float y)
+        {
+            rightTextParent.sizeDelta = new Vector2(x, y);
+        }
+
         public void AnimateGlow()
         {
             glowImage.DOFade(1, 0.2f).OnComplete(() => glowImage.DOFade(0, 0.2f).SetDelay(0.3f));

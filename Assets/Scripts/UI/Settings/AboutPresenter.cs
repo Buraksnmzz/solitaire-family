@@ -10,7 +10,7 @@ namespace UI.Settings
 
         private void OnPrivacySettingsClicked()
         {
-            throw new System.NotImplementedException();
+            
         }
     }
 }

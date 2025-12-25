@@ -1,0 +1,66 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!687078895 &4343727234628468602
+SpriteAtlas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: WinAtlas
+  m_EditorData:
+    serializedVersion: 2
+    textureSettings:
+      serializedVersion: 2
+      anisoLevel: 1
+      compressionQuality: 50
+      maxTextureSize: 2048
+      textureCompression: 0
+      filterMode: 1
+      generateMipMaps: 0
+      readable: 0
+      crunchedCompression: 0
+      sRGB: 1
+    platformSettings: []
+    packingSettings:
+      serializedVersion: 2
+      padding: 8
+      blockOffset: 1
+      allowAlphaSplitting: 0
+      enableRotation: 1
+      enableTightPacking: 0
+      enableAlphaDilation: 0
+    secondaryTextureSettings: {}
+    variantMultiplier: 1
+    packables:
+    - {fileID: 102900000, guid: 803911d39a5ed4b56a335e1c90bc1f85, type: 3}
+    bindAsDefault: 1
+    isAtlasV2: 0
+    cachedData: {fileID: 0}
+    packedSpriteRenderDataKeys:
+    - 809f9a20f89cc43f8b82da46c286b8b4: 21300000
+    - 309f22925d6ff4c5b8795bbb946d7076: 21300000
+    - b99e17e31d3854d92807a9890b694770: 21300000
+    - 22ee5ee87b8514afe85b0353a472ba29: 21300000
+    - dc92c9f89c81646b6a8eaca58baf8218: 21300000
+    - 25ed2b69eb32247bab2998d149bde2e6: 21300000
+    - 71c1171e9bbfb44f99be61e20f90be40: 21300000
+  m_MasterAtlas: {fileID: 0}
+  m_PackedSprites:
+  - {fileID: 21300000, guid: 809f9a20f89cc43f8b82da46c286b8b4, type: 3}
+  - {fileID: 21300000, guid: 309f22925d6ff4c5b8795bbb946d7076, type: 3}
+  - {fileID: 21300000, guid: b99e17e31d3854d92807a9890b694770, type: 3}
+  - {fileID: 21300000, guid: 22ee5ee87b8514afe85b0353a472ba29, type: 3}
+  - {fileID: 21300000, guid: dc92c9f89c81646b6a8eaca58baf8218, type: 3}
+  - {fileID: 21300000, guid: 25ed2b69eb32247bab2998d149bde2e6, type: 3}
+  - {fileID: 21300000, guid: 71c1171e9bbfb44f99be61e20f90be40, type: 3}
+  m_PackedSpriteNamesToIndex:
+  - completed_text
+  - flag_1
+  - joker_win
+  - coin_pile
+  - light
+  - light_dot
+  - flag_2
+  m_RenderDataMap: {}
+  m_Tag: WinAtlas
+  m_IsVariant: 0

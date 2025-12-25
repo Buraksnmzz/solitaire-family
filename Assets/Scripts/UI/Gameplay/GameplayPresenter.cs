@@ -1,3 +1,4 @@
+using Card;
 using Collectible;
 using Configuration;
 using Core.Scripts.Services;
@@ -74,7 +75,23 @@ namespace UI.Gameplay
             View.DegubNextButtonClicked += OnDebugNextButtonClicked;
             View.SettingsButtonClicked += OnSettingsButtonClicked;
             View.DegubCompleteButtonClicked += OnDebugCompleteButtonClicked;
+            View.DegubMoveButtonClicked += OnDegubMoveButtonClicked;
             View.OnCoinMoved += CoinMoved;
+        }
+
+        private void OnDegubMoveButtonClicked()
+        {
+            var movement = _hintService.GetBestMovement(View.board);
+            var targetContainer = movement.ToContainer;
+            var fromContainer = movement.FromContainer;
+            foreach (var presenter in movement.Presenters)
+            {
+                presenter.SetFaceUp(true, 0.2f);
+                fromContainer.RemoveCard(presenter); 
+                targetContainer.AddCard(presenter);
+            }
+            if(fromContainer is Pile)
+                fromContainer.RevealTopCardIfNeeded();
         }
 
         private void CoinMoved()
@@ -388,13 +405,13 @@ namespace UI.Gameplay
             if (_movesCount <= 0) return;
             _movesCount--;
             View.SetMovesCount(_movesCount);
-            if (_movesCount == 0)
+            _isGameWon = View.Board.IsGameWon();
+            if (_movesCount == 0 && !_isGameWon)
                 _uiService.ShowPopup<OutOfMovesPresenter>();
 
-            if (!View.Board.IsGameWon())
+            if (!_isGameWon)
                 return;
 
-            _isGameWon = true;
             var gameConfigModel = _savedDataService.GetModel<GameConfigModel>();
             var earnedCoinsFromMoves = _movesCount * gameConfigModel.earnedCoinPerMoveLeft;
             if (earnedCoinsFromMoves < 0)

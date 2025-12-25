@@ -45,6 +45,7 @@ public class GameplayView : BaseView
     [SerializeField] private Sprite jokerIconPassiveSprite;
     [SerializeField] private Button debugNextButton;
     [SerializeField] private Button debugCompleteButton;
+    [SerializeField] private Button debugMoveButton;
     [SerializeField] private ParticleSystem coinParticle;
     [SerializeField] private ParticleSystem confettiParticle;
     [SerializeField] private ParticleSystem getMovesParticle;
@@ -60,6 +61,7 @@ public class GameplayView : BaseView
     public event Action DegubNextButtonClicked;
     public event Action SettingsButtonClicked;
     public event Action DegubCompleteButtonClicked;
+    public event Action DegubMoveButtonClicked;
     public event Action OnCoinMoved;
 
 
@@ -70,6 +72,7 @@ public class GameplayView : BaseView
         hintButton.onClick.AddListener(() => HintButtonClicked?.Invoke());
         debugNextButton.onClick.AddListener(() => DegubNextButtonClicked?.Invoke());
         debugCompleteButton.onClick.AddListener(() => DegubCompleteButtonClicked?.Invoke());
+        debugMoveButton.onClick.AddListener(()=> DegubMoveButtonClicked?.Invoke());
         coinButton.onClick.AddListener(() => CoinButtonClicked?.Invoke());
         settingsButton.onClick.AddListener(() => SettingsButtonClicked?.Invoke());
         // Exclude some gameplay buttons from playing the global click sound
