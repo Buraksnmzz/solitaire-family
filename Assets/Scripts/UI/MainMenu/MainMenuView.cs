@@ -42,7 +42,7 @@ namespace UI.MainMenu
 
         public void SetLevelText(int currentLevel)
         {
-            continueLevelText.SetText("Level " + (currentLevel+1));
+            continueLevelText.SetText("Level " + currentLevel);
         }
 
         public void SetCoinText(int totalCoins)

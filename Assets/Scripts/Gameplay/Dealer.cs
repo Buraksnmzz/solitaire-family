@@ -13,19 +13,19 @@ namespace Gameplay
     {
         [SerializeField] private Button dealerButton;
         [SerializeField] private OpenDealer openDealer;
-        [SerializeField] private CanvasGroup dealerHint;
+        [SerializeField] protected CanvasGroup dealerHint;
         private List<CardModel> _cardModels;
         private IEventDispatcherService _eventDispatcherService;
         private ISoundService _soundService;
-        private Sequence _hintSequence;
+        protected Sequence _hintSequence;
         private ITutorialMoveRestrictionService _tutorialMoveRestrictionService;
         IHapticService _hapticService;
 
         public void SetupDeck(List<CardModel> cardModels, List<CardPresenter> cardPresenters, List<CardView> cardViews)
         {
             _eventDispatcherService = ServiceLocator.GetService<IEventDispatcherService>();
-            _tutorialMoveRestrictionService =  ServiceLocator.GetService<ITutorialMoveRestrictionService>();
-            _soundService  = ServiceLocator.GetService<ISoundService>();
+            _tutorialMoveRestrictionService = ServiceLocator.GetService<ITutorialMoveRestrictionService>();
+            _soundService = ServiceLocator.GetService<ISoundService>();
             _hapticService = ServiceLocator.GetService<IHapticService>();
             _cardModels = new List<CardModel>(cardModels);
             CardPresenters = new List<CardPresenter>(cardPresenters);
@@ -70,7 +70,7 @@ namespace Gameplay
             var pileCounts = GetInitialPileCounts(foundationCount);
             if (pileCounts == null) return;
             _soundService.PlaySound(ClipName.InitialDeal);
-            
+
             for (var pileIndex = 0; pileIndex < pileCounts.Length && pileIndex < piles.Count; pileIndex++)
             {
                 var targetPile = piles[pileIndex];
@@ -117,20 +117,19 @@ namespace Gameplay
         public override void Setup(IPlacableRule placableRule)
         {
             base.Setup(placableRule);
-            _soundService  = ServiceLocator.GetService<ISoundService>();
+            _soundService = ServiceLocator.GetService<ISoundService>();
             _hapticService = ServiceLocator.GetService<IHapticService>();
             _eventDispatcherService = ServiceLocator.GetService<IEventDispatcherService>();
             dealerButton.onClick.RemoveAllListeners();
             dealerButton.onClick.AddListener(OnDealerButtonClick);
         }
 
-        public void PlayHintCue(float fadeDuration = 0.2f, float holdDuration = 0.6f)
+        public virtual void PlayHintCue(float fadeDuration = 0.7f, float holdDuration = 0.2f)
         {
             if (dealerHint == null) return;
 
             _hintSequence?.Kill();
             dealerHint.DOKill();
-
             dealerHint.alpha = 0f;
             dealerHint.gameObject.SetActive(true);
 
@@ -138,14 +137,28 @@ namespace Gameplay
             _hintSequence.Append(dealerHint.DOFade(1f, fadeDuration));
             _hintSequence.AppendInterval(holdDuration);
             _hintSequence.Append(dealerHint.DOFade(0f, fadeDuration));
-            _hintSequence.OnComplete(() => { dealerHint.gameObject.SetActive(false); _hintSequence = null; });
+            _hintSequence.AppendInterval(holdDuration);
+            _hintSequence.SetLoops(-1, LoopType.Restart);
+            _hintSequence.OnKill(() => { _hintSequence = null; });
+        }
+
+        public void StopHintCue()
+        {
+            if (dealerHint == null) return;
+
+            _hintSequence?.Kill();
+            dealerHint.DOKill();
+            dealerHint.gameObject.SetActive(false);
         }
 
         private void OnDealerButtonClick()
         {
             Debug.Log("OnDealerButtonClick");
             if (_tutorialMoveRestrictionService != null && _tutorialMoveRestrictionService.IsActive && !_tutorialMoveRestrictionService.IsDragAllowed(GetTopCard())) return;
-            
+
+            _hintSequence?.Kill();
+            dealerHint.DOKill();
+            dealerHint.gameObject.SetActive(false);
             var topCardPresenter = GetTopCard();
             if (topCardPresenter == null)
             {
@@ -182,7 +195,7 @@ namespace Gameplay
             _eventDispatcherService.Dispatch(new MoveCountRequestedSignal());
             _soundService.PlaySound(ClipName.OpenDealerToDealer);
             _hapticService.HapticLow();
-            
+
             for (var i = movedPresenters.Count - 1; i >= 0; i--)
             {
                 var presenter = movedPresenters[i];

@@ -13,7 +13,6 @@ namespace UI.Gameplay
         [SerializeField] private CanvasGroup errorImage;
         [SerializeField] private TextMeshProUGUI errorText;
         [SerializeField] private TutorialConfig tutorialConfig;
-        public Image handImage;
         [SerializeField] private ParticleSystem confettiParticle;
         public Board Board => board;
         public TutorialConfig TutorialConfig => tutorialConfig;

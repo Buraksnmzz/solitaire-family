@@ -387,7 +387,7 @@ namespace UI.Gameplay
             View.SetHintAmount(_collectibleModel.totalHints);
             View.SetUndoAmount(_collectibleModel.totalUndo);
             View.SetCoinText(_collectibleModel.totalCoins);
-            View.SetLevelText(_currentLevelIndex + 1);
+            View.SetLevelText(_currentLevelIndex);
             base.ViewShown();
             if (_snapshotService.HasSnapShot())
             {

@@ -57,6 +57,11 @@ namespace Card
             _dragStateService.StartDrag();
             _isDragging = true;
 
+            if (_eventDispatcherService != null)
+            {
+                _eventDispatcherService.Dispatch(new CardMovementStateChangedSignal(true));
+            }
+
 
             _startParent = transform.parent;
             _startSiblingIndex = transform.GetSiblingIndex();

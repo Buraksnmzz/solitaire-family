@@ -49,6 +49,7 @@ public class GameplayView : BaseView
     [SerializeField] private ParticleSystem coinParticle;
     [SerializeField] private ParticleSystem confettiParticle;
     [SerializeField] private ParticleSystem getMovesParticle;
+    [SerializeField] private Transform bottomPanel;
 
     private Sequence _sequence;
     private Sequence _inputBlockerSequence;
@@ -72,7 +73,7 @@ public class GameplayView : BaseView
         hintButton.onClick.AddListener(() => HintButtonClicked?.Invoke());
         debugNextButton.onClick.AddListener(() => DegubNextButtonClicked?.Invoke());
         debugCompleteButton.onClick.AddListener(() => DegubCompleteButtonClicked?.Invoke());
-        debugMoveButton.onClick.AddListener(()=> DegubMoveButtonClicked?.Invoke());
+        debugMoveButton.onClick.AddListener(() => DegubMoveButtonClicked?.Invoke());
         coinButton.onClick.AddListener(() => CoinButtonClicked?.Invoke());
         settingsButton.onClick.AddListener(() => SettingsButtonClicked?.Invoke());
         // Exclude some gameplay buttons from playing the global click sound
@@ -110,6 +111,20 @@ public class GameplayView : BaseView
     public void SetupBoard(LevelData levelData, int currentLevelIndex, SnapShotModel snapshot = null)
     {
         board.Setup(levelData, currentLevelIndex, panel, snapshot);
+
+        var bottomPanelRectTransform = bottomPanel as RectTransform;
+        if (bottomPanelRectTransform == null) return;
+
+        var piles = board != null ? board.Piles : null;
+        if (piles == null) return;
+
+        for (var i = 0; i < piles.Count; i++)
+        {
+            if (piles[i] is Pile pile)
+            {
+                pile.ConfigureDynamicSpacing(bottomPanelRectTransform);
+            }
+        }
     }
 
     public void ShowErrorMessage(string errorMessage)

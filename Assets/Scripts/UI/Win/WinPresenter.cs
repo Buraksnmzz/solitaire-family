@@ -62,7 +62,7 @@ namespace UI.Win
             var configModel = _savedDataService.GetModel<GameConfigModel>();
             var levelProgressModel = _savedDataService.GetModel<LevelProgressModel>();
             View.SetCoinText(collectibleModel.totalCoins);
-            View.SetLevelText(levelProgressModel.CurrentLevelIndex);
+            View.SetLevelText(levelProgressModel.CurrentLevelIndex-1);
             View.SetCoinAmountToCollectText(configModel.earnedCoinAtLevelEnd);
             collectibleModel.totalCoins += configModel.earnedCoinAtLevelEnd;
             View.finalCoins = collectibleModel.totalCoins;

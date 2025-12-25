@@ -277,7 +277,6 @@ namespace Gameplay
             pileParent.anchoredPosition =
                 _foundationCount <= 4 ? new Vector3(0, -610, 0) : new Vector3(0, -510, 0);
 
-            //_itemWidth = _foundationCount <= 4 ? 152f : 116f;
             _itemWidth = _foundationCount <= 4 ? 142f : 108f;
             _itemHeight = _itemWidth / widhtHeightRatio;
 

@@ -102,15 +102,16 @@ namespace UI.Gameplay
             _currentPresenter = presenter;
             _currentTargetContainer = movement.ToContainer;
             _tutorialMoveRestrictionService.SetCurrentMove(presenter, movement.ToContainer);
-            var moveDuration = 1;
-            var fadeDuration = 0.4f;
-            _hintService.ShowHintForMovement(View.Board, movement, true, View.handImage, moveDuration, fadeDuration);
+            var moveDuration = 1.5f;
+            var fadeDuration = 0.6f;
+            var shouldShowHand = movement.Presenters.Count > 1;
+            _hintService.ShowHintForMovement(View.Board, movement, shouldShowHand, moveDuration, fadeDuration);
 
-            var totalDelay = moveDuration + fadeDuration + 0.4f;
-            ScheduleNextHint(totalDelay, moveDuration, fadeDuration);
+            var totalDelay = moveDuration + fadeDuration + 0.8f;
+            ScheduleNextHint(totalDelay, moveDuration, fadeDuration, shouldShowHand);
         }
 
-        void ScheduleNextHint(float totalDelay, float moveDuration, float fadeDuration)
+        void ScheduleNextHint(float totalDelay, float moveDuration, float fadeDuration, bool showHand)
         {
             _hintLoopTween = DOVirtual.DelayedCall(totalDelay, () =>
             {
@@ -121,8 +122,8 @@ namespace UI.Gameplay
                 if (!_dragStateService.CanStartDrag()) return;
                 var movement = GetCurrentTutorialMovement();
                 if (movement == null) return;
-                _hintService.ShowHintForMovement(View.Board, movement, true, View.handImage, moveDuration, fadeDuration);
-                ScheduleNextHint(totalDelay, moveDuration, fadeDuration);
+                _hintService.ShowHintForMovement(View.Board, movement, showHand, moveDuration, fadeDuration);
+                ScheduleNextHint(totalDelay, moveDuration, fadeDuration, showHand);
             });
         }
 
@@ -132,6 +133,11 @@ namespace UI.Gameplay
             if (signal.IsMoving)
             {
                 _isDragging = true;
+
+                _hintLoopTween?.Kill();
+                _hintService?.ShowHintForMovement(View.Board, null);
+                View.Board?.Dealer?.StopHintCue();
+
                 return;
             }
 
@@ -158,7 +164,7 @@ namespace UI.Gameplay
                 var levelProgressModel = _savedDataService.GetModel<LevelProgressModel>();
                 levelProgressModel.CurrentLevelIndex++;
                 _savedDataService.SaveData(levelProgressModel);
-                
+
                 DOVirtual.DelayedCall(0.8f, () =>
                 {
                     _soundService.PlaySound(ClipName.GameWon);

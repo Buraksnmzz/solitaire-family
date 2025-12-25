@@ -20,7 +20,7 @@ namespace Card
         [SerializeField][CanBeNull] Image upImage;
         [SerializeField][CanBeNull] Image rightImage;
         [SerializeField][CanBeNull] Image crownImage;
-        [SerializeField] RectTransform rightTextParent;
+        [SerializeField][CanBeNull] RectTransform rightTextParent;
         [SerializeField] GameObject frontSide;
         [SerializeField] GameObject backSide;
         [SerializeField][CanBeNull] GameObject upCategoryInfoImage;
@@ -37,7 +37,7 @@ namespace Card
 
         public void SetRightTextParentSize(float x, float y)
         {
-            rightTextParent.sizeDelta = new Vector2(x, y);
+            if (rightTextParent != null) rightTextParent.sizeDelta = new Vector2(x, y);
         }
 
         public void AnimateGlow()

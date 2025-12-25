@@ -12,6 +12,7 @@ namespace Services.Hint
     {
         private Sequence _sequence;
         private readonly List<GameObject> _activeCopies = new();
+        private Image _handImage;
 
         public List<HintMovement> GetPlayableMovements(Board board)
         {
@@ -176,14 +177,14 @@ namespace Services.Hint
             return movements.FirstOrDefault();
         }
 
-        public void ShowHint(Board board, bool showHand = false, Image handImage = null, float moveDuration = 0.4f, float fadeDuration = 0.25f)
+        public void ShowHint(Board board, bool showHand = false, Image handImage = null, float moveDuration = 0.8f, float fadeDuration = 0.35f)
         {
             var movement = GetBestMovement(board);
             if (movement == null) return;
-            ShowHintForMovement(board, movement, showHand, handImage, moveDuration, fadeDuration);
+            ShowHintForMovement(board, movement, showHand, moveDuration, fadeDuration);
         }
 
-        public void ShowHintForMovement(Board board, HintMovement movement, bool showHand = false, Image handImage = null, float moveDuration = 0.4f, float fadeDuration = 0.25f)
+        public void ShowHintForMovement(Board board, HintMovement movement, bool showHand = false, float moveDuration = 0.8f, float fadeDuration = 0.35f)
         {
             CleanupAnimation();
 
@@ -196,7 +197,7 @@ namespace Services.Hint
                 return;
             }
 
-            PlayAnimation(movement, board, showHand, handImage, moveDuration, fadeDuration);
+            PlayAnimation(movement, board, showHand, moveDuration, fadeDuration);
         }
 
         private void AddOpenDealerMovements(Board board, List<HintMovement> movements)
@@ -546,10 +547,11 @@ namespace Services.Hint
             return null;
         }
 
-        private void PlayAnimation(HintMovement movement, Board board, bool showHand, Image handImage, float moveDuration, float fadeDuration)
+        private void PlayAnimation(HintMovement movement, Board board, bool showHand, float moveDuration, float fadeDuration)
         {
+            
             CleanupAnimation();
-
+            
             if (movement.Presenters == null || movement.Presenters.Count == 0) return;
 
             var parent = movement.Presenters[0].CardView != null
@@ -590,12 +592,10 @@ namespace Services.Hint
                     continue;
                 }
 
-                // if (showHand && handImage != null)
-                // {
-                //     handImage.gameObject.SetActive(true);
-                //     handImage.transform.SetParent(copyRect);
-                //     handImage.transform.localPosition = Vector3.zero;
-                // }
+                if (showHand && i == movement.Presenters.Count-1)
+                {
+                    copy.SetHandVisible(true);
+                }
 
                 if (firstBasePosition == null)
                 {
@@ -672,6 +672,11 @@ namespace Services.Hint
 
         private void CleanupAnimation()
         {
+            if (_handImage != null)
+            {
+                _handImage.transform.SetParent(null);
+                _handImage.gameObject.SetActive(false);
+            }
             if (_sequence != null)
             {
                 _sequence.Kill();
