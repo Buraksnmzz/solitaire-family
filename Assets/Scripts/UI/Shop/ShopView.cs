@@ -38,6 +38,26 @@ namespace UI.Shop
         private readonly float _showScaleDuration = 0.2f;
         private readonly float _showSpawnInterval = 0.12f;
 
+        private static readonly Vector2 CenterPivot = new(0.5f, 0.5f);
+        private static readonly Vector2 TopCenterPivot = new(0.5f, 1f);
+
+        private static void SetPivotKeepingCenter(Transform targetTransform, Vector2 targetPivot)
+        {
+            if (targetTransform == null)
+                return;
+
+            if (targetTransform is not RectTransform rectTransform)
+                return;
+
+            if (rectTransform.pivot == targetPivot)
+                return;
+
+            var centerWorldBefore = rectTransform.TransformPoint(rectTransform.rect.center);
+            rectTransform.pivot = targetPivot;
+            var centerWorldAfter = rectTransform.TransformPoint(rectTransform.rect.center);
+            rectTransform.position += centerWorldBefore - centerWorldAfter;
+        }
+
         public void AnimateOnShow(bool isNoAds)
         {
             if (shopNoAdsPack != null) shopNoAdsPack.localScale = Vector3.zero;
@@ -46,20 +66,16 @@ namespace UI.Shop
 
             if (isNoAds)
             {
+                SetPivotKeepingCenter(shopNoAdsPack, TopCenterPivot);
                 coinOffers.position = shopNoAdsPack.position;
-                if (shopNoAdsPack != null)
-                    shopNoAdsPack.gameObject.SetActive(false);
-
-                if (noAdsOnly != null)
-                    noAdsOnly.gameObject.SetActive(false);
+                shopNoAdsPack.gameObject.SetActive(false);
+                noAdsOnly.gameObject.SetActive(false);
             }
             else
             {
-                if (shopNoAdsPack != null)
-                    shopNoAdsPack.gameObject.SetActive(true);
-
-                if (noAdsOnly != null)
-                    noAdsOnly.gameObject.SetActive(true);
+                SetPivotKeepingCenter(shopNoAdsPack, CenterPivot);
+                shopNoAdsPack.gameObject.SetActive(true);
+                noAdsOnly.gameObject.SetActive(true);
             }
 
             var seq = DOTween.Sequence();
@@ -87,8 +103,14 @@ namespace UI.Shop
         {
             if (isNoAds)
             {
-                if (shopNoAdsPackButton != null) shopNoAdsPackButton.gameObject.SetActive(false);
-                if (noAdsButton != null) noAdsButton.gameObject.SetActive(false);
+                SetPivotKeepingCenter(shopNoAdsPack, TopCenterPivot);
+                shopNoAdsPackButton.gameObject.SetActive(false);
+                noAdsButton.gameObject.SetActive(false);
+                coinOffers.position = shopNoAdsPack.position;
+            }
+            else
+            {
+                SetPivotKeepingCenter(shopNoAdsPack, CenterPivot);
             }
         }
 

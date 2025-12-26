@@ -1,5 +1,6 @@
 using Collectible;
 using Configuration;
+using IAP;
 using Levels;
 using Services;
 using UI.Gameplay;
@@ -14,6 +15,7 @@ namespace UI.MainMenu
         ISnapshotService _snapshotService;
         ISavedDataService _savedDataService;
         IEventDispatcherService _eventDispatcherService;
+        private IIAPService _iapService;
         protected override void OnInitialize()
         {
             base.OnInitialize();
@@ -22,10 +24,28 @@ namespace UI.MainMenu
             _savedDataService = ServiceLocator.GetService<ISavedDataService>();
             _eventDispatcherService = ServiceLocator.GetService<IEventDispatcherService>();
             _eventDispatcherService.AddListener<RewardGivenSignal>(OnRewardGiven);
+            _iapService = ServiceLocator.GetService<IIAPService>();
             View.SetBackgroundImageFromRemote(_savedDataService.GetModel<GameConfigModel>().backgroundImageId -1);
             View.ContinueButtonClicked += OnContinueButtonClicked;
             View.SettingsButtonClicked += OnSettingsButtonClicked;
             View.CoinButtonClicked += OnCoinButtonCLicked;
+            View.NoAdsButtonClicked += OnNoAdsButtonClicked;
+        }
+
+        private void OnNoAdsButtonClicked()
+        {
+            _iapService.Purchase("noads_only", GiveReward);
+        }
+        
+        private void GiveReward(bool success)
+        {
+            if (success)
+            {
+                var settingsModel = _savedDataService.GetModel<SettingsModel>();
+                settingsModel.IsNoAds = true;
+                _savedDataService.SaveData(settingsModel);
+                View.SetNoAdsButton(false);
+            }
         }
 
         private void OnRewardGiven(RewardGivenSignal _)
@@ -49,7 +69,8 @@ namespace UI.MainMenu
             base.ViewShown();
             View.SetLevelText(currentLevel);
             View.SetCoinText(_savedDataService.GetModel<CollectibleModel>().totalCoins);
-
+            var settingsModel = _savedDataService.GetModel<SettingsModel>();
+            View.SetNoAdsButton(!settingsModel.IsNoAds);
         }
 
         private void OnContinueButtonClicked()

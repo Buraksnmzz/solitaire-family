@@ -32,8 +32,8 @@ namespace UI.Shop
             _soundService.PlaySound(ClipName.ShopPurchase);
             _hapticService.HapticLow();
             View.totalCoins = _savedDataService.GetModel<CollectibleModel>().totalCoins;
-            View.PlayCoinAnimation(null, rewardGivenSignal.ButtonTransform);
-            View.SetNoAdsButtons(_savedDataService.GetModel<SettingsModel>().IsNoAds);
+            var isNoAds = _savedDataService.GetModel<SettingsModel>().IsNoAds;
+            View.PlayCoinAnimation(() => View.SetNoAdsButtons(isNoAds), rewardGivenSignal.ButtonTransform);
         }
 
         public override void ViewShown()

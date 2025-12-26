@@ -16,16 +16,19 @@ namespace UI.MainMenu
         [SerializeField] private TextMeshProUGUI coinText;
         [SerializeField] private List<Sprite> backgroundSprites;
         [SerializeField] private Button coinButton;
+        [SerializeField] private Button noAdsButton;
         
         public event Action ContinueButtonClicked;
         public event Action SettingsButtonClicked;
         public event Action CoinButtonClicked;
+        public event Action NoAdsButtonClicked;
         protected override void Awake()
         {
             base.Awake();
             continueButton.onClick.AddListener(()=>ContinueButtonClicked?.Invoke());
             settingsButton.onClick.AddListener(()=>SettingsButtonClicked?.Invoke());
             coinButton.onClick.AddListener(()=>CoinButtonClicked?.Invoke());
+            noAdsButton.onClick.AddListener(()=>NoAdsButtonClicked?.Invoke());
         }
 
         protected override void OnShown()
@@ -58,6 +61,11 @@ namespace UI.MainMenu
                 return;
             }
             backgroundImage.sprite = backgroundSprites[backgroundImageId];
+        }
+
+        public void SetNoAdsButton(bool isTrue)
+        {
+            noAdsButton.gameObject.SetActive(isTrue);
         }
     }
     
