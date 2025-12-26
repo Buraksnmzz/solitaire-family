@@ -4568,6 +4568,7 @@ MonoBehaviour:
   dealerButton: {fileID: 304714720286475817}
   openDealer: {fileID: 8081133985992640563}
   dealerHint: {fileID: 5641614822015465320}
+  handImage: {fileID: 4383261717968024562}
 --- !u!114 &304714720286475817
 MonoBehaviour:
   m_ObjectHideFlags: 0

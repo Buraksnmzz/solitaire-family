@@ -21,6 +21,9 @@ namespace Gameplay
         private ITutorialMoveRestrictionService _tutorialMoveRestrictionService;
         IHapticService _hapticService;
 
+        protected virtual float DefaultHintFadeDuration => 0.7f;
+        protected virtual float DefaultHintHoldDuration => 0.2f;
+
         public void SetupDeck(List<CardModel> cardModels, List<CardPresenter> cardPresenters, List<CardView> cardViews)
         {
             _eventDispatcherService = ServiceLocator.GetService<IEventDispatcherService>();
@@ -124,7 +127,12 @@ namespace Gameplay
             dealerButton.onClick.AddListener(OnDealerButtonClick);
         }
 
-        public virtual void PlayHintCue(float fadeDuration = 0.7f, float holdDuration = 0.2f)
+        public void PlayHintCue()
+        {
+            PlayHintCue(DefaultHintFadeDuration, DefaultHintHoldDuration);
+        }
+
+        protected virtual void PlayHintCue(float fadeDuration, float holdDuration)
         {
             if (dealerHint == null) return;
 
