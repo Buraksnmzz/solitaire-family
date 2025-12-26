@@ -21,6 +21,9 @@ public abstract class BaseView : MonoBehaviour, IView
     private float _moveOffset;
     private RectTransform _backgroundRectTransform;
     private bool _isBackgroundAttachedToCanvas;
+    private Transform _backgroundOriginalParent;
+    private int _backgroundOriginalSiblingIndex;
+    private Transform _backgroundsRoot;
     private CanvasGroup _panelCanvasGroup;
     private ISoundService _soundService;
     private List<Button> _subscribedButtons;
@@ -137,7 +140,13 @@ public abstract class BaseView : MonoBehaviour, IView
         gameObject.SetActive(true);
 
         if (shouldMoveBackgroundToParent)
+        {
             AttachBackgroundToCanvas();
+            if (_backgroundRectTransform != null)
+            {
+                _backgroundRectTransform.SetAsLastSibling();
+            }
+        }
 
         _currentAnimation = DOTween.Sequence()
             .OnStart(() =>
@@ -281,7 +290,7 @@ public abstract class BaseView : MonoBehaviour, IView
 
     private void AttachBackgroundToCanvas()
     {
-        if (_backgroundRectTransform == null || _isBackgroundAttachedToCanvas)
+        if (_backgroundRectTransform == null)
         {
             return;
         }
@@ -292,8 +301,19 @@ public abstract class BaseView : MonoBehaviour, IView
             return;
         }
 
-        _backgroundRectTransform.SetParent(canvas.transform, false);
-        _backgroundRectTransform.SetAsFirstSibling();
+        if (!_isBackgroundAttachedToCanvas)
+        {
+            _backgroundOriginalParent = _backgroundRectTransform.parent;
+            _backgroundOriginalSiblingIndex = _backgroundRectTransform.GetSiblingIndex();
+        }
+
+        if (_backgroundsRoot == null)
+        {
+            var backgroundsTransform = canvas.transform.Find("Backgrounds");
+            _backgroundsRoot = backgroundsTransform != null ? backgroundsTransform : canvas.transform;
+        }
+
+        _backgroundRectTransform.SetParent(_backgroundsRoot, false);
         _isBackgroundAttachedToCanvas = true;
     }
 }

@@ -1,3 +1,4 @@
+using DG.Tweening;
 using UI.Gameplay;
 using UI.MainMenu;
 using UI.NoMoreMoves;
@@ -17,10 +18,14 @@ namespace UI.Settings
 
         private void OnMainMenuButtonClicked()
         {
-            UIService.HidePopup<GameplayPresenter>();
-            View.Hide();
-            UIService.ShowPopup<MainMenuPresenter>();
             _eventDispatcher.Dispatch(new MainMenuButtonClickSignal());
+            View.Hide();
+            DOVirtual.DelayedCall(0.3f, () =>
+            {
+                UIService.HidePopup<GameplayPresenter>();
+                UIService.ShowPopup<MainMenuPresenter>();
+            });
+            
         }
 
         private void OnRestartButtonClicked()

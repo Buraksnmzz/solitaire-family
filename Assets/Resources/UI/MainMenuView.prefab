@@ -770,7 +770,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   backgroundImage: {fileID: 2761853639519717757}
-  animationDuration: 0.1
+  animationDuration: 0
   animationType: 0
   panel: {fileID: 5246650766432237325}
   fadeEndValue: 1
@@ -792,6 +792,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5246650766432237325}
     m_Modifications:
+    - target: {fileID: 2832878791797708312, guid: f2114199c07f140e4b58518f280d7277, type: 3}
+      propertyPath: m_text
+      value: "Cont\u0131nue"
+      objectReference: {fileID: 0}
     - target: {fileID: 2832878791797708312, guid: f2114199c07f140e4b58518f280d7277, type: 3}
       propertyPath: m_RaycastTarget
       value: 0

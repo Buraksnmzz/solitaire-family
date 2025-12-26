@@ -6448,7 +6448,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   backgroundImage: {fileID: 8188636935371010217}
-  animationDuration: 0.2
+  animationDuration: 0
   animationType: 0
   panel: {fileID: 2249596092404895449}
   fadeEndValue: 1

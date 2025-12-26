@@ -27,7 +27,7 @@ namespace Gameplay
             cardPresenter.SetContainer(this);
 
             var targetLocalPosition = GetCardLocalPosition(index);
-
+            UpdateLastCardContentCountText();
             if (cardPresenter.CardView != null)
             {
                 cardPresenter.CardView.transform.SetAsLastSibling();
@@ -38,14 +38,15 @@ namespace Gameplay
                 var isCompleted = TryCollectCompletedPresenters(out var presentersToRemove);
                 if (isCompleted)
                 {
+                    var presenter = presentersToRemove[^1];
+                    presenter.SetContentCount(presenter.CardModel.ContentCount, presenter.CardModel.ContentCount);
                     SoundService.PlaySound(ClipName.FoundationCompleted);
                     HapticService.HapticMedium();
                     DOVirtual.DelayedCall(moveDuration, () => CheckAndHandleCompletion(presentersToRemove));
                 }
             }
-
+            
             OnCardAdded(null, cardPresenter);
-            UpdateLastCardContentCountText();
             TryUpdateCategoryAndTopContentStatesForStackCase();
         }
 
@@ -185,7 +186,7 @@ namespace Gameplay
             if (CardPresenters.Count == 0) return;
 
             var categoryModel = CardPresenters[0].CardModel;
-            if (categoryModel.Type != CardType.Category) return;
+            //if (categoryModel.Type != CardType.Category) return;
 
             var totalContentCount = categoryModel.ContentCount;
             if (totalContentCount <= 0) return;

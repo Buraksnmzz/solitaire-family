@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Gameplay
 {
-    public class DealerTutorial: Dealer
+    public class DealerTutorial : Dealer
     {
         [SerializeField] private Transform handImage;
 
