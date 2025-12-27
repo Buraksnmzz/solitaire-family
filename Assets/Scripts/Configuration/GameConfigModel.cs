@@ -16,5 +16,6 @@ namespace Configuration
         public int backgroundImageId = 1;
         public int[] rateUsTriggerLevels;
         public int dailyAdsWatchAmount = 9;
+        public int rewardedVideoCoinAmount = 500;
     }
 }

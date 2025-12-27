@@ -67,6 +67,7 @@ namespace UI.Gameplay
             _eventDispatcherService.AddListener<JokerClickedSignal>(OnJokerClickedFromNoMoreMoves);
             _eventDispatcherService.AddListener<RewardGivenSignal>(OnRewardGiven);
             _eventDispatcherService.AddListener<MainMenuButtonClickSignal>(OnMainMenuButtonClick);
+            _eventDispatcherService.AddListener<CoinChangedSignal>(OnCoinChanged);
             View.UndoButtonClicked += OnUndoClicked;
             View.HintButtonClicked += OnHintClicked;
             View.JokerButtonClicked += OnJokerClicked;
@@ -77,6 +78,11 @@ namespace UI.Gameplay
             View.DegubCompleteButtonClicked += OnDebugCompleteButtonClicked;
             View.DegubMoveButtonClicked += OnDegubMoveButtonClicked;
             View.OnCoinMoved += CoinMoved;
+        }
+
+        private void OnCoinChanged(CoinChangedSignal _)
+        {
+            View.SetCoinText(_savedDataService.GetModel<CollectibleModel>().totalCoins);
         }
 
         private void OnDegubMoveButtonClicked()

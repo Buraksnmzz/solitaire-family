@@ -13,6 +13,7 @@
   "jokerCost": 900,
   "extraMovesCost": 1200,
   "dailyAdsWatchAmount": 9,
+  "rewardedVideoCoinAmount": 500,
   
   "rateUsTrigger": "2,4,7",
   

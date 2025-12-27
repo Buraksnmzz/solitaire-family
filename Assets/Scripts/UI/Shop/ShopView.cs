@@ -12,12 +12,14 @@ namespace UI.Shop
     public class ShopView : BaseView
     {
         [SerializeField] private Button closeButton;
+        [SerializeField] public Button rewardedVideoButton;
         [SerializeField] private ShopNoAdsPackButton shopNoAdsPackButton;
         [SerializeField] private ShopNoAdsOnlyButton noAdsButton;
         [SerializeField] private Transform shopNoAdsPack;
         [SerializeField] private Transform noAdsOnly;
         [SerializeField] private Transform coinOffers;
         [SerializeField] private TextMeshProUGUI coinText;
+        [SerializeField] private TextMeshProUGUI rewardedVideoCoinAmountText;
         [SerializeField] private Transform coinImage;
         [SerializeField] private RectTransform earnedCoinIconPrefab;
         private readonly int _coinAnimationCount = 8;
@@ -27,19 +29,26 @@ namespace UI.Shop
         private readonly float _coinMoveDuration = 0.8f;
         public int totalCoins;
 
-        public event Action OnIconMoved;
-
-        private void Start()
-        {
-            closeButton.onClick.AddListener(Hide);
-            CatalogService.LoadCatalog();
-        }
-
         private readonly float _showScaleDuration = 0.2f;
         private readonly float _showSpawnInterval = 0.12f;
 
         private static readonly Vector2 CenterPivot = new(0.5f, 0.5f);
         private static readonly Vector2 TopCenterPivot = new(0.5f, 1f);
+        
+        public event Action OnIconMoved;
+        public event Action RewardedVideoButtonClicked;
+
+        private void Start()
+        {
+            closeButton.onClick.AddListener(Hide);
+            rewardedVideoButton.onClick.AddListener(()=>RewardedVideoButtonClicked?.Invoke());
+            CatalogService.LoadCatalog();
+        }
+
+        public void SetRewardedVideoCoinAmount(int coinAmount)
+        {
+            rewardedVideoCoinAmountText.text = coinAmount.ToString();
+        }
 
         private static void SetPivotKeepingCenter(Transform targetTransform, Vector2 targetPivot)
         {

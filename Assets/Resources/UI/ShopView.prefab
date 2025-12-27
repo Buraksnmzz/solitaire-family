@@ -574,7 +574,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.025489958, y: 0.13183698}
   m_AnchorMax: {x: 0.18051006, y: 0.92316306}
-  m_AnchoredPosition: {x: -0.000061035156, y: 0.5999985}
+  m_AnchoredPosition: {x: -0.000061035156, y: 0.60001373}
   m_SizeDelta: {x: -2, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8806175992588020093
@@ -1548,7 +1548,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.34222227, y: 0.60346156}
   m_AnchorMax: {x: 0.6576666, y: 0.833718}
-  m_AnchoredPosition: {x: -0.0000076293945, y: -0.88594055}
+  m_AnchoredPosition: {x: -0.0000076293945, y: -0.8859253}
   m_SizeDelta: {x: 460, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &1668946654865769238
@@ -3175,6 +3175,28 @@ PrefabInstance:
       addedObject: {fileID: 7349540757246194695}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ab235062e90a449919622b4fc32ea21c, type: 3}
+--- !u!114 &549138899809469316 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2838402614869966640, guid: ab235062e90a449919622b4fc32ea21c, type: 3}
+  m_PrefabInstance: {fileID: 2376465503207242932}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &729046142979334399 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3090860578814942283, guid: ab235062e90a449919622b4fc32ea21c, type: 3}
+  m_PrefabInstance: {fileID: 2376465503207242932}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &6897707450097668720 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 9170299340390936260, guid: ab235062e90a449919622b4fc32ea21c, type: 3}
@@ -3777,12 +3799,14 @@ MonoBehaviour:
   fadeEndValue: 1
   shouldMoveBackgroundToParent: 0
   closeButton: {fileID: 7426225424154011107}
+  rewardedVideoButton: {fileID: 549138899809469316}
   shopNoAdsPackButton: {fileID: 1965512779598294986}
   noAdsButton: {fileID: 1099617487569773732}
   shopNoAdsPack: {fileID: 3279595705354876543}
   noAdsOnly: {fileID: 4785864669956784159}
   coinOffers: {fileID: 4718244869821686666}
   coinText: {fileID: 4682622328835038824}
+  rewardedVideoCoinAmountText: {fileID: 729046142979334399}
   coinImage: {fileID: 5801743509734819694}
   earnedCoinIconPrefab: {fileID: 611373488224889559, guid: 3bfc68eea2ff34d1294b8bf5116c850e, type: 3}
   totalCoins: 0

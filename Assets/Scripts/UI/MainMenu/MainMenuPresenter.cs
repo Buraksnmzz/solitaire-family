@@ -6,6 +6,7 @@ using Services;
 using UI.Gameplay;
 using UI.Settings;
 using UI.Shop;
+using UI.Signals;
 
 namespace UI.MainMenu
 {
@@ -24,12 +25,18 @@ namespace UI.MainMenu
             _savedDataService = ServiceLocator.GetService<ISavedDataService>();
             _eventDispatcherService = ServiceLocator.GetService<IEventDispatcherService>();
             _eventDispatcherService.AddListener<RewardGivenSignal>(OnRewardGiven);
+            _eventDispatcherService.AddListener<CoinChangedSignal>(OnCoinChanged);
             _iapService = ServiceLocator.GetService<IIAPService>();
             View.SetBackgroundImageFromRemote(_savedDataService.GetModel<GameConfigModel>().backgroundImageId -1);
             View.ContinueButtonClicked += OnContinueButtonClicked;
             View.SettingsButtonClicked += OnSettingsButtonClicked;
             View.CoinButtonClicked += OnCoinButtonCLicked;
             View.NoAdsButtonClicked += OnNoAdsButtonClicked;
+        }
+
+        private void OnCoinChanged(CoinChangedSignal _)
+        {
+            View.SetCoinText(_savedDataService.GetModel<CollectibleModel>().totalCoins);
         }
 
         private void OnNoAdsButtonClicked()

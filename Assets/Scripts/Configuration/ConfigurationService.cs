@@ -63,6 +63,9 @@ namespace Configuration
 
 			[JsonProperty("rateUsTrigger")]
 			public string RateUsTrigger { get; set; }
+			
+			[JsonProperty("rewardedVideoCoinAmount")]
+			public int RewardedVideoCoinAmount { get; set; }
 		}
 
 		public int GetLevelGoal(int levelIndex, int columnCount)
@@ -120,6 +123,7 @@ namespace Configuration
 			gameConfigModel.dailyAdsWatchAmount = root.DailyAdsWatchAmount;
 			_rateUsTriggerLevels = ParseRateUsTrigger(root.RateUsTrigger);
 			gameConfigModel.rateUsTriggerLevels = _rateUsTriggerLevels;
+			gameConfigModel.rewardedVideoCoinAmount = root.RewardedVideoCoinAmount;
 			savedDataService.SaveData(gameConfigModel);
 		}
 
