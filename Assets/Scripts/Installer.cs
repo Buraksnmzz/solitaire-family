@@ -26,7 +26,6 @@ public class Installer : MonoBehaviour
     {
         InstallServices();
         SetOptimalFrameRate();
-        YoogoLabManager.ShowBanner();
     }
 
     private void SetOptimalFrameRate()

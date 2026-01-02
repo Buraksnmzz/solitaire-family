@@ -1,6 +1,6 @@
 {
-  "levelDataUrl": "https://cdn.yoogalab.com/level_map.json",
-  "layoutId": 2,
+  "levelDataUrl": "https://cdn.yoogalab.com/solitaire_level_map_for_unity.json",
+  "layoutId": 1,
   "backgroundImageId": 1,
   "totalHintGiven" : 3,
   "totalJokerGiven": 3,

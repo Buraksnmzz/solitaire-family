@@ -1,6 +1,7 @@
 using Collectible;
 using IAP;
 using TMPro;
+using UI.Signals;
 using UnityEngine;
 
 namespace UI.Shop
@@ -36,6 +37,7 @@ namespace UI.Shop
                 SavedDataService.SaveData(collectibleModel);
                 SavedDataService.SaveData(settingsModel);
                 EventDispatcherService.Dispatch(new RewardGivenSignal(transform));
+                EventDispatcherService.Dispatch(new BannerVisibilityChangedSignal(false));
             }
         }
     }

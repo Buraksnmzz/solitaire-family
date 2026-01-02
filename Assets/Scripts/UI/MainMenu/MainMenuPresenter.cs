@@ -32,6 +32,8 @@ namespace UI.MainMenu
             View.SettingsButtonClicked += OnSettingsButtonClicked;
             View.CoinButtonClicked += OnCoinButtonCLicked;
             View.NoAdsButtonClicked += OnNoAdsButtonClicked;
+            if (!_savedDataService.GetModel<SettingsModel>().IsNoAds)
+                YoogoLabManager.ShowBanner();
         }
 
         private void OnCoinChanged(CoinChangedSignal _)
@@ -52,6 +54,7 @@ namespace UI.MainMenu
                 settingsModel.IsNoAds = true;
                 _savedDataService.SaveData(settingsModel);
                 View.SetNoAdsButton(false);
+                _eventDispatcherService.Dispatch(new BannerVisibilityChangedSignal(false));
             }
         }
 

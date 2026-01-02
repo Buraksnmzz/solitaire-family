@@ -13,6 +13,7 @@ using UI.Settings;
 using UI.Shop;
 using UI.Signals;
 using UI.Win;
+using Unity.VisualScripting;
 
 namespace UI.Gameplay
 {
@@ -83,6 +84,9 @@ namespace UI.Gameplay
         private void OnCoinChanged(CoinChangedSignal _)
         {
             View.SetCoinText(_savedDataService.GetModel<CollectibleModel>().totalCoins);
+            View.SetJokerAmount(_collectibleModel.totalJokers, _collectibleModel.totalCoins,  _gameConfigModel.jokerCost);
+            View.SetHintAmount(_collectibleModel.totalHints, _collectibleModel.totalCoins, _gameConfigModel.hintCost);
+            View.SetUndoAmount(_collectibleModel.totalUndo, _collectibleModel.totalCoins, _gameConfigModel.undoCost);
         }
 
         private void OnDegubMoveButtonClicked()
@@ -113,6 +117,9 @@ namespace UI.Gameplay
         private void OnRewardGiven(RewardGivenSignal _)
         {
             View.SetCoinText(_savedDataService.GetModel<CollectibleModel>().totalCoins);
+            View.SetJokerAmount(_collectibleModel.totalJokers, _collectibleModel.totalCoins,  _gameConfigModel.jokerCost);
+            View.SetHintAmount(_collectibleModel.totalHints, _collectibleModel.totalCoins, _gameConfigModel.hintCost);
+            View.SetUndoAmount(_collectibleModel.totalUndo, _collectibleModel.totalCoins, _gameConfigModel.undoCost);
         }
 
         private void OnDebugCompleteButtonClicked()
@@ -254,7 +261,7 @@ namespace UI.Gameplay
             if (success)
             {
                 _collectibleModel.totalJokers++;
-                View.SetJokerAmount(_collectibleModel.totalJokers);
+                View.SetJokerAmount(_collectibleModel.totalJokers, _collectibleModel.totalCoins, _gameConfigModel.jokerCost);
                 _savedDataService.SaveData(_collectibleModel);
             }
         }
@@ -265,7 +272,7 @@ namespace UI.Gameplay
             _soundService.PlaySound(ClipName.PowerUp);
             _hapticService.HapticLow();
             View.board.GenerateJokerCard();
-            View.SetJokerAmount(totalJokers);
+            View.SetJokerAmount(totalJokers, _collectibleModel.totalCoins, _gameConfigModel.jokerCost);
             //View.SetJokerButtonInteractable(false);
             _savedDataService.SaveData(_collectibleModel);
         }
@@ -325,7 +332,7 @@ namespace UI.Gameplay
             if (success)
             {
                 _collectibleModel.totalUndo++;
-                View.SetUndoAmount(_collectibleModel.totalUndo);
+                View.SetUndoAmount(_collectibleModel.totalUndo, _collectibleModel.totalCoins, _gameConfigModel.undoCost);
                 _savedDataService.SaveData(_collectibleModel);
             }
         }
@@ -338,7 +345,7 @@ namespace UI.Gameplay
             _movesCount++;
             View.SetMovesCount(_movesCount);
             View.SetUndoButtonInteractable(false);
-            View.SetUndoAmount(totalUndo);
+            View.SetUndoAmount(totalUndo, _collectibleModel.totalCoins, _gameConfigModel.undoCost);
             _savedDataService.SaveData(_collectibleModel);
         }
 
@@ -351,7 +358,7 @@ namespace UI.Gameplay
                 _soundService.PlaySound(ClipName.PowerUp);
                 _collectibleModel.totalHints--;
                 _hintService.ShowHint(View.Board);
-                View.SetHintAmount(_collectibleModel.totalHints);
+                View.SetHintAmount(_collectibleModel.totalHints, _collectibleModel.totalCoins, _gameConfigModel.hintCost);
                 _savedDataService.SaveData(_collectibleModel);
             }
             else if (_collectibleModel.totalCoins >= gameConfigModel.hintCost)
@@ -360,7 +367,7 @@ namespace UI.Gameplay
                 _collectibleModel.totalCoins -= gameConfigModel.hintCost;
                 View.SetCoinText(_collectibleModel.totalCoins);
                 _hintService.ShowHint(View.Board);
-                View.SetHintAmount(_collectibleModel.totalHints);
+                View.SetHintAmount(_collectibleModel.totalHints, _collectibleModel.totalCoins, _gameConfigModel.hintCost);
                 _savedDataService.SaveData(_collectibleModel);
             }
             else
@@ -374,7 +381,7 @@ namespace UI.Gameplay
             if (success)
             {
                 _collectibleModel.totalHints++;
-                View.SetHintAmount(_collectibleModel.totalHints);
+                View.SetHintAmount(_collectibleModel.totalHints, _collectibleModel.totalCoins, _gameConfigModel.hintCost);
                 _savedDataService.SaveData(_collectibleModel);
             }
         }
@@ -389,9 +396,9 @@ namespace UI.Gameplay
             _levelData = _levelGeneratorService.GetLevelData(_currentLevelIndex);
             _movesCount = _totalGoalCount;
             _collectibleModel = _savedDataService.GetModel<CollectibleModel>();
-            View.SetJokerAmount(_collectibleModel.totalJokers);
-            View.SetHintAmount(_collectibleModel.totalHints);
-            View.SetUndoAmount(_collectibleModel.totalUndo);
+            View.SetJokerAmount(_collectibleModel.totalJokers, _collectibleModel.totalCoins,  _gameConfigModel.jokerCost);
+            View.SetHintAmount(_collectibleModel.totalHints, _collectibleModel.totalCoins, _gameConfigModel.hintCost);
+            View.SetUndoAmount(_collectibleModel.totalUndo, _collectibleModel.totalCoins, _gameConfigModel.undoCost);
             View.SetCoinText(_collectibleModel.totalCoins);
             View.SetLevelText(_currentLevelIndex);
             base.ViewShown();
@@ -428,6 +435,7 @@ namespace UI.Gameplay
             _savedDataService.SaveData(_collectibleModel);
 
             var levelProgressModel = _savedDataService.GetModel<LevelProgressModel>();
+            YoogoLabManager.LevelEnd(levelProgressModel.CurrentLevelIndex);
             levelProgressModel.CurrentLevelIndex++;
             _savedDataService.SaveData(levelProgressModel);
             if (_snapshotService.HasSnapShot())
@@ -442,6 +450,8 @@ namespace UI.Gameplay
                 View.PlayConfetti();
                 View.PlayEarnedMovesCoinAnimation(_movesCount, gameConfigModel.earnedCoinPerMoveLeft, initialCoins, () =>
                 {
+                    if (!_savedDataService.GetModel<SettingsModel>().IsNoAds)
+                        YoogoLabManager.ShowInterstitial();
                     _uiService.ShowPopup<WinPresenter>();
                 });
             });

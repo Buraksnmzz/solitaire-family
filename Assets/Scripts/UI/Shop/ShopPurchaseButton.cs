@@ -43,16 +43,18 @@ namespace UI.Shop
             SetRewardValue();
         }
 
-        public void SetPurchaseValue()
+        private void SetPurchaseValue()
         {
             if (string.IsNullOrEmpty(productId)) return;
 
             var localized = _iapService.GetLocalizedPrice(productId);
             if (!string.IsNullOrEmpty(localized))
             {
+                purchaseButton.interactable = true;
                 purchaseValueText.SetText(localized);
                 return;
             }
+            purchaseButton.interactable = false;
             purchaseValueText.SetText("--");
         }
 

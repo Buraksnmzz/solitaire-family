@@ -1,3 +1,5 @@
+using UI.Signals;
+
 namespace UI.Shop
 {
     public class ShopNoAdsOnlyButton: ShopPurchaseButton
@@ -10,6 +12,7 @@ namespace UI.Shop
                 settingsModel.IsNoAds = true;
                 SavedDataService.SaveData(settingsModel);
                 EventDispatcherService.Dispatch(new RewardGivenSignal(transform));
+                EventDispatcherService.Dispatch(new BannerVisibilityChangedSignal(false));
             }
         }
 

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Card;
 using DG.Tweening;
@@ -13,6 +14,13 @@ namespace Gameplay
         private readonly float _completeScaleDownDuration = 0.4f;
         [SerializeField] private Image glowImage;
         [SerializeField] private ParticleSystem completeParticle;
+        private ISavedDataService _savedDataService;
+
+
+        private void Start()
+        {
+            _savedDataService = ServiceLocator.GetService<ISavedDataService>();
+        }
 
         public override Vector3 GetCardLocalPosition(int index)
         {
@@ -138,7 +146,12 @@ namespace Gameplay
             glowSequence.Append(glowImage.transform.DOScale(Vector3.one, _completeScaleUpDuration));
             glowSequence.Append(glowImage.DOFade(0f, _completeScaleDownDuration));
 
-            DOVirtual.DelayedCall(_completeScaleUpDuration + _completeScaleDownDuration, () => completeParticle.Play());
+            DOVirtual.DelayedCall(_completeScaleUpDuration + _completeScaleDownDuration, () =>
+            {
+                completeParticle.Play();
+                if (!_savedDataService.GetModel<SettingsModel>().IsNoAds)
+                    YoogoLabManager.ShowInterstitial();
+            });
             foreach (var presenter in presentersToRemove)
             {
                 if (presenter.CardView == null) continue;
@@ -157,7 +170,10 @@ namespace Gameplay
                 sequence.Append(cardTransform
                     .DOScale(Vector3.zero, _completeScaleDownDuration));
 
-                sequence.OnComplete(() => Destroy(cardTransform.gameObject));
+                sequence.OnComplete(() =>
+                {
+                    Destroy(cardTransform.gameObject);
+                });
             }
         }
 

@@ -31,18 +31,18 @@ public class GameplayView : BaseView
     [SerializeField] private GameObject hintCountImage;
     [SerializeField] private GameObject undoCountImage;
     [SerializeField] private GameObject jokerCountImage;
+    [SerializeField] private GameObject hintCoinCostImage;
+    [SerializeField] private GameObject undoCoinCostImage;
+    [SerializeField] private GameObject jokerCoinCostImage;
+    [SerializeField] private TextMeshProUGUI hintCoinCostText;
+    [SerializeField] private TextMeshProUGUI undoCoinCostText;
+    [SerializeField] private TextMeshProUGUI jokerCoinCostText;
     [SerializeField] private Image undoButtonImage;
-    [SerializeField] private Image jokerButtonImage;
     [SerializeField] private Image undoButtonIcon;
-    [SerializeField] private Image jokerButtonIcon;
     [SerializeField] private Sprite undoButtonActiveSprite;
     [SerializeField] private Sprite undoIconActiveSprite;
     [SerializeField] private Sprite undoButtonPassiveSprite;
     [SerializeField] private Sprite undoIconPassiveSprite;
-    [SerializeField] private Sprite jokerButtonActiveSprite;
-    [SerializeField] private Sprite jokerIconActiveSprite;
-    [SerializeField] private Sprite jokerButtonPassiveSprite;
-    [SerializeField] private Sprite jokerIconPassiveSprite;
     [SerializeField] private Button debugNextButton;
     [SerializeField] private Button debugCompleteButton;
     [SerializeField] private Button debugMoveButton;
@@ -221,46 +221,73 @@ public class GameplayView : BaseView
         });
     }
 
-    public void SetUndoAmount(int totalUndo)
+    public void SetUndoAmount(int totalUndo, int totalCoins, int coinCost)
     {
         if (totalUndo > 0)
         {
             undoCountText.SetText(totalUndo.ToString());
             undoCountImage.SetActive(true);
             undoRewardedImage.SetActive(false);
+            undoCoinCostImage.SetActive(false);
+        }
+        else if(totalCoins >= coinCost)
+        {
+            undoCountImage.SetActive(false);
+            undoRewardedImage.SetActive(false);
+            undoCoinCostImage.SetActive(true);
+            undoCoinCostText.text = coinCost.ToString();
         }
         else
         {
             undoCountImage.SetActive(false);
             undoRewardedImage.SetActive(true);
+            undoCoinCostImage.SetActive(false);
         }
     }
 
-    public void SetHintAmount(int totalHints)
+    public void SetHintAmount(int totalHints, int totalCoins, int coinCost)
     {
         if (totalHints > 0)
         {
             hintCountText.SetText(totalHints.ToString());
             hintCountImage.SetActive(true);
             hintRewardedImage.SetActive(false);
+            hintCoinCostImage.SetActive(false);
+        }
+        else if(totalCoins >= coinCost)
+        {
+            hintCountImage.SetActive(false);
+            hintRewardedImage.SetActive(false);
+            hintCoinCostImage.SetActive(true);
+            hintCoinCostText.text = coinCost.ToString();
         }
         else
         {
             hintCountImage.SetActive(false);
             hintRewardedImage.SetActive(true);
+            hintCoinCostImage.SetActive(false);
         }
     }
 
-    public void SetJokerAmount(int totalJokers)
+    public void SetJokerAmount(int totalJokers, int totalCoins, int coinCost)
     {
         if (totalJokers > 0)
         {
             jokerCountText.SetText(totalJokers.ToString());
             jokerCountImage.SetActive(true);
             jokerRewardedImage.SetActive(false);
+            jokerCoinCostImage.SetActive(false);
+        }
+        else if(totalCoins >= coinCost)
+        {
+            jokerCountImage.SetActive(false);
+            jokerRewardedImage.SetActive(false);
+            jokerCoinCostImage.SetActive(true);
+            jokerCoinCostText.text = coinCost.ToString();
         }
         else
         {
+            jokerCoinCostImage.SetActive(false);
             jokerCountImage.SetActive(false);
             jokerRewardedImage.SetActive(true);
         }
