@@ -16,6 +16,18 @@ PrefabInstance:
       propertyPath: m_RaycastTarget
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2367568040699909112, guid: f88709ebafbd04830bc9dbb4b5194c73, type: 3}
+      propertyPath: m_fontColorGradient.bottomRight.b
+      value: 0.8235294
+      objectReference: {fileID: 0}
+    - target: {fileID: 2367568040699909112, guid: f88709ebafbd04830bc9dbb4b5194c73, type: 3}
+      propertyPath: m_fontColorGradient.bottomRight.g
+      value: 0.9529412
+      objectReference: {fileID: 0}
+    - target: {fileID: 2367568040699909112, guid: f88709ebafbd04830bc9dbb4b5194c73, type: 3}
+      propertyPath: m_fontColorGradient.bottomRight.r
+      value: 0.98039216
+      objectReference: {fileID: 0}
     - target: {fileID: 2691129052010426612, guid: f88709ebafbd04830bc9dbb4b5194c73, type: 3}
       propertyPath: m_Sprite
       value: 
@@ -222,6 +234,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 2867323778033428678, guid: f88709ebafbd04830bc9dbb4b5194c73, type: 3}
       insertIndex: -1
       addedObject: {fileID: 4001766656564451915}
+    - targetCorrespondingSourceObject: {fileID: 3885156549836440842, guid: f88709ebafbd04830bc9dbb4b5194c73, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5828225855468509358}
+    - targetCorrespondingSourceObject: {fileID: 7661398137182536682, guid: f88709ebafbd04830bc9dbb4b5194c73, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2711718717515585168}
   m_SourcePrefab: {fileID: 100100000, guid: f88709ebafbd04830bc9dbb4b5194c73, type: 3}
 --- !u!224 &358747788657990208 stripped
 RectTransform:
@@ -244,6 +262,62 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 7595591903260089297, guid: f88709ebafbd04830bc9dbb4b5194c73, type: 3}
   m_PrefabInstance: {fileID: 4682821419431432525}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &3075527840307335847 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7661398137182536682, guid: f88709ebafbd04830bc9dbb4b5194c73, type: 3}
+  m_PrefabInstance: {fileID: 4682821419431432525}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2711718717515585168
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3075527840307335847}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56eb0353ae6e5124bb35b17aff880f16, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_StringReference:
+    m_TableReference:
+      m_TableCollectionName: GUID:01ffaf6180b554402a3de4e279b604f9
+    m_TableEntryReference:
+      m_KeyId: 15
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  m_FormatArguments: []
+  m_UpdateString:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 3792321720449128424}
+        m_TargetAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
+        m_MethodName: set_text
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 1
+  references:
+    version: 2
+    RefIds: []
+--- !u!114 &3792321720449128424 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8385053545976776357, guid: f88709ebafbd04830bc9dbb4b5194c73, type: 3}
+  m_PrefabInstance: {fileID: 4682821419431432525}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3075527840307335847}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &4093736750969768053 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 8661379378465134904, guid: f88709ebafbd04830bc9dbb4b5194c73, type: 3}
@@ -275,7 +349,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2367568040699909112, guid: f88709ebafbd04830bc9dbb4b5194c73, type: 3}
   m_PrefabInstance: {fileID: 4682821419431432525}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 8437036543730095175}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
@@ -311,6 +385,51 @@ MonoBehaviour:
   completedImageCanvasGroup: {fileID: 6172544302683053449}
   levelText: {fileID: 6928774643535921845}
   jokerImage: {fileID: 2996107419620969116}
+--- !u!1 &8437036543730095175 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3885156549836440842, guid: f88709ebafbd04830bc9dbb4b5194c73, type: 3}
+  m_PrefabInstance: {fileID: 4682821419431432525}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &5828225855468509358
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8437036543730095175}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56eb0353ae6e5124bb35b17aff880f16, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_StringReference:
+    m_TableReference:
+      m_TableCollectionName: GUID:01ffaf6180b554402a3de4e279b604f9
+    m_TableEntryReference:
+      m_KeyId: 28
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  m_FormatArguments: []
+  m_UpdateString:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6928774643535921845}
+        m_TargetAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
+        m_MethodName: set_text
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 1
+  references:
+    version: 2
+    RefIds: []
 --- !u!224 &8439539780284090492 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3883226520022522161, guid: f88709ebafbd04830bc9dbb4b5194c73, type: 3}

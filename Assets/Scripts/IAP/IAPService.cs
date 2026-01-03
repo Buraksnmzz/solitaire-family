@@ -21,7 +21,7 @@ namespace IAP
 #if UNITY_IOS
         private static IAppleExtensions appleExtensions;
 #endif
-        private bool _isInitialized;
+        public bool IsInitialized { get; private set; }
         private Action<bool> _purchaseCallback;
         private HashSet<string> _processedTransactions = new HashSet<string>();
         private string _pendingPurchaseProductId;
@@ -40,7 +40,7 @@ namespace IAP
         public void Purchase(string productId, Action<bool> onComplete)
         {
             _purchaseCallback = onComplete;
-            if (!_isInitialized)
+            if (!IsInitialized)
             {
                 Debug.LogError("IAP not initialized");
                 _purchaseCallback?.Invoke(false);
@@ -48,7 +48,7 @@ namespace IAP
                 _pendingPurchaseProductId = null;
                 return;
             }
-            if (_isInitialized && m_StoreController != null)
+            if (IsInitialized && m_StoreController != null)
             {
                 var product = m_StoreController.products.WithID(productId);
                 if (product != null && product.availableToPurchase)
@@ -75,7 +75,7 @@ namespace IAP
         {
             if (string.IsNullOrEmpty(productId)) return string.Empty;
 
-            if (_isInitialized && m_StoreController != null)
+            if (IsInitialized && m_StoreController != null)
             {
                 var prod = m_StoreController.products.WithID(productId);
                 if (prod != null && prod.metadata != null && !string.IsNullOrEmpty(prod.metadata.localizedPriceString))
@@ -87,7 +87,7 @@ namespace IAP
 
         private async void InitializePurchasing()
         {
-            if (_isInitialized) return;
+            if (IsInitialized) return;
 
             //var options = new InitializationOptions().SetEnvironmentName("production");
             var options = new InitializationOptions().SetEnvironmentName("test");
@@ -110,19 +110,19 @@ namespace IAP
 #if UNITY_IOS
             appleExtensions = extensions.GetExtension<IAppleExtensions>();
 #endif
-            _isInitialized = true;
+            IsInitialized = true;
         }
 
         public void OnInitializeFailed(InitializationFailureReason error)
         {
             Debug.LogWarning("IAP initialization failed: " + error);
-            _isInitialized = false;
+            IsInitialized = false;
         }
 
         public void OnInitializeFailed(InitializationFailureReason error, string message = null)
         {
             Debug.LogWarning("IAP initialization failed: " + error);
-            _isInitialized = false;
+            IsInitialized = false;
         }
 
         public PurchaseProcessingResult ProcessPurchase(PurchaseEventArgs args)

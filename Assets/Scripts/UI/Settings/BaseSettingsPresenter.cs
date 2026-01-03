@@ -2,8 +2,8 @@ namespace UI.Settings
 {
     public abstract class BaseSettingsPresenter<TView> : BasePresenter<TView> where TView : BaseSettingsView
     {
-        private SettingsModel _settingsModel;
-        private ISavedDataService _savedDataService;
+        protected SettingsModel _settingsModel;
+        protected ISavedDataService _savedDataService;
         protected IUIService UIService;
         protected override void OnInitialize()
         {

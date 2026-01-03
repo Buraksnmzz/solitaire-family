@@ -17,5 +17,6 @@ namespace Configuration
         public int[] rateUsTriggerLevels;
         public int dailyAdsWatchAmount = 9;
         public int rewardedVideoCoinAmount = 500;
+        public int extraGivenMovesCount = 500;
     }
 }

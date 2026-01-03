@@ -13,6 +13,8 @@ namespace UI.OutOfMoves
         [SerializeField] private Button closeButton;
         [SerializeField] private TextMeshProUGUI usageCountText;
         [SerializeField] private TextMeshProUGUI extraMovesCostText;
+        [SerializeField] private TextMeshProUGUI youCanAddMovesText;
+        [SerializeField] private TextMeshProUGUI plusXMovesText;
 
         public event Action RestartButtonClicked;
         public event Action AddMovesClicked;
@@ -40,6 +42,16 @@ namespace UI.OutOfMoves
         public void SetExtraMovesCostText(int extraMovesCost)
         {
             extraMovesCostText.text = extraMovesCost.ToString();
+        }
+
+        public void SetYouCanAddMovesText(string addMovesText)
+        {
+            youCanAddMovesText.text = addMovesText;
+        }
+
+        public void SetPlusXMovesText(string xMovesText)
+        {
+            plusXMovesText.text = xMovesText;
         }
     }
 }

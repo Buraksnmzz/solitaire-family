@@ -6,5 +6,7 @@ namespace IAP
     {
         void Purchase(string productId,  Action<bool> onComplete);
         string GetLocalizedPrice(string productId);
+        void RestorePurchasesIOS();
+        bool IsInitialized { get; }
     }
 }

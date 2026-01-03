@@ -68,6 +68,7 @@ public class Installer : MonoBehaviour
         ServiceLocator.Register<ITutorialMoveRestrictionService>(new TutorialMoveRestrictionService());
         ServiceLocator.Register<IIAPService>(new IAPService());
         ServiceLocator.Register<IAdsService>(new AdsService());
+        ServiceLocator.Register<ILocalizationService>(new LocalizationService());
 
         var uiService = ServiceLocator.GetService<IUIService>();
         if (PlayerPrefs.GetInt(StringConstants.IsTutorialShown) == 0)

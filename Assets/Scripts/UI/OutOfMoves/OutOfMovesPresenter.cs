@@ -4,6 +4,7 @@ using Core.Scripts.Services;
 using Services;
 using UI.NoMoreMoves;
 using UI.Shop;
+using UnityEngine.UI;
 
 namespace UI.OutOfMoves
 {
@@ -15,6 +16,7 @@ namespace UI.OutOfMoves
         IUIService _uiService;
         ISoundService _soundService;
         IAdsService _adsService;
+        ILocalizationService _localizationService;
         protected override void OnInitialize()
         {
             base.OnInitialize();
@@ -24,6 +26,7 @@ namespace UI.OutOfMoves
             _uiService = ServiceLocator.GetService<IUIService>();
             _soundService = ServiceLocator.GetService<ISoundService>();
             _adsService = ServiceLocator.GetService<IAdsService>();
+            _localizationService = ServiceLocator.GetService<ILocalizationService>();
             View.RestartButtonClicked += OnRestartButtonClick;
             View.AddMovesClicked += OnAddMovesClick;
             View.ContinueButtonClicked += OnContinueClick;
@@ -37,6 +40,10 @@ namespace UI.OutOfMoves
             UpdateUsage();
             var gameConfigModel = _savedDataService.GetModel<GameConfigModel>();
             View.SetExtraMovesCostText(gameConfigModel.extraMovesCost);
+            var youCanAddMovesText = _localizationService.GetLocalizedString(LocalizationStrings.YouCanAddXMoves, gameConfigModel.extraGivenMovesCount);
+            var plusXMovesText = _localizationService.GetLocalizedString(LocalizationStrings.PlusExtraMoves, gameConfigModel.extraGivenMovesCount);
+            View.SetYouCanAddMovesText(youCanAddMovesText);
+            View.SetPlusXMovesText(plusXMovesText);
         }
 
         private void OnContinueClick()

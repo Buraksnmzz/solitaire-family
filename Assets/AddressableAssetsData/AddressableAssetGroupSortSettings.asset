@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dea69d41f90c6ea4fa55c27c1d60c145, type: 3}
+  m_Name: AddressableAssetGroupSortSettings
+  m_EditorClassIdentifier: 
+  sortOrder:
+  - 2428c2abdea6e489b83d096ce6c08fdc
+  - 27b1cc3b8f2e54d65945a58df4b3c25d
+  - ee1744e1bdf0146efa73ba04ab829dce
+  - 2dd25b4222d544180aa956b42988b9e3
+  - f2991e7b358874fad9167b692cb070f6
+  - 29d75075ce21149b0a214837cd901e05
+  - 3c75969edde2f451d9605fdec39d6bb5
+  - 359b38ff248cc43a19bf90613e755bd5
+  - e96fd59005810441781439087f4e6a80
+  - 4506502c20065481d8b4ebbec7a04dbb
+  - 3cbfd135d35da4971a7898b01416c5ce
+  - 129043f7344fd4ee4b9569470dad9b0b
+  - 2e387f177d2d74716ae0354cfaadcb0b
+  - 7874d226f96a94e7ba70e36c0e4d1ff9
+  - fcbcce44d75aa442185c94d4bb4c5140
+  - c13075520ab454bdfb144b4fe26c1d26
+  - e7f9dc5be148740689d95a4a8a5d5f85
+  - 0d5a059d3bad242b282d691bbeb19bdf

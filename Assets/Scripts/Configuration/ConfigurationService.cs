@@ -66,6 +66,9 @@ namespace Configuration
 			
 			[JsonProperty("rewardedVideoCoinAmount")]
 			public int RewardedVideoCoinAmount { get; set; }
+			
+			[JsonProperty("extraGivenMovesCount")]
+			public int ExtraGivenMovesCount { get; set; }
 		}
 
 		public int GetLevelGoal(int levelIndex, int columnCount)
@@ -124,6 +127,7 @@ namespace Configuration
 			_rateUsTriggerLevels = ParseRateUsTrigger(root.RateUsTrigger);
 			gameConfigModel.rateUsTriggerLevels = _rateUsTriggerLevels;
 			gameConfigModel.rewardedVideoCoinAmount = root.RewardedVideoCoinAmount;
+			gameConfigModel.extraGivenMovesCount = root.ExtraGivenMovesCount;
 			savedDataService.SaveData(gameConfigModel);
 		}
 

@@ -1,0 +1,135 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9620f8c34305754d8cc9a7e49e852d9, type: 3}
+  m_Name: LanguageTable_es
+  m_EditorClassIdentifier: 
+  m_LocaleId:
+    m_Code: es
+  m_SharedData: {fileID: 11400000, guid: 01ffaf6180b554402a3de4e279b604f9, type: 2}
+  m_Metadata:
+    m_Items: []
+  m_TableData:
+  - m_Id: 1
+    m_Localized: "Espa\xF1ol"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2
+    m_Localized: Acerca de
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3
+    m_Localized: Privacidad
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4
+    m_Localized: "Pol\xEDtica de privacidad"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5
+    m_Localized: "T\xE9rminos de uso"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6
+    m_Localized: "Danos tu opini\xF3n"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7
+    m_Localized: Contacto
+    m_Metadata:
+      m_Items: []
+  - m_Id: 8
+    m_Localized: Restaurar compras
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9
+    m_Localized: Movimientos
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10
+    m_Localized: Ajustes
+    m_Metadata:
+      m_Items: []
+  - m_Id: 11
+    m_Localized: Sonido
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12
+    m_Localized: "Vibraci\xF3n"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13
+    m_Localized: Reiniciar
+    m_Metadata:
+      m_Items: []
+  - m_Id: 14
+    m_Localized: "Men\xFA principal"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15
+    m_Localized: Continuar
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16
+    m_Localized: Sin movimientos
+    m_Metadata:
+      m_Items: []
+  - m_Id: 17
+    m_Localized: "Usar comod\xEDn"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18
+    m_Localized: "Puedes usar el comod\xEDn"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 19
+    m_Localized: Sin movimientos
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20
+    m_Localized: +{0} movimientos
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21
+    m_Localized: "A\xF1ade {0}+ movimientos"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 22
+    m_Localized: "\xBFTe gusta el juego?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 23
+    m_Localized: "Dinos qu\xE9 te parece"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 24
+    m_Localized: Pack sin anuncios
+    m_Metadata:
+      m_Items: []
+  - m_Id: 25
+    m_Localized: Sin anuncios
+    m_Metadata:
+      m_Items: []
+  - m_Id: 26
+    m_Localized: "Adi\xF3s a los anuncios"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 27
+    m_Localized: Conseguir
+    m_Metadata:
+      m_Items: []
+  - m_Id: 28
+    m_Localized: Tutorial
+    m_Metadata:
+      m_Items: []
+  references:
+    version: 2
+    RefIds: []

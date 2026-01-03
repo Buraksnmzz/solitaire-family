@@ -14,6 +14,7 @@
   "extraMovesCost": 1200,
   "dailyAdsWatchAmount": 9,
   "rewardedVideoCoinAmount": 500,
+  "extraGivenMovesCount": 10,
   
   "rateUsTrigger": "2,4,7",
   
