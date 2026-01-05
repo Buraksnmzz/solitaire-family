@@ -2,11 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Localization;
 using UnityEngine.Localization.Settings;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.UI;
+using UI.Signals;
 
 namespace Services
 {
@@ -21,7 +23,7 @@ namespace Services
     {
         private readonly ISavedDataService _savedDataService;
         private readonly SettingsModel _settingsModel;
-        
+
         public LocalizationService()
         {
             _savedDataService = ServiceLocator.GetService<ISavedDataService>();
@@ -67,25 +69,34 @@ namespace Services
             if (locale != null && LocalizationSettings.SelectedLocale != locale)
             {
                 LocalizationSettings.SelectedLocale = locale;
-                _settingsModel.CurrentLanguage = language;
-                _savedDataService.SaveData(_settingsModel);
             }
             else if (locale == null)
             {
                 Debug.LogError($"Locale not found for language: {language}.");
             }
+            _settingsModel.CurrentLanguage = language;
+            _savedDataService.SaveData(_settingsModel);
+
+            try
+            {
+                var eventDispatcherService = ServiceLocator.GetService<IEventDispatcherService>();
+                eventDispatcherService.Dispatch(new LanguageChangedSignal(language));
+            }
+            catch
+            {
+            }
         }
 
         public SystemLanguage GetCurrentLanguage()
         {
-            if (_settingsModel !=null && _settingsModel.CurrentLanguage != SystemLanguage.Unknown)
+            if (_settingsModel != null && _settingsModel.CurrentLanguage != SystemLanguage.Unknown)
             {
                 return _settingsModel.CurrentLanguage;
             }
-            
+
             var deviceLanguage = Application.systemLanguage;
             var availableLanguages = GetAvailableLanguages().Select(l => l.Language).ToList();
-            
+
             return availableLanguages.Contains(deviceLanguage) ? deviceLanguage : SystemLanguage.English;
         }
 

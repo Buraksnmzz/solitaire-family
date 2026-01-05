@@ -12,6 +12,12 @@ namespace UI.Settings
             _iapService = ServiceLocator.GetService<IIAPService>();
             View.AboutToggled += OnAboutToggle;
             View.RestorePurchaseClicked += OnRestorePurchasesClicked;
+            View.LanguageClicked += OnLanguageClicked;
+        }
+
+        private void OnLanguageClicked()
+        {
+            UIService.ShowPopup<LanguageSelectPresenter>();
         }
 
         public override void ViewShown()

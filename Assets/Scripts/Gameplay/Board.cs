@@ -260,7 +260,7 @@ namespace Gameplay
 
                 var cardView = Instantiate(prefab, dealerRectTransform);
                 cardViews.Add(cardView);
-                cardView.SetRightTextParentSize(_itemWidth * 1.1f, _itemWidth * 0.37f);
+                cardView.SetRightTextParentSize(_itemWidth * 1.15f, _itemWidth * 0.36f);
                 if (index < CardPresenters.Count)
                 {
                     var presenter = CardPresenters[index];

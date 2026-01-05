@@ -233,20 +233,36 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 726906467613052692, guid: dd54232767b114ad4a40c51723bdff4e, type: 3}
+      propertyPath: m_Color.a
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1021778524031018683, guid: dd54232767b114ad4a40c51723bdff4e, type: 3}
       propertyPath: m_Name
       value: RestartButton
       objectReference: {fileID: 0}
     - target: {fileID: 1353266240058268569, guid: dd54232767b114ad4a40c51723bdff4e, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1353266240058268569, guid: dd54232767b114ad4a40c51723bdff4e, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1353266240058268569, guid: dd54232767b114ad4a40c51723bdff4e, type: 3}
       propertyPath: m_SizeDelta.x
+      value: 200
+      objectReference: {fileID: 0}
+    - target: {fileID: 1353266240058268569, guid: dd54232767b114ad4a40c51723bdff4e, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 400
+      objectReference: {fileID: 0}
+    - target: {fileID: 1353266240058268569, guid: dd54232767b114ad4a40c51723bdff4e, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1353266240058268569, guid: dd54232767b114ad4a40c51723bdff4e, type: 3}
+      propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4737031901231803748, guid: dd54232767b114ad4a40c51723bdff4e, type: 3}
@@ -337,6 +353,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5637203236775402492, guid: dd54232767b114ad4a40c51723bdff4e, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6296993951435904609, guid: dd54232767b114ad4a40c51723bdff4e, type: 3}
       propertyPath: m_Name
       value: GameSettingsView
@@ -344,6 +364,10 @@ PrefabInstance:
     - target: {fileID: 6296993951435904609, guid: dd54232767b114ad4a40c51723bdff4e, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7187398450927795741, guid: dd54232767b114ad4a40c51723bdff4e, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7245649440089485668, guid: dd54232767b114ad4a40c51723bdff4e, type: 3}
       propertyPath: m_SizeDelta.y
@@ -359,7 +383,9 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 5850216988642183488, guid: dd54232767b114ad4a40c51723bdff4e, type: 3}
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 5637203236775402492, guid: dd54232767b114ad4a40c51723bdff4e, type: 3}
+    - {fileID: 7187398450927795741, guid: dd54232767b114ad4a40c51723bdff4e, type: 3}
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 7245649440089485668, guid: dd54232767b114ad4a40c51723bdff4e, type: 3}
       insertIndex: -1

@@ -1,8 +1,12 @@
 {
-  "levelDataUrl": "https://cdn.yoogalab.com/solitaire_level_map_for_unity.json",
+  "levelDataUrls": {
+    "en": "https://cdn.yoogalab.com/level_map_en.json",
+    "fr": "https://cdn.yoogalab.com/level_map_fr.json",
+    "es": "https://cdn.yoogalab.com/level_map_es.json"
+  },
   "layoutId": 1,
   "backgroundImageId": 1,
-  "totalHintGiven" : 3,
+  "totalHintGiven": 3,
   "totalJokerGiven": 3,
   "totalUndoGiven": 3,
   "totalCoinGiven": 500,
@@ -15,32 +19,65 @@
   "dailyAdsWatchAmount": 9,
   "rewardedVideoCoinAmount": 500,
   "extraGivenMovesCount": 10,
-  
   "rateUsTrigger": "2,4,7",
-  
   "goalConfig": {
     "ColumnGoals": {
       "3": [
-        { "goal": 75, "probability": 80 },
-        { "goal": 70, "probability": 10 },
-        { "goal": 65, "probability": 10 }
+        {
+          "goal": 75,
+          "probability": 80
+        },
+        {
+          "goal": 70,
+          "probability": 10
+        },
+        {
+          "goal": 65,
+          "probability": 10
+        }
       ],
       "4": [
-        { "goal": 130, "probability": 60 },
-        { "goal": 120, "probability": 30 },
-        { "goal": 110, "probability": 10 }
+        {
+          "goal": 130,
+          "probability": 60
+        },
+        {
+          "goal": 120,
+          "probability": 30
+        },
+        {
+          "goal": 110,
+          "probability": 10
+        }
       ],
       "5": [
-        { "goal": 210, "probability": 70 },
-        { "goal": 200, "probability": 20 },
-        { "goal": 190, "probability": 10 }
+        {
+          "goal": 210,
+          "probability": 70
+        },
+        {
+          "goal": 200,
+          "probability": 20
+        },
+        {
+          "goal": 190,
+          "probability": 10
+        }
       ]
     },
-
     "LevelGoals": [
-      { "level": 1, "goal": 15 },
-      { "level": 2, "goal": 45 },
-      { "level": 13, "goal": 80 }
+      {
+        "level": 1,
+        "goal": 15
+      },
+      {
+        "level": 2,
+        "goal": 45
+      },
+      {
+        "level": 13,
+        "goal": 80
+      }
     ]
   }
 }

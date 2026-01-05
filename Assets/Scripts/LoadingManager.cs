@@ -1,9 +1,11 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Networking;
 using Loading;
+using Services;
 
 public class LoadingManager : MonoBehaviour
 {
@@ -11,9 +13,43 @@ public class LoadingManager : MonoBehaviour
     [SerializeField] private TextAsset localConfigurationJson;
     [SerializeField] private TextAsset localLevelsJson;
 
+    private static bool _bootServicesInstalled;
+    private SystemLanguage _startupLanguage;
+
+    private void Awake()
+    {
+        InstallBootServices();
+    }
+
     private void Start()
     {
+        _startupLanguage = ResolveStartupLanguage();
         StartCoroutine(InitializeGame());
+    }
+
+    private void InstallBootServices()
+    {
+        if (_bootServicesInstalled)
+        {
+            return;
+        }
+
+        ServiceLocator.Register<ISavedDataService>(new SavedDataService());
+        ServiceLocator.Register<ILocalizationService>(new LocalizationService());
+        _bootServicesInstalled = true;
+    }
+
+    private static SystemLanguage ResolveStartupLanguage()
+    {
+        var savedDataService = ServiceLocator.GetService<ISavedDataService>();
+        var settingsModel = savedDataService.GetModel<SettingsModel>();
+        if (settingsModel.CurrentLanguage != SystemLanguage.Unknown)
+        {
+            return settingsModel.CurrentLanguage;
+        }
+
+        var deviceLanguage = Application.systemLanguage;
+        return deviceLanguage != SystemLanguage.Unknown ? deviceLanguage : SystemLanguage.English;
     }
 
     private IEnumerator InitializeGame()
@@ -59,7 +95,8 @@ public class LoadingManager : MonoBehaviour
     private IEnumerator InitializeLevels(string rawJson)
     {
         var levelsJson = string.Empty;
-        var levelDataUrl = ExtractLevelDataUrl(rawJson);
+        var configurationJson = string.IsNullOrEmpty(rawJson) ? GetLocalRawJson() : rawJson;
+        var levelDataUrl = LevelDataUrlResolver.ResolveLevelDataUrl(configurationJson, _startupLanguage);
         if (string.IsNullOrEmpty(levelDataUrl))
         {
             levelsJson = GetLocalLevelJson();
@@ -96,21 +133,6 @@ public class LoadingManager : MonoBehaviour
         }
     }
 
-    private string ExtractLevelDataUrl(string rawJson)
-    {
-        var configurationJson = GetLocalRawJson();
-        if (rawJson != null)
-            configurationJson = rawJson;
-
-        var url = string.Empty;
-        if (!string.IsNullOrEmpty(configurationJson))
-        {
-            var root = JsonUtility.FromJson<GameConfigurationRoot>(configurationJson);
-            url = root != null ? root.levelDataUrl : string.Empty;
-        }
-        return url;
-    }
-
     private string GetLocalRawJson()
     {
         return localConfigurationJson != null ? localConfigurationJson.text : string.Empty;
@@ -120,11 +142,4 @@ public class LoadingManager : MonoBehaviour
     {
         return localLevelsJson != null ? localLevelsJson.text : string.Empty;
     }
-
-    [System.Serializable]
-    private class GameConfigurationRoot
-    {
-        public string levelDataUrl;
-    }
-
 }

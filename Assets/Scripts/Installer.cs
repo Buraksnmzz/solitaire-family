@@ -50,7 +50,6 @@ public class Installer : MonoBehaviour
     private void InstallServices()
     {
         Debug.Log("Installing Services");
-        ServiceLocator.Register<ISavedDataService>(new SavedDataService());
         ServiceLocator.Register<IPlacableErrorPersistenceService>(new PlacableErrorPersistenceService());
         ServiceLocator.Register<IEventDispatcherService>(new EventDispatcherService());
         ServiceLocator.Register<IStyleService>(new StyleService());
@@ -60,6 +59,7 @@ public class Installer : MonoBehaviour
         ServiceLocator.Register<ISnapshotService>(new SnapshotService());
         ServiceLocator.Register<ICollectibelService>(new CollectibleService());
         ServiceLocator.Register<ILevelGeneratorService>(new LevelGeneratorService(BootCache.LevelsJson));
+        ServiceLocator.Register<ILevelMapLanguageSyncService>(new LevelMapLanguageSyncService());
         ServiceLocator.Register<IConfigurationService>(new ConfigurationService(BootCache.ConfigurationJson));
         ServiceLocator.Register<IDailyAdsService>(new DailyAdsService());
         ServiceLocator.Register<IUndoService>(new UndoService());
@@ -68,7 +68,6 @@ public class Installer : MonoBehaviour
         ServiceLocator.Register<ITutorialMoveRestrictionService>(new TutorialMoveRestrictionService());
         ServiceLocator.Register<IIAPService>(new IAPService());
         ServiceLocator.Register<IAdsService>(new AdsService());
-        ServiceLocator.Register<ILocalizationService>(new LocalizationService());
 
         var uiService = ServiceLocator.GetService<IUIService>();
         if (PlayerPrefs.GetInt(StringConstants.IsTutorialShown) == 0)
