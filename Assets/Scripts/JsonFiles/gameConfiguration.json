@@ -14,12 +14,14 @@
   "earnedCoinPerMoveLeft": 2,
   "hintCost": 900,
   "undoCost": 800,
-  "jokerCost": 900,
+  "jokerCost": 1500,
   "extraMovesCost": 1200,
   "dailyAdsWatchAmount": 9,
   "rewardedVideoCoinAmount": 500,
   "extraGivenMovesCount": 10,
   "rateUsTrigger": "2,4,7",
+  "noAdsPackRewards": "9000,5,5,5",
+  "shopCoinRewards": "1500,7000,25000,50000,100000",
   "goalConfig": {
     "ColumnGoals": {
       "3": [

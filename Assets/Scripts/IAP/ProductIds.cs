@@ -1,8 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine.Purchasing;
-#if UNITY_PURCHASING
-using UnityEngine.Purchasing;
-#endif
 
 namespace IAP
 {
@@ -10,13 +7,13 @@ namespace IAP
     // Replace the placeholder ids below with the real ids from your store/catalog.
     public static class ProductIds
     {
-        const string CoinPack1 = "coin_pack_1";
-        const string CoinPack2 = "coin_pack_2";
-        const string CoinPack3 = "coin_pack_3";
-        const string CoinPack4 = "coin_pack_4";
-        const string CoinPack5 = "coin_pack_5";
-        const string NoAdsPack = "noads_pack";
-        const string NoAdsOnly = "noads_only"; 
+        public const string CoinPack1 = "solitairefam_pack_1";
+        public const string CoinPack2 = "solitairefam_pack_2";
+        public const string CoinPack3 = "solitairefam_pack_3";
+        public const string CoinPack4 = "solitairefam_pack_4";
+        public const string CoinPack5 = "solitairefam_pack_5";
+        public const string NoAdsOnly = "solitairefam_noads";
+        public const string NoAdsPack = "solitairefam_noadspack"; 
 
         public static readonly Dictionary<string, ProductType> ProductTypeMap = new Dictionary<string, ProductType>
         {

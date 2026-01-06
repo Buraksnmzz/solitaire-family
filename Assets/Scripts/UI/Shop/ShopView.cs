@@ -42,7 +42,6 @@ namespace UI.Shop
         {
             closeButton.onClick.AddListener(Hide);
             rewardedVideoButton.onClick.AddListener(()=>RewardedVideoButtonClicked?.Invoke());
-            CatalogService.LoadCatalog();
         }
 
         public void SetRewardedVideoCoinAmount(int coinAmount)

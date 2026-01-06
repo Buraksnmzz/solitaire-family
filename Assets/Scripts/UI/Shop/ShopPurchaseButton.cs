@@ -1,5 +1,6 @@
 using System;
 using Collectible;
+using Configuration;
 using Core.Scripts.Services;
 using IAP;
 using JetBrains.Annotations;
@@ -22,14 +23,12 @@ namespace UI.Shop
         private IIAPService _iapService;
         protected IEventDispatcherService EventDispatcherService;
         protected ISavedDataService SavedDataService;
-        protected CatalogProduct CatalogProduct;
 
         private void Awake()
         {
             _iapService = ServiceLocator.GetService<IIAPService>();
             SavedDataService = ServiceLocator.GetService<ISavedDataService>();
             EventDispatcherService = ServiceLocator.GetService<IEventDispatcherService>();
-            CatalogProduct = CatalogService.GetProduct(productId);
             if (purchaseButton != null)
             {
                 purchaseButton.onClick.RemoveAllListeners();
@@ -61,8 +60,10 @@ namespace UI.Shop
         public virtual void SetRewardValue()
         {
             if (string.IsNullOrEmpty(productId)) return;
-            if(coinRewardText != null)
-                coinRewardText.SetText(CatalogProduct.Coins.ToString());
+
+            var reward = GetProductReward();
+            if (coinRewardText != null)
+                coinRewardText.SetText(reward.Coins.ToString());
         }
 
         private void OnPurchaseClicked()
@@ -74,11 +75,18 @@ namespace UI.Shop
         {
             if (success)
             {
+                var reward = GetProductReward();
                 var collectibleModel = SavedDataService.GetModel<CollectibleModel>();
-                collectibleModel.totalCoins += CatalogProduct.Coins;
+                collectibleModel.totalCoins += reward.Coins;
                 SavedDataService.SaveData(collectibleModel);
                 EventDispatcherService.Dispatch(new RewardGivenSignal(transform));
             }
+        }
+
+        protected CatalogProduct GetProductReward()
+        {
+            var configModel = SavedDataService.GetModel<GameConfigModel>();
+            return ProductRewardResolver.Resolve(configModel, productId);
         }
     }
 }

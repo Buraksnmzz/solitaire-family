@@ -1,13 +1,9 @@
-using Collectible;
 using System;
 using System.Collections.Generic;
 using Unity.Services.Core;
 using Unity.Services.Core.Environments;
 using UnityEngine;
 using UnityEngine.Purchasing;
-#if UNITY_PURCHASING
-using UnityEngine.Purchasing;
-#endif
 
 namespace IAP
 {
@@ -26,14 +22,13 @@ namespace IAP
         private HashSet<string> _processedTransactions = new HashSet<string>();
         private string _pendingPurchaseProductId;
 
-        private const string NoAdsProductID = "noads_only";
-        private const string NoAdsPackProductID = "noads_pack";
+        private const string NoAdsProductID = ProductIds.NoAdsOnly;
+        private const string NoAdsPackProductID = ProductIds.NoAdsPack;
 
         public IAPService()
         {
             _collectibleService = ServiceLocator.GetService<ICollectibelService>();
             _savedDataService = ServiceLocator.GetService<ISavedDataService>();
-            CatalogService.LoadCatalog();
             InitializePurchasing();
         }
 

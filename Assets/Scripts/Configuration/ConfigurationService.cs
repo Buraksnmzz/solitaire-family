@@ -69,6 +69,12 @@ namespace Configuration
 			
 			[JsonProperty("extraGivenMovesCount")]
 			public int ExtraGivenMovesCount { get; set; }
+
+			[JsonProperty("noAdsPackRewards")]
+			public string NoAdsPackRewards { get; set; }
+
+			[JsonProperty("shopCoinRewards")]
+			public string ShopCoinRewards { get; set; }
 		}
 
 		public int GetLevelGoal(int levelIndex, int columnCount)
@@ -128,7 +134,55 @@ namespace Configuration
 			gameConfigModel.rateUsTriggerLevels = _rateUsTriggerLevels;
 			gameConfigModel.rewardedVideoCoinAmount = root.RewardedVideoCoinAmount;
 			gameConfigModel.extraGivenMovesCount = root.ExtraGivenMovesCount;
+			InitializeShopRewards(gameConfigModel, root);
 			savedDataService.SaveData(gameConfigModel);
+		}
+
+		private void InitializeShopRewards(GameConfigModel gameConfigModel, GameConfigurationJson root)
+		{
+			var noAdsPackRewards = ParseIntList(root.NoAdsPackRewards, 4);
+			if (noAdsPackRewards.Length == 4)
+			{
+				gameConfigModel.noAdsPackCoinReward = noAdsPackRewards[0];
+				gameConfigModel.noAdsPackJokerReward = noAdsPackRewards[1];
+				gameConfigModel.noAdsPackHintReward = noAdsPackRewards[2];
+				gameConfigModel.noAdsPackUndoReward = noAdsPackRewards[3];
+			}
+
+			var shopCoinRewards = ParseIntList(root.ShopCoinRewards, 5);
+			if (shopCoinRewards.Length == 5)
+			{
+				gameConfigModel.shopCoinReward1 = shopCoinRewards[0];
+				gameConfigModel.shopCoinReward2 = shopCoinRewards[1];
+				gameConfigModel.shopCoinReward3 = shopCoinRewards[2];
+				gameConfigModel.shopCoinReward4 = shopCoinRewards[3];
+				gameConfigModel.shopCoinReward5 = shopCoinRewards[4];
+			}
+		}
+
+		private int[] ParseIntList(string rawValue, int expectedLength)
+		{
+			if (string.IsNullOrEmpty(rawValue))
+			{
+				return Array.Empty<int>();
+			}
+
+			var parts = rawValue.Split(',');
+			if (parts.Length != expectedLength)
+			{
+				return Array.Empty<int>();
+			}
+
+			var result = new int[expectedLength];
+			for (var i = 0; i < expectedLength; i++)
+			{
+				if (!int.TryParse(parts[i], out var value))
+				{
+					return Array.Empty<int>();
+				}
+				result[i] = value;
+			}
+			return result;
 		}
 
 		private int[] ParseRateUsTrigger(string rateUsTrigger)
