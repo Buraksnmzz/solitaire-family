@@ -52,7 +52,6 @@ public class GameplayView : BaseView
     [SerializeField] private Transform bottomPanel;
 
     private Sequence _sequence;
-    private Sequence _inputBlockerSequence;
     private Sequence _coinSequence;
     public event Action UndoButtonClicked;
     public event Action HintButtonClicked;
@@ -80,6 +79,7 @@ public class GameplayView : BaseView
         ExcludeButtonsFromClickSound(undoButton, jokerButton, hintButton);
 
         SetUndoButtonInteractable(false);
+        SetGameplayInputBlocked(false);
     }
 
     private void OnApplicationPause(bool pauseStatus)
@@ -88,6 +88,13 @@ public class GameplayView : BaseView
     }
 
     public Board Board => board;
+
+    public void SetGameplayInputBlocked(bool isBlocked)
+    {
+        _inputBlocker.blocksRaycasts = isBlocked;
+        _inputBlocker.interactable = isBlocked;
+        _inputBlocker.gameObject.SetActive(isBlocked);
+    }
 
     public void SetUndoButtonInteractable(bool interactable)
     {
@@ -230,7 +237,7 @@ public class GameplayView : BaseView
             undoRewardedImage.SetActive(false);
             undoCoinCostImage.SetActive(false);
         }
-        else if(totalCoins >= coinCost)
+        else if (totalCoins >= coinCost)
         {
             undoCountImage.SetActive(false);
             undoRewardedImage.SetActive(false);
@@ -254,7 +261,7 @@ public class GameplayView : BaseView
             hintRewardedImage.SetActive(false);
             hintCoinCostImage.SetActive(false);
         }
-        else if(totalCoins >= coinCost)
+        else if (totalCoins >= coinCost)
         {
             hintCountImage.SetActive(false);
             hintRewardedImage.SetActive(false);
@@ -278,7 +285,7 @@ public class GameplayView : BaseView
             jokerRewardedImage.SetActive(false);
             jokerCoinCostImage.SetActive(false);
         }
-        else if(totalCoins >= coinCost)
+        else if (totalCoins >= coinCost)
         {
             jokerCountImage.SetActive(false);
             jokerRewardedImage.SetActive(false);

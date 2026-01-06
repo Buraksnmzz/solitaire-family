@@ -47,7 +47,7 @@ namespace UI.Gameplay
             _configurationService = ServiceLocator.GetService<IConfigurationService>();
             _savedDataService = ServiceLocator.GetService<ISavedDataService>();
             _eventDispatcherService = ServiceLocator.GetService<IEventDispatcherService>();
-            _soundService  = ServiceLocator.GetService<ISoundService>();
+            _soundService = ServiceLocator.GetService<ISoundService>();
             _uiService = ServiceLocator.GetService<IUIService>();
             _undoService = ServiceLocator.GetService<IUndoService>();
             _hintService = ServiceLocator.GetService<IHintService>();
@@ -84,7 +84,7 @@ namespace UI.Gameplay
         private void OnCoinChanged(CoinChangedSignal _)
         {
             View.SetCoinText(_savedDataService.GetModel<CollectibleModel>().totalCoins);
-            View.SetJokerAmount(_collectibleModel.totalJokers, _collectibleModel.totalCoins,  _gameConfigModel.jokerCost);
+            View.SetJokerAmount(_collectibleModel.totalJokers, _collectibleModel.totalCoins, _gameConfigModel.jokerCost);
             View.SetHintAmount(_collectibleModel.totalHints, _collectibleModel.totalCoins, _gameConfigModel.hintCost);
             View.SetUndoAmount(_collectibleModel.totalUndo, _collectibleModel.totalCoins, _gameConfigModel.undoCost);
         }
@@ -97,10 +97,10 @@ namespace UI.Gameplay
             foreach (var presenter in movement.Presenters)
             {
                 presenter.SetFaceUp(true, 0.2f);
-                fromContainer.RemoveCard(presenter); 
+                fromContainer.RemoveCard(presenter);
                 targetContainer.AddCard(presenter);
             }
-            if(fromContainer is Pile)
+            if (fromContainer is Pile)
                 fromContainer.RevealTopCardIfNeeded();
         }
 
@@ -117,7 +117,7 @@ namespace UI.Gameplay
         private void OnRewardGiven(RewardGivenSignal _)
         {
             View.SetCoinText(_savedDataService.GetModel<CollectibleModel>().totalCoins);
-            View.SetJokerAmount(_collectibleModel.totalJokers, _collectibleModel.totalCoins,  _gameConfigModel.jokerCost);
+            View.SetJokerAmount(_collectibleModel.totalJokers, _collectibleModel.totalCoins, _gameConfigModel.jokerCost);
             View.SetHintAmount(_collectibleModel.totalHints, _collectibleModel.totalCoins, _gameConfigModel.hintCost);
             View.SetUndoAmount(_collectibleModel.totalUndo, _collectibleModel.totalCoins, _gameConfigModel.undoCost);
         }
@@ -125,6 +125,7 @@ namespace UI.Gameplay
         private void OnDebugCompleteButtonClicked()
         {
             _isGameWon = true;
+            View.SetGameplayInputBlocked(true);
             var gameConfigModel = _savedDataService.GetModel<GameConfigModel>();
             var earnedCoinsFromMoves = _movesCount * gameConfigModel.earnedCoinPerMoveLeft;
             if (earnedCoinsFromMoves < 0)
@@ -144,6 +145,7 @@ namespace UI.Gameplay
 
             View.PlayEarnedMovesCoinAnimation(_movesCount, gameConfigModel.earnedCoinPerMoveLeft, initialCoins, () =>
             {
+                View.SetGameplayInputBlocked(false);
                 _uiService.ShowPopup<WinPresenter>();
             });
         }
@@ -161,7 +163,7 @@ namespace UI.Gameplay
 
         private void CallbackJoker(bool success)
         {
-            if(success)
+            if (success)
                 HandleJoker(_collectibleModel.totalJokers);
             else
             {
@@ -187,7 +189,7 @@ namespace UI.Gameplay
 
         private void CallbackAddMoves(bool success)
         {
-            if(success)
+            if (success)
                 HandleAddMoves();
             else
             {
@@ -351,7 +353,7 @@ namespace UI.Gameplay
 
         private void OnHintClicked()
         {
-            
+
             var gameConfigModel = _savedDataService.GetModel<GameConfigModel>();
             if (_collectibleModel.totalHints >= 1)
             {
@@ -396,11 +398,12 @@ namespace UI.Gameplay
             _levelData = _levelGeneratorService.GetLevelData(_currentLevelIndex);
             _movesCount = _totalGoalCount;
             _collectibleModel = _savedDataService.GetModel<CollectibleModel>();
-            View.SetJokerAmount(_collectibleModel.totalJokers, _collectibleModel.totalCoins,  _gameConfigModel.jokerCost);
+            View.SetJokerAmount(_collectibleModel.totalJokers, _collectibleModel.totalCoins, _gameConfigModel.jokerCost);
             View.SetHintAmount(_collectibleModel.totalHints, _collectibleModel.totalCoins, _gameConfigModel.hintCost);
             View.SetUndoAmount(_collectibleModel.totalUndo, _collectibleModel.totalCoins, _gameConfigModel.undoCost);
             View.SetCoinText(_collectibleModel.totalCoins);
             View.SetLevelText(_currentLevelIndex);
+            View.SetGameplayInputBlocked(false);
             base.ViewShown();
             if (_snapshotService.HasSnapShot())
             {
@@ -424,6 +427,8 @@ namespace UI.Gameplay
 
             if (!_isGameWon)
                 return;
+
+            View.SetGameplayInputBlocked(true);
 
             var gameConfigModel = _savedDataService.GetModel<GameConfigModel>();
             var earnedCoinsFromMoves = _movesCount * gameConfigModel.earnedCoinPerMoveLeft;
@@ -452,10 +457,11 @@ namespace UI.Gameplay
                 {
                     if (!_savedDataService.GetModel<SettingsModel>().IsNoAds)
                         YoogoLabManager.ShowInterstitial();
+                    View.SetGameplayInputBlocked(false);
                     _uiService.ShowPopup<WinPresenter>();
                 });
             });
-            
+
         }
 
         void StartNewLevel()
