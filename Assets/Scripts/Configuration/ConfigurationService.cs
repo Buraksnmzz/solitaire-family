@@ -19,9 +19,6 @@ namespace Configuration
 		[System.Serializable]
 		private class GameConfigurationJson
 		{
-			[JsonProperty("layoutId")]
-			public int LayoutId { get; set; }
-
 			[JsonProperty("backgroundImageId")]
 			public int BackgroundImageId { get; set; }
 
@@ -126,7 +123,6 @@ namespace Configuration
 			gameConfigModel.hintCost = root.HintCost;
 			gameConfigModel.undoCost = root.UndoCost;
 			gameConfigModel.jokerCost = root.JokerCost;
-			gameConfigModel.layout = root.LayoutId;
 			gameConfigModel.backgroundImageId = root.BackgroundImageId;
 			gameConfigModel.extraMovesCost = root.ExtraMovesCost;
 			gameConfigModel.dailyAdsWatchAmount = root.DailyAdsWatchAmount;

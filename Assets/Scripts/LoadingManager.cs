@@ -70,21 +70,36 @@ public class LoadingManager : MonoBehaviour
                 yield return null;
             }
 
-            var rawJson = YoogoLabManager.IsRemoteConfigReady()
-                ? YoogoLabManager.GetRemoteConfig()
-                : GetLocalRawJson();
+            var localConfiguration = GetLocalRawJson();
+            var remoteConfiguration = YoogoLabManager.IsRemoteConfigReady() ? YoogoLabManager.GetRemoteConfig() : string.Empty;
+            var configurationJson = BuildConfigurationJson(localConfiguration, remoteConfiguration);
 
-            if (string.IsNullOrEmpty(rawJson) || rawJson == "{}")
-            {
-                rawJson = GetLocalRawJson();
-            }
-
-            InitializeConfiguration(rawJson);
-            yield return InitializeLevels(rawJson);
+            InitializeConfiguration(configurationJson);
+            yield return InitializeLevels(configurationJson);
 
             SceneManager.LoadScene(gameSceneName);
         }
         yield break;
+    }
+
+    private static string BuildConfigurationJson(string localConfigurationJsonValue, string remoteConfigRawJson)
+    {
+        if (string.IsNullOrWhiteSpace(localConfigurationJsonValue))
+        {
+            return string.Empty;
+        }
+
+        if (string.IsNullOrWhiteSpace(remoteConfigRawJson) || remoteConfigRawJson == "{}")
+        {
+            return localConfigurationJsonValue;
+        }
+
+        if (RemoteConfigConfigurationMerger.TryBuildConfigurationJson(localConfigurationJsonValue, remoteConfigRawJson, out var merged))
+        {
+            return merged;
+        }
+
+        return localConfigurationJsonValue;
     }
 
     private void InitializeConfiguration(string rawJson)
