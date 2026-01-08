@@ -14,6 +14,7 @@ using UI.Shop;
 using UI.Signals;
 using UI.Win;
 using Unity.VisualScripting;
+using UnityEngine.UI;
 
 namespace UI.Gameplay
 {
@@ -30,6 +31,7 @@ namespace UI.Gameplay
         ISoundService _soundService;
         IAdsService _adsService;
         IHapticService _hapticService;
+        ILocalizationService _localizationService;
         LevelData _levelData;
         int _movesCount;
         private IUIService _uiService;
@@ -56,6 +58,7 @@ namespace UI.Gameplay
             _adsService = ServiceLocator.GetService<IAdsService>();
             _gameConfigModel = _savedDataService.GetModel<GameConfigModel>();
             _hapticService = ServiceLocator.GetService<IHapticService>();
+            _localizationService = ServiceLocator.GetService<ILocalizationService>();
 
             _eventDispatcherService.AddListener<MoveCountRequestedSignal>(OnMoveCountRequested);
             _eventDispatcherService.AddListener<CardMovePerformedSignal>(OnCardMovePerformed);
@@ -290,7 +293,8 @@ namespace UI.Gameplay
         private void OnPlacableError(PlacableErrorSignal placableError)
         {
             var errorMessage = placableError.PlacableErrorMessage;
-            View.ShowErrorMessage(errorMessage);
+            var localizedMessage = _localizationService.GetLocalizedString(errorMessage);
+            View.ShowErrorMessage(localizedMessage);
         }
 
         private void OnCardMovePerformed(CardMovePerformedSignal _)
@@ -402,7 +406,8 @@ namespace UI.Gameplay
             View.SetHintAmount(_collectibleModel.totalHints, _collectibleModel.totalCoins, _gameConfigModel.hintCost);
             View.SetUndoAmount(_collectibleModel.totalUndo, _collectibleModel.totalCoins, _gameConfigModel.undoCost);
             View.SetCoinText(_collectibleModel.totalCoins);
-            View.SetLevelText(_currentLevelIndex);
+            var levelText = _localizationService.GetLocalizedString(LocalizationStrings.LevelX, _currentLevelIndex);
+            View.SetLevelText(levelText);
             View.SetGameplayInputBlocked(false);
             base.ViewShown();
             if (_snapshotService.HasSnapShot())

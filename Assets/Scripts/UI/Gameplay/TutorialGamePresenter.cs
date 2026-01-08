@@ -26,6 +26,7 @@ namespace UI.Gameplay
         ISavedDataService _savedDataService;
         ISoundService _soundService;
         IHapticService _hapticService;
+        ILocalizationService _localizationService;
         int _currentLevelIndex;
         bool _isGameWon;
         Tween _hintLoopTween;
@@ -48,6 +49,13 @@ namespace UI.Gameplay
             _savedDataService = ServiceLocator.GetService<ISavedDataService>();
             _soundService = ServiceLocator.GetService<ISoundService>();
             _hapticService = ServiceLocator.GetService<IHapticService>();
+            _localizationService = ServiceLocator.GetService<ILocalizationService>();
+            _eventDispatcherService.AddListener<LanguageChangedSignal>(OnLanguageChanged);
+        }
+
+        private void OnLanguageChanged(LanguageChangedSignal _)
+        {
+            UpdateInstructionText();
         }
 
         public override void ViewShown()
@@ -219,85 +227,29 @@ namespace UI.Gameplay
             CardPresenter presenter = null;
             CardContainer fromContainer = null;
 
-            bool Matches(CardPresenter p)
-            {
-                if (p == null) return false;
-                var model = p.CardModel;
-                if (model == null) return false;
-                if (config.isCategory && model.Type != CardType.Category) return false;
-                if (!config.isCategory && model.Type != CardType.Content) return false;
-                if (!string.IsNullOrEmpty(config.cardName) && model.ContentName != config.cardName && model.CategoryName != config.cardName) return false;
-                return true;
-            }
+            if (config.cardIndex < 0)
+                return null;
 
-            var dealer = board.Dealer;
-            if (dealer != null)
-            {
-                var cards = dealer.GetAllCards();
-                for (var i = 0; i < cards.Count; i++)
-                {
-                    if (!Matches(cards[i])) continue;
-                    presenter = cards[i];
-                    fromContainer = dealer;
-                    break;
-                }
-            }
+            if (board.CardPresenters == null)
+                return null;
+            if (config.cardIndex >= board.CardPresenters.Count)
+                return null;
 
+            presenter = board.CardPresenters[config.cardIndex];
             if (presenter == null)
-            {
-                var openDealer = board.OpenDealer;
-                if (openDealer != null)
-                {
-                    var cards = openDealer.GetAllCards();
-                    for (var i = 0; i < cards.Count; i++)
-                    {
-                        if (!Matches(cards[i])) continue;
-                        presenter = cards[i];
-                        fromContainer = openDealer;
-                        break;
-                    }
-                }
-            }
+                return null;
 
-            if (presenter == null)
-            {
-                foreach (var pileContainer in board.Piles)
-                {
-                    if (pileContainer == null) continue;
-                    var cards = pileContainer.GetAllCards();
-                    for (var i = 0; i < cards.Count; i++)
-                    {
-                        if (!Matches(cards[i])) continue;
-                        presenter = cards[i];
-                        fromContainer = pileContainer;
-                        break;
-                    }
+            var model = presenter.CardModel;
+            if (model == null)
+                return null;
 
-                    if (presenter != null)
-                        break;
-                }
-            }
+            if (config.isCategory && model.Type != CardType.Category)
+                return null;
+            if (!config.isCategory && model.Type != CardType.Content)
+                return null;
 
-            if (presenter == null)
-            {
-                foreach (var foundation in board.Foundations)
-                {
-                    if (foundation == null) continue;
-                    var cards = foundation.GetAllCards();
-                    for (var i = 0; i < cards.Count; i++)
-                    {
-                        if (!Matches(cards[i])) continue;
-                        presenter = cards[i];
-                        fromContainer = foundation;
-                        break;
-                    }
-
-                    if (presenter != null)
-                        break;
-                }
-            }
-
-            if (presenter == null)
+            fromContainer = presenter.GetContainer();
+            if (fromContainer == null)
                 return null;
 
             CardContainer toContainer = null;
@@ -369,7 +321,8 @@ namespace UI.Gameplay
             if (step == null)
                 return;
 
-            View.ShowInstructionMessage(step.instructionText);
+            var localizedText = _localizationService.GetLocalizedString(step.instructionText);
+            View.ShowInstructionMessage(localizedText);
         }
     }
 }

@@ -85,3 +85,6 @@ Assets/BuildReports.meta
 Assets/Plugins/Android
 ProjectSettings/AndroidResolverDependencies.xml
 .vsconfig
+
+# iOS build
+iosBuild/

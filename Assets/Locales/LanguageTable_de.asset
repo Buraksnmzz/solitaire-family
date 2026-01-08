@@ -130,6 +130,77 @@ MonoBehaviour:
     m_Localized: Tutorial
     m_Metadata:
       m_Items: []
+  - m_Id: 29
+    m_Localized: Sprache
+    m_Metadata:
+      m_Items: []
+  - m_Id: 30
+    m_Localized: Level {0}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 31
+    m_Localized: "K\xE4ufe wiederherstellen"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32
+    m_Localized: 'Ziel ist es, alle Karten auf die Ablagestapel zu legen
+
+      -
+      Staple sie nach <color=#ffa84a>Kategorie</color>
+
+      - Beginne mit einer
+      Kategoriekarte
+
+      - Ziehe eine Karte, um sie zu bewegen.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 33
+    m_Localized: "Sehr gut!\n- Du kannst Karten auch <color=#ffa84a>zwischen Spalten</color>
+      bewegen\n- Du kannst sie stapeln, wenn sie zur <color=#ffa84a>gleichen Kategorie</color>
+      geh\xF6ren"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 34
+    m_Localized: 'Brauchst du mehr Karten?
+
+      - Tippe oben rechts auf den <color=#ffa84a>Nachziehstapel</color>'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 35
+    m_Localized: Sobald eine Kategorie abgelegt ist, wird sie <color=#ffa84a>geleert</color>
+      und du kannst dort eine <color=#ffa84a>neue Kategorie beginnen</color>.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 36
+    m_Localized: 'Ausgezeichnet! Du hast nun eine <color=#ffa84a>leere Spalte.</color>
+
+      Du
+      kannst einen ganzen Stapel dorthin bewegen.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 37
+    m_Localized: "Schlie\xDFe nun alle Kategorien ab, um das Level zu <color=#ffa84a>beenden</color>."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 38
+    m_Localized: Du kannst nur Karten der gleichen Kategorie stapeln.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 39
+    m_Localized: Eine Kategoriekarte kann nur auf Karten gelegt werden, die der Kategorie
+      entsprechen.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 40
+    m_Localized: "Karten k\xF6nnen nur auf eine Kategoriekarte im Ablagestapel gestapelt
+      werden (nicht in einer Spalte)."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 41
+    m_Localized: Nur eine Kategoriekarte kann in einen leeren Ablagestapel gelegt
+      werden.
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

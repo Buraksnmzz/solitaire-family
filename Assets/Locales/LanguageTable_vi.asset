@@ -131,6 +131,79 @@ MonoBehaviour:
     m_Localized: "H\u01B0\u1EDBng d\u1EABn"
     m_Metadata:
       m_Items: []
+  - m_Id: 29
+    m_Localized: "Ng\xF4n ng\u1EEF"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 30
+    m_Localized: "C\u1EA5p \u0111\u1ED9 {0}"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 31
+    m_Localized: "Kh\xF4i ph\u1EE5c mua h\xE0ng"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32
+    m_Localized: "M\u1EE5c ti\xEAu l\xE0 chuy\u1EC3n t\u1EA5t c\u1EA3 c\xE1c l\xE1
+      b\xE0i v\xE0o \xF4 n\u1EC1n\n- X\u1EBFp ch\xFAng theo <color=#ffa84a>th\u1EC3
+      lo\u1EA1i</color>\n- B\u1EAFt \u0111\u1EA7u b\u1EB1ng m\u1ED9t l\xE1 b\xE0i
+      th\u1EC3 lo\u1EA1i\n- K\xE9o m\u1ED9t l\xE1 b\xE0i \u0111\u1EC3 di chuy\u1EC3n."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 33
+    m_Localized: "\u0110ang l\xE0m r\u1EA5t t\u1ED1t!\n- B\u1EA1n c\u0169ng c\xF3
+      th\u1EC3 di chuy\u1EC3n c\xE1c l\xE1 b\xE0i <color=#ffa84a>gi\u1EEFa c\xE1c
+      c\u1ED9t</color>\n- B\u1EA1n c\xF3 th\u1EC3 x\u1EBFp ch\u1ED3ng ch\xFAng n\u1EBFu
+      ch\xFAng c\xF9ng <color=#ffa84a>m\u1ED9t th\u1EC3 lo\u1EA1i</color>"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 34
+    m_Localized: "C\u1EA7n th\xEAm b\xE0i kh\xF4ng?\n- Ki\u1EC3m tra <color=#ffa84a>ch\u1ED3ng
+      b\xE0i r\xFAt</color> b\u1EB1ng c\xE1ch nh\u1EA5n v\xE0o g\xF3c tr\xEAn b\xEAn
+      ph\u1EA3i"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 35
+    m_Localized: "Khi m\u1ED9t th\u1EC3 lo\u1EA1i ho\xE0n th\xE0nh trong \xF4 n\u1EC1n,
+      n\xF3 akan \u0111\u01B0\u1EE3c <color=#ffa84a>d\u1ECDn s\u1EA1ch</color> v\xE0
+      b\u1EA1n c\xF3 th\u1EC3 <color=#ffa84a>b\u1EAFt \u0111\u1EA7u m\u1ED9t th\u1EC3
+      lo\u1EA1i m\u1EDBi</color> t\u1EA1i \u0111\xF3."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 36
+    m_Localized: "Tuy\u1EC7t v\u1EDDi! B\u1EA1n \u0111\xE3 c\xF3 m\u1ED9t <color=#ffa84a>c\u1ED9t
+      tr\u1ED1ng.</color>\nB\u1EA1n c\xF3 th\u1EC3 di chuy\u1EC3n c\u1EA3 m\u1ED9t
+      x\u1EA5p b\xE0i v\xE0o \u0111\xF3."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 37
+    m_Localized: "B\xE2y gi\u1EDD h\xE3y ho\xE0n th\xE0nh t\u1EA5t c\u1EA3 c\xE1c
+      th\u1EC3 lo\u1EA1i \u0111\u1EC3 <color=#ffa84a>ho\xE0n t\u1EA5t</color> c\u1EA5p
+      \u0111\u1ED9."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 38
+    m_Localized: "B\u1EA1n ch\u1EC9 c\xF3 th\u1EC3 x\u1EBFp ch\u1ED3ng c\xE1c l\xE1
+      b\xE0i c\xF9ng th\u1EC3 lo\u1EA1i."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 39
+    m_Localized: "M\u1ED9t l\xE1 b\xE0i th\u1EC3 lo\u1EA1i ch\u1EC9 c\xF3 th\u1EC3
+      \u0111\u1EB7t l\xEAn tr\xEAn c\xE1c l\xE1 b\xE0i ph\xF9 h\u1EE3p v\u1EDBi th\u1EC3
+      lo\u1EA1i \u0111\xF3."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 40
+    m_Localized: "B\u1EA1n ch\u1EC9 c\xF3 th\u1EC3 x\u1EBFp ch\u1ED3ng c\xE1c l\xE1
+      b\xE0i l\xEAn m\u1ED9t l\xE1 b\xE0i th\u1EC3 lo\u1EA1i trong \xF4 n\u1EC1n
+      (kh\xF4ng ph\u1EA3i trong c\u1ED9t)."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 41
+    m_Localized: "Ch\u1EC9 m\u1ED9t l\xE1 b\xE0i th\u1EC3 lo\u1EA1i m\u1EDBi c\xF3
+      th\u1EC3 \u0111\u01B0a v\xE0o m\u1ED9t \xF4 n\u1EC1n tr\u1ED1ng."
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

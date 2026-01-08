@@ -15,7 +15,7 @@ namespace Tutorial
     [Serializable]
     public class TutorialMovementConfig
     {
-        public string cardName;
+        public int cardIndex = -1;
         public bool isCategory;
         public TutorialContainerType toContainerType;
         public int toContainerIndex;

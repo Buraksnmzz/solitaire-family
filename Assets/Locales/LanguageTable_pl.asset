@@ -130,6 +130,68 @@ MonoBehaviour:
     m_Localized: Samouczek
     m_Metadata:
       m_Items: []
+  - m_Id: 29
+    m_Localized: "J\u0119zyk"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 30
+    m_Localized: Poziom {0}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 31
+    m_Localized: "Przywr\xF3\u0107 zakupy"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32
+    m_Localized: "Celem jest przeniesienie wszystkich kart na pola bazowe\n- Uk\u0142adaj
+      je wed\u0142ug <color=#ffa84a>kategorii</color>\n- Zacznij od karty kategorii\n-
+      Aby przenie\u015B\u0107 kart\u0119, przeci\u0105gnij j\u0105."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 33
+    m_Localized: "Dobrze Ci idzie!\n- Mo\u017Cesz te\u017C przenosi\u0107 karty <color=#ffa84a>mi\u0119dzy
+      kolumnami</color>\n- Mo\u017Cesz je uk\u0142ada\u0107, je\u015Bli s\u0105 z
+      <color=#ffa84a>tej samej kategorii</color>"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 34
+    m_Localized: "Potrzebujesz wi\u0119cej kart?\n- Sprawd\u017A <color=#ffa84a>tali\u0119</color>,
+      stukaj\u0105c w prawym g\xF3rnym rogu"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 35
+    m_Localized: "Po uko\u0144czeniu kategorii na polu bazowym zostanie ona <color=#ffa84a>wyczyszczona</color>,
+      a Ty mo\u017Cesz <color=#ffa84a>zacz\u0105\u0107 now\u0105</color>."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 36
+    m_Localized: "\u015Awietnie! Masz teraz <color=#ffa84a>pust\u0105 kolumn\u0119.</color>\nMo\u017Cesz
+      tam przenie\u015B\u0107 ca\u0142y stos kart."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 37
+    m_Localized: "Teraz uko\u0144cz wszystkie kategorie, aby <color=#ffa84a>zaliczy\u0107</color>
+      poziom."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 38
+    m_Localized: "Mo\u017Cesz uk\u0142ada\u0107 tylko karty z tej samej kategorii."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 39
+    m_Localized: "Kart\u0119 kategorii mo\u017Cna po\u0142o\u017Cy\u0107 tylko na
+      kartach pasuj\u0105cych do tej kategorii."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 40
+    m_Localized: "Karty mo\u017Cna uk\u0142ada\u0107 na karcie kategorii tylko na
+      polu bazowym (nie w kolumnie)."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 41
+    m_Localized: "Tylko karta kategorii mo\u017Ce trafi\u0107 na puste pole bazowe."
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

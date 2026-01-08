@@ -6,6 +6,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Localization;
 using UnityEngine.Localization.Settings;
+using UnityEngine.Localization.Tables;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.UI;
 using UI.Signals;
@@ -23,6 +24,8 @@ namespace Services
     {
         private readonly ISavedDataService _savedDataService;
         private readonly SettingsModel _settingsModel;
+
+        private AsyncOperationHandle<StringTable>? _stringTableLoadOperation;
 
         public LocalizationService()
         {
@@ -77,6 +80,36 @@ namespace Services
             _settingsModel.CurrentLanguage = language;
             _savedDataService.SaveData(_settingsModel);
 
+            DispatchLanguageChangedWhenReady(language);
+        }
+
+        private void DispatchLanguageChangedWhenReady(SystemLanguage language)
+        {
+            if (!LocalizationSettings.InitializationOperation.IsDone)
+            {
+                return;
+            }
+
+            try
+            {
+                if (_stringTableLoadOperation.HasValue && !_stringTableLoadOperation.Value.IsDone)
+                {
+                    _stringTableLoadOperation.Value.Completed += _ => DispatchLanguageChanged(language);
+                    return;
+                }
+
+                var tableLoadOperation = LocalizationSettings.StringDatabase.GetTableAsync(LocalizationStrings.LocalizationTable);
+                _stringTableLoadOperation = tableLoadOperation;
+                tableLoadOperation.Completed += _ => DispatchLanguageChanged(language);
+            }
+            catch
+            {
+                DispatchLanguageChanged(language);
+            }
+        }
+
+        private void DispatchLanguageChanged(SystemLanguage language)
+        {
             try
             {
                 var eventDispatcherService = ServiceLocator.GetService<IEventDispatcherService>();
@@ -104,18 +137,32 @@ namespace Services
         {
             if (!LocalizationSettings.InitializationOperation.IsDone) return key;
 
-            var table = LocalizationSettings.StringDatabase.GetTable(LocalizationStrings.LocalizationTable);
-            var entry = table?.GetEntry(key);
-            return entry?.GetLocalizedString() ?? key;
+            try
+            {
+                var table = LocalizationSettings.StringDatabase.GetTable(LocalizationStrings.LocalizationTable);
+                var entry = table?.GetEntry(key);
+                return entry?.GetLocalizedString() ?? key;
+            }
+            catch
+            {
+                return key;
+            }
         }
 
         public string GetLocalizedString(string key, params object[] args)
         {
             if (!LocalizationSettings.InitializationOperation.IsDone) return key;
 
-            var table = LocalizationSettings.StringDatabase.GetTable(LocalizationStrings.LocalizationTable);
-            var entry = table?.GetEntry(key);
-            return entry?.GetLocalizedString(args) ?? key;
+            try
+            {
+                var table = LocalizationSettings.StringDatabase.GetTable(LocalizationStrings.LocalizationTable);
+                var entry = table?.GetEntry(key);
+                return entry?.GetLocalizedString(args) ?? key;
+            }
+            catch
+            {
+                return key;
+            }
         }
 
         private SystemLanguage GetSystemLanguageFromLocale(Locale locale)

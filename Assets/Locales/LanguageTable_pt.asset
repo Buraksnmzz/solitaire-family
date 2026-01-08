@@ -130,6 +130,71 @@ MonoBehaviour:
     m_Localized: Tutorial
     m_Metadata:
       m_Items: []
+  - m_Id: 29
+    m_Localized: Idioma
+    m_Metadata:
+      m_Items: []
+  - m_Id: 30
+    m_Localized: "N\xEDvel {0}"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 31
+    m_Localized: Restaurar compras
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32
+    m_Localized: "O objetivo \xE9 mover todas as cartas para as funda\xE7\xF5es\n-
+      Empilhe-as por <color=#ffa84a>categoria</color>\n- Comece com uma carta de
+      categoria\n- Para mover uma carta, arraste-a."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 33
+    m_Localized: "Muito bem!\n- Voc\xEA tamb\xE9m pode mover cartas <color=#ffa84a>entre
+      colunas</color>\n- Voc\xEA pode empilh\xE1-las se forem da <color=#ffa84a>mesma
+      categoria</color>"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 34
+    m_Localized: 'Precisa de mais cartas?
+
+      - Confira o <color=#ffa84a>monte
+      de compra</color> tocando no canto superior direito'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 35
+    m_Localized: "Quando uma categoria \xE9 completada, ela \xE9 <color=#ffa84a>limpa</color>
+      e voc\xEA pode <color=#ffa84a>come\xE7ar uma nova</color> ali."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 36
+    m_Localized: "Excelente! Voc\xEA tem uma <color=#ffa84a>coluna vazia.</color>\nPode
+      mover uma pilha inteira de cartas para l\xE1."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 37
+    m_Localized: "Agora finalize todas as categorias para <color=#ffa84a>completar</color>
+      o n\xEDvel."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 38
+    m_Localized: "Voc\xEA s\xF3 pode empilhar cartas da mesma categoria."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 39
+    m_Localized: "Uma carta de categoria s\xF3 pode ser colocada sobre cartas que
+      correspondam \xE0 categoria."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 40
+    m_Localized: "Voc\xEA s\xF3 pode empilhar cartas sobre uma carta de categoria
+      na funda\xE7\xE3o (n\xE3o em uma coluna)."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 41
+    m_Localized: "Somente uma carta de categoria pode ser colocada em uma funda\xE7\xE3o
+      vazia."
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

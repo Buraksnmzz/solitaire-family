@@ -1,8 +1,20 @@
 {
   "levelDataUrls": {
+    "ar": "https://cdn.yoogalab.com/level_map_ar.json",
+    "de": "https://cdn.yoogalab.com/level_map_de.json",
     "en": "https://cdn.yoogalab.com/level_map_en.json",
+    "es": "https://cdn.yoogalab.com/level_map_es.json",
     "fr": "https://cdn.yoogalab.com/level_map_fr.json",
-    "es": "https://cdn.yoogalab.com/level_map_es.json"
+    "it": "https://cdn.yoogalab.com/level_map_it.json",
+    "ja": "https://cdn.yoogalab.com/level_map_ja.json",
+    "ko": "https://cdn.yoogalab.com/level_map_ko.json",
+    "ms": "https://cdn.yoogalab.com/level_map_ms.json",
+    "pl": "https://cdn.yoogalab.com/level_map_pl.json",
+    "pt": "https://cdn.yoogalab.com/level_map_pt.json",
+    "ru": "https://cdn.yoogalab.com/level_map_ru.json",
+    "th": "https://cdn.yoogalab.com/level_map_th.json",
+    "tr": "https://cdn.yoogalab.com/level_map_tr.json",
+    "vi": "https://cdn.yoogalab.com/level_map_vi.json"
   },
   "layoutId": 1,
   "backgroundImageId": 1,

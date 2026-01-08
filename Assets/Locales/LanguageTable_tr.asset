@@ -47,7 +47,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 8
-    m_Localized: "Sat\u0131n Almalar\u0131 Geri Y\xFCkle"
+    m_Localized: Desteyi Yenile
     m_Metadata:
       m_Items: []
   - m_Id: 9
@@ -128,6 +128,68 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 28
     m_Localized: "E\u011Fitim"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29
+    m_Localized: Dil
+    m_Metadata:
+      m_Items: []
+  - m_Id: 30
+    m_Localized: "B\xF6l\xFCm {0}"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 31
+    m_Localized: "Sat\u0131n Almalar\u0131 Geri Y\xFCkle"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32
+    m_Localized: "Ama\xE7 t\xFCm kartlar\u0131 temellere ta\u015F\u0131makt\u0131r\n-
+      Onlar\u0131 <color=#ffa84a>kategoriye</color> g\xF6re diz\n- Bir kategori kart\u0131yla
+      ba\u015Fla\n- Kart\u0131 ta\u015F\u0131mak i\xE7in s\xFCr\xFCkle."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 33
+    m_Localized: "Harika gidiyorsun!\n- Kartlar\u0131 <color=#ffa84a>s\xFCtunlar
+      aras\u0131nda</color> da ta\u015F\u0131yabilirsin\n- <color=#ffa84a>Ayn\u0131
+      kategoridelerse</color> onlar\u0131 \xFCst \xFCste dizebilirsin"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 34
+    m_Localized: "Daha fazla kart m\u0131 laz\u0131m?\n- Sa\u011F \xFCstteki <color=#ffa84a>desteye</color>
+      dokunarak yeni kart al"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 35
+    m_Localized: "Bir kategori tamamland\u0131\u011F\u0131nda <color=#ffa84a>temizlenir</color>
+      ve orada <color=#ffa84a>yeni bir kategoriye ba\u015Flayabilirsin</color>."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 36
+    m_Localized: "Harika! Art\u0131k <color=#ffa84a>bo\u015F bir s\xFCtunun</color>
+      var.\nOraya tam bir kart destesi ta\u015F\u0131yabilirsin."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 37
+    m_Localized: "Seviyeyi <color=#ffa84a>tamamlamak</color> i\xE7in t\xFCm kategorileri
+      bitir."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 38
+    m_Localized: "Sadece ayn\u0131 kategorideki kartlar\u0131 \xFCst \xFCste dizebilirsin."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 39
+    m_Localized: "Bir kategori kart\u0131, yaln\u0131zca o kategoriyle e\u015Fle\u015Fen
+      kartlar\u0131n \xFCzerine gelebilir."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 40
+    m_Localized: "Kartlar\u0131 yaln\u0131zca temeldeki bir kategori kart\u0131n\u0131n
+      \xFCzerine dizebilirsin (s\xFCtunda de\u011Fil)."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 41
+    m_Localized: "Bo\u015F bir temele yaln\u0131zca bir kategori kart\u0131 yerle\u015Ftirilebilir."
     m_Metadata:
       m_Items: []
   references:

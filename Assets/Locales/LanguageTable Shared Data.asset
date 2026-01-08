@@ -127,6 +127,58 @@ MonoBehaviour:
     m_Key: TUTORIAL
     m_Metadata:
       m_Items: []
+  - m_Id: 29
+    m_Key: LANGUAGE
+    m_Metadata:
+      m_Items: []
+  - m_Id: 30
+    m_Key: LEVEL_X
+    m_Metadata:
+      m_Items: []
+  - m_Id: 31
+    m_Key: RESTORE_PURCHASES
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32
+    m_Key: TUTORIAL_INSTRUCTION_1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 33
+    m_Key: TUTORIAL_INSTRUCTION_2
+    m_Metadata:
+      m_Items: []
+  - m_Id: 34
+    m_Key: TUTORIAL_INSTRUCTION_3
+    m_Metadata:
+      m_Items: []
+  - m_Id: 35
+    m_Key: TUTORIAL_INSTRUCTION_4
+    m_Metadata:
+      m_Items: []
+  - m_Id: 36
+    m_Key: TUTORIAL_INSTRUCTION_5
+    m_Metadata:
+      m_Items: []
+  - m_Id: 37
+    m_Key: TUTORIAL_INSTRUCTION_6
+    m_Metadata:
+      m_Items: []
+  - m_Id: 38
+    m_Key: ERROR_MESSAGE_1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 39
+    m_Key: ERROR_MESSAGE_2
+    m_Metadata:
+      m_Items: []
+  - m_Id: 40
+    m_Key: ERROR_MESSAGE_3
+    m_Metadata:
+      m_Items: []
+  - m_Id: 41
+    m_Key: ERROR_MESSAGE_4
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

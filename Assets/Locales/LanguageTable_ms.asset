@@ -130,6 +130,82 @@ MonoBehaviour:
     m_Localized: Tutorial
     m_Metadata:
       m_Items: []
+  - m_Id: 29
+    m_Localized: Bahasa
+    m_Metadata:
+      m_Items: []
+  - m_Id: 30
+    m_Localized: Tahap {0}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 31
+    m_Localized: Pulihkan Pembelian
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32
+    m_Localized: 'Matlamatnya adalah untuk mengalihkan semua kad ke tapak
+
+      -
+      Susun mengikut <color=#ffa84a>kategori</color>
+
+      - Mula dengan kad kategori
+
+      -
+      Seret kad untuk mengalihkannya.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 33
+    m_Localized: 'Bagus!
+
+      - Anda juga boleh mengalih kad <color=#ffa84a>antara
+      lajur</color>
+
+      - Anda boleh menyusunnya jika dalam <color=#ffa84a>kategori
+      yang sama</color>'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 34
+    m_Localized: 'Perlukan lebih banyak kad?
+
+      - Periksa <color=#ffa84a>timbunan
+      kad</color> dengan mengetik di atas sebelah kanan'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 35
+    m_Localized: Sebaik sahaja kategori lengkap di tapak, ia akan <color=#ffa84a>dikosongkan</color>
+      dan anda boleh <color=#ffa84a>mula kategori baharu</color> di sana.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 36
+    m_Localized: 'Syabas! Anda kini mempunyai <color=#ffa84a>lajur kosong.</color>
+
+      Anda
+      boleh alihkan satu susunan kad ke sana.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 37
+    m_Localized: Sekarang siapkan semua kategori untuk <color=#ffa84a>melengkapkan</color>
+      tahap ini.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 38
+    m_Localized: Anda hanya boleh menyusun kad dari kategori yang sama.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 39
+    m_Localized: Kad kategori hanya boleh diletakkan di atas kad yang sepadan dengan
+      kategori tersebut.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 40
+    m_Localized: Anda hanya boleh menyusun kad pada kad kategori di tapak (bukan
+      dalam lajur).
+    m_Metadata:
+      m_Items: []
+  - m_Id: 41
+    m_Localized: Hanya kad kategori boleh diletakkan di tapak yang kosong.
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

@@ -7,6 +7,8 @@ using UI.Gameplay;
 using UI.Settings;
 using UI.Shop;
 using UI.Signals;
+using UnityEngine.Localization;
+using UnityEngine.UI;
 
 namespace UI.MainMenu
 {
@@ -16,7 +18,9 @@ namespace UI.MainMenu
         ISnapshotService _snapshotService;
         ISavedDataService _savedDataService;
         IEventDispatcherService _eventDispatcherService;
+        ILocalizationService _localizationService;
         private IIAPService _iapService;
+
         protected override void OnInitialize()
         {
             base.OnInitialize();
@@ -27,7 +31,8 @@ namespace UI.MainMenu
             _eventDispatcherService.AddListener<RewardGivenSignal>(OnRewardGiven);
             _eventDispatcherService.AddListener<CoinChangedSignal>(OnCoinChanged);
             _iapService = ServiceLocator.GetService<IIAPService>();
-            View.SetBackgroundImageFromRemote(_savedDataService.GetModel<GameConfigModel>().backgroundImageId -1);
+            _localizationService = ServiceLocator.GetService<ILocalizationService>();
+            View.SetBackgroundImageFromRemote(_savedDataService.GetModel<GameConfigModel>().backgroundImageId - 1);
             View.ContinueButtonClicked += OnContinueButtonClicked;
             View.SettingsButtonClicked += OnSettingsButtonClicked;
             View.CoinButtonClicked += OnCoinButtonCLicked;
@@ -45,7 +50,7 @@ namespace UI.MainMenu
         {
             _iapService.Purchase("noads_only", GiveReward);
         }
-        
+
         private void GiveReward(bool success)
         {
             if (success)
@@ -75,23 +80,36 @@ namespace UI.MainMenu
 
         public override void ViewShown()
         {
-            var currentLevel = _savedDataService.GetModel<LevelProgressModel>().CurrentLevelIndex;
             base.ViewShown();
-            View.SetLevelText(currentLevel);
+
+            _eventDispatcherService.AddListener<LanguageChangedSignal>(OnLanguageChanged);
+
+            RefreshLevelText();
             View.SetCoinText(_savedDataService.GetModel<CollectibleModel>().totalCoins);
             var settingsModel = _savedDataService.GetModel<SettingsModel>();
             View.SetNoAdsButton(!settingsModel.IsNoAds);
         }
 
-        private void OnContinueButtonClicked()
+        public override void ViewHidden()
         {
-            _uiService.HidePopup<MainMenuPresenter>();
-            _uiService.ShowPopup<GameplayPresenter>();
+            base.ViewHidden();
+            _eventDispatcherService.RemoveListener<LanguageChangedSignal>(OnLanguageChanged);
         }
 
-        private void OnLevelButtonClicked()
+        private void OnLanguageChanged(LanguageChangedSignal signal)
         {
-            _snapshotService.ClearSnapshot();
+            RefreshLevelText();
+        }
+
+        private void RefreshLevelText()
+        {
+            var currentLevel = _savedDataService.GetModel<LevelProgressModel>().CurrentLevelIndex;
+            var levelText = _localizationService.GetLocalizedString(LocalizationStrings.LevelX, currentLevel);
+            View.SetLevelText(levelText);
+        }
+
+        private void OnContinueButtonClicked()
+        {
             _uiService.HidePopup<MainMenuPresenter>();
             _uiService.ShowPopup<GameplayPresenter>();
         }

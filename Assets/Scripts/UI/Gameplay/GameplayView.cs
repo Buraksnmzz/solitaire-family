@@ -110,9 +110,9 @@ public class GameplayView : BaseView
         movesCount.transform.DOPunchScale(Vector3.one * 0.2f, 0.3f, 5);
     }
 
-    public void SetLevelText(int level)
+    public void SetLevelText(string level)
     {
-        topLevelText.SetText("Level " + level.ToString());
+        topLevelText.SetText(level);
     }
 
     public void SetupBoard(LevelData levelData, int currentLevelIndex, SnapShotModel snapshot = null)

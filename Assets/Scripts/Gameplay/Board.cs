@@ -145,85 +145,41 @@ namespace Gameplay
 
         void ApplyDeckOrder(TutorialDeckConfig deckConfig)
         {
-            if (deckConfig == null || deckConfig.orderedCardNames == null || deckConfig.orderedCardNames.Count == 0)
+            if (deckConfig == null)
                 return;
 
-            var contentMap = new Dictionary<string, Queue<CardModel>>();
-            var categoryMap = new Dictionary<string, Queue<CardModel>>();
-
-            foreach (var model in CardModels)
-            {
-                if (model == null)
-                    continue;
-
-                if (model.Type == CardType.Content)
-                {
-                    if (!contentMap.TryGetValue(model.ContentName, out var queue))
-                    {
-                        queue = new Queue<CardModel>();
-                        contentMap.Add(model.ContentName, queue);
-                    }
-
-                    queue.Enqueue(model);
-                }
-                else if (model.Type == CardType.Category)
-                {
-                    if (!categoryMap.TryGetValue(model.CategoryName, out var queue))
-                    {
-                        queue = new Queue<CardModel>();
-                        categoryMap.Add(model.CategoryName, queue);
-                    }
-
-                    queue.Enqueue(model);
-                }
-            }
-
-            var modelToPresenter = new Dictionary<CardModel, CardPresenter>();
-            for (var i = 0; i < CardModels.Count && i < CardPresenters.Count; i++)
-            {
-                var model = CardModels[i];
-                var presenter = CardPresenters[i];
-                if (model != null && presenter != null && !modelToPresenter.ContainsKey(model))
-                {
-                    modelToPresenter.Add(model, presenter);
-                }
-            }
+            if (deckConfig.orderedCardIndices == null || deckConfig.orderedCardIndices.Count == 0)
+                return;
 
             var newModels = new List<CardModel>(CardModels.Count);
             var newPresenters = new List<CardPresenter>(CardPresenters.Count);
+            var usedIndices = new HashSet<int>();
 
-            void AddPair(CardModel model)
+            for (var i = 0; i < deckConfig.orderedCardIndices.Count; i++)
             {
-                if (model == null)
-                    return;
-                if (!modelToPresenter.TryGetValue(model, out var presenter))
-                    return;
+                var index = deckConfig.orderedCardIndices[i];
+                if (index < 0) continue;
+                if (index >= CardModels.Count) continue;
+                if (index >= CardPresenters.Count) continue;
+                if (!usedIndices.Add(index)) continue;
+
+                var model = CardModels[index];
+                var presenter = CardPresenters[index];
+                if (model == null || presenter == null) continue;
                 newModels.Add(model);
                 newPresenters.Add(presenter);
             }
 
-            foreach (var name in deckConfig.orderedCardNames)
+            for (var index = 0; index < CardModels.Count && index < CardPresenters.Count; index++)
             {
-                if (string.IsNullOrEmpty(name))
+                if (usedIndices.Contains(index))
                     continue;
 
-                CardModel model = null;
-
-                if (categoryMap.TryGetValue(name, out var categoryQueue) && categoryQueue.Count > 0)
-                    model = categoryQueue.Dequeue();
-                else if (contentMap.TryGetValue(name, out var contentQueue) && contentQueue.Count > 0)
-                    model = contentQueue.Dequeue();
-
-                AddPair(model);
-            }
-
-            foreach (var pair in modelToPresenter)
-            {
-                if (!newModels.Contains(pair.Key))
-                {
-                    newModels.Add(pair.Key);
-                    newPresenters.Add(pair.Value);
-                }
+                var model = CardModels[index];
+                var presenter = CardPresenters[index];
+                if (model == null || presenter == null) continue;
+                newModels.Add(model);
+                newPresenters.Add(presenter);
             }
 
             if (newModels.Count != CardModels.Count || newPresenters.Count != CardPresenters.Count)

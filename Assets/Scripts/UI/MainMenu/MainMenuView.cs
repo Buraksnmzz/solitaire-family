@@ -43,9 +43,9 @@ namespace UI.MainMenu
             continueButton.transform.localScale = Vector3.zero;
         }
 
-        public void SetLevelText(int currentLevel)
+        public void SetLevelText(string currentLevel)
         {
-            continueLevelText.SetText("Level " + currentLevel);
+            continueLevelText.SetText(currentLevel);
         }
 
         public void SetCoinText(int totalCoins)

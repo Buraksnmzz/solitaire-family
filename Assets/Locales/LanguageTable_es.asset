@@ -130,6 +130,67 @@ MonoBehaviour:
     m_Localized: Tutorial
     m_Metadata:
       m_Items: []
+  - m_Id: 29
+    m_Localized: Idioma
+    m_Metadata:
+      m_Items: []
+  - m_Id: 30
+    m_Localized: Nivel {0}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 31
+    m_Localized: Restaurar compras
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32
+    m_Localized: "El objetivo es mover todas las cartas a las fundaciones\n- Ap\xEDlalas
+      por <color=#ffa84a>categor\xEDa</color>\n- Empieza con una carta de categor\xEDa\n-
+      Para mover una carta, arr\xE1strala."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 33
+    m_Localized: "\xA1Vas bien!\n- Tambi\xE9n puedes mover cartas <color=#ffa84a>entre
+      columnas</color>\n- Puedes apilarlas si son de la <color=#ffa84a>misma categor\xEDa</color>"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 34
+    m_Localized: "\xBFNecesitas m\xE1s cartas?\n- Toca el <color=#ffa84a>mazo</color>
+      arriba a la derecha"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 35
+    m_Localized: "Cuando completas una categor\xEDa, se <color=#ffa84a>limpia</color>
+      y puedes <color=#ffa84a>empezar una nueva</color> all\xED."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 36
+    m_Localized: "\xA1Excelente! Tienes una <color=#ffa84a>columna vac\xEDa.</color>\nPuedes
+      mover una pila entera de cartas all\xED."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 37
+    m_Localized: "Ahora termina todas las categor\xEDas para <color=#ffa84a>completar</color>
+      el nivel."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 38
+    m_Localized: "Solo puedes apilar cartas de la misma categor\xEDa."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 39
+    m_Localized: "Una carta de categor\xEDa solo puede ir sobre cartas que coincidan
+      con la categor\xEDa."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 40
+    m_Localized: "Solo puedes apilar cartas sobre una carta de categor\xEDa en la
+      fundaci\xF3n (no en una columna)."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 41
+    m_Localized: "Solo una carta de categor\xEDa puede ir en una fundaci\xF3n vac\xEDa."
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

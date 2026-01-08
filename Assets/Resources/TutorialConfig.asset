@@ -14,117 +14,99 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   deckConfig: {fileID: 11400000, guid: 4eccdffceba91482f988b2261b397265, type: 2}
   steps:
-  - instructionText: 'The objective is to move all the cards to the foundations
-
-      -
-      Stack them by <color=#ffa84a>category</color>
-
-      - Start with a category
-      card
-
-      - To move a card, drag it.'
+  - instructionText: TUTORIAL_INSTRUCTION_1
     movements:
-    - cardName: Happy
+    - cardIndex: 9
       isCategory: 1
       toContainerType: 2
       toContainerIndex: 0
-    - cardName: Joyful
+    - cardIndex: 4
       isCategory: 0
       toContainerType: 2
       toContainerIndex: 0
-    - cardName: Medieval
+    - cardIndex: 5
       isCategory: 1
       toContainerType: 2
       toContainerIndex: 1
-  - instructionText: 'Doing good!
-
-      - You can also move cards <color=#ffa84a>between
-      columns</color>
-
-      - You can stack them if they are in the <color=#ffa84a>same
-      category</color>'
+  - instructionText: TUTORIAL_INSTRUCTION_2
     movements:
-    - cardName: Pastry
+    - cardIndex: 13
       isCategory: 0
       toContainerType: 3
       toContainerIndex: 1
-  - instructionText: "Needing more cards? \n- Check the <color=#ffa84a>draw pile</color>
-      by tapping on the top right"
+  - instructionText: TUTORIAL_INSTRUCTION_3
     movements:
-    - cardName: Delighted
+    - cardIndex: 3
       isCategory: 0
       toContainerType: 1
       toContainerIndex: 0
-    - cardName: Delighted
+    - cardIndex: 3
       isCategory: 0
       toContainerType: 2
       toContainerIndex: 0
-    - cardName: Cheerful
+    - cardIndex: 14
       isCategory: 0
       toContainerType: 2
       toContainerIndex: 0
-  - instructionText: Once a category gets completed in the foundation, it gets <color=#ffa84a>cleared</color>
-      and you can <color=#ffa84a>start a new category</color> there.
+  - instructionText: TUTORIAL_INSTRUCTION_4
     movements:
-    - cardName: Desserts
+    - cardIndex: 15
       isCategory: 1
       toContainerType: 2
       toContainerIndex: 0
-  - instructionText: Excellent! You now have an <color=#ffa84a>empty column.</color>
-      You can move a full stack of cards there.
+  - instructionText: TUTORIAL_INSTRUCTION_5
     movements:
-    - cardName: Sweet
+    - cardIndex: 10
       isCategory: 0
       toContainerType: 3
       toContainerIndex: 0
-  - instructionText: Now finish all the categories to <color=#ffa84a>complete</color>
-      the level.
+  - instructionText: TUTORIAL_INSTRUCTION_6
     movements:
-    - cardName: Medieval3
+    - cardIndex: 11
       isCategory: 0
       toContainerType: 2
       toContainerIndex: 1
-    - cardName: Medieval1
+    - cardIndex: 6
       isCategory: 0
       toContainerType: 2
       toContainerIndex: 1
-    - cardName: Medieval2
+    - cardIndex: 7
       isCategory: 0
       toContainerType: 2
       toContainerIndex: 1
-    - cardName: Cake
+    - cardIndex: 8
       isCategory: 0
       toContainerType: 2
       toContainerIndex: 0
-    - cardName: Pie
+    - cardIndex: 12
       isCategory: 0
       toContainerType: 2
       toContainerIndex: 0
-    - cardName: Sweet
+    - cardIndex: 10
       isCategory: 0
       toContainerType: 2
       toContainerIndex: 0
-    - cardName: Medieval7
+    - cardIndex: 2
       isCategory: 0
       toContainerType: 1
       toContainerIndex: 0
-    - cardName: Medieval7
+    - cardIndex: 2
       isCategory: 0
       toContainerType: 2
       toContainerIndex: 1
-    - cardName: Cream
+    - cardIndex: 1
       isCategory: 0
       toContainerType: 1
       toContainerIndex: 0
-    - cardName: Cream
+    - cardIndex: 1
       isCategory: 0
       toContainerType: 2
       toContainerIndex: 0
-    - cardName: Chocolate
+    - cardIndex: 0
       isCategory: 0
       toContainerType: 1
       toContainerIndex: 0
-    - cardName: Chocolate
+    - cardIndex: 0
       isCategory: 0
       toContainerType: 2
       toContainerIndex: 0

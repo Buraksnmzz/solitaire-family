@@ -130,6 +130,81 @@ MonoBehaviour:
     m_Localized: Tutorial
     m_Metadata:
       m_Items: []
+  - m_Id: 29
+    m_Localized: Language
+    m_Metadata:
+      m_Items: []
+  - m_Id: 30
+    m_Localized: Level {0}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 31
+    m_Localized: Restore Purchases
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32
+    m_Localized: 'The objective is to move all the cards to the foundations
+
+      -
+      Stack them by <color=#ffa84a>category</color>
+
+      - Start with a category
+      card
+
+      - To move a card, drag it.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 33
+    m_Localized: 'Doing good!
+
+      - You can also move cards <color=#ffa84a>between
+      columns</color>
+
+      - You can stack them if they are in the <color=#ffa84a>same
+      category</color>'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 34
+    m_Localized: 'Needing more cards?
+
+      - Check the <color=#ffa84a>draw pile</color>
+      by tapping on the top right'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 35
+    m_Localized: Once a category gets completed in the foundation, it gets <color=#ffa84a>cleared</color>
+      and you can <color=#ffa84a>start a new category</color> there.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 36
+    m_Localized: 'Excellent! You now have an <color=#ffa84a>empty column.</color>
+
+      You
+      can move a full stack of cards there.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 37
+    m_Localized: Now finish all the categories to <color=#ffa84a>complete</color>
+      the level.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 38
+    m_Localized: You can only stack cards of the same category.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 39
+    m_Localized: A category card can only go on top of cards that matches the category.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 40
+    m_Localized: You can only stack cards on a category card in the foundation (not
+      in a column).
+    m_Metadata:
+      m_Items: []
+  - m_Id: 41
+    m_Localized: Only a category card can go in an empty foundation.
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

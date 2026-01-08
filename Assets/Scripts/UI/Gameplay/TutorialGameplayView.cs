@@ -3,7 +3,6 @@ using Levels;
 using TMPro;
 using Tutorial;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace UI.Gameplay
 {

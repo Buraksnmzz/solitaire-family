@@ -130,6 +130,69 @@ MonoBehaviour:
     m_Localized: Tutoriel
     m_Metadata:
       m_Items: []
+  - m_Id: 29
+    m_Localized: Langue
+    m_Metadata:
+      m_Items: []
+  - m_Id: 30
+    m_Localized: Niveau {0}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 31
+    m_Localized: Restaurer les achats
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32
+    m_Localized: "L'objectif est de d\xE9placer toutes les cartes vers la fondation\n-
+      Empile-les par <color=#ffa84a>cat\xE9gorie</color>\n- Commence par une carte
+      cat\xE9gorie\n- Fais glisser une carte pour la d\xE9placer."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 33
+    m_Localized: "Bien jou\xE9 !\n- Tu peux aussi d\xE9placer les cartes <color=#ffa84a>entre
+      les colonnes</color>\n- Tu peux les empiler si elles sont de la <color=#ffa84a>m\xEAme
+      cat\xE9gorie</color>"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 34
+    m_Localized: "Besoin de plus de cartes ?\n- Appuie sur la <color=#ffa84a>pioche</color>
+      en haut \xE0 droite"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 35
+    m_Localized: "Une fois une cat\xE9gorie termin\xE9e, elle est <color=#ffa84a>valid\xE9e</color>
+      et tu peux en <color=#ffa84a>commencer une nouvelle</color>."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 36
+    m_Localized: "Excellent ! Tu as une <color=#ffa84a>colonne vide.</color>\nTu
+      peux y d\xE9placer toute une pile de cartes."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 37
+    m_Localized: "Termine toutes les cat\xE9gories pour <color=#ffa84a>finir</color>
+      le niveau."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 38
+    m_Localized: "Tu ne peux empiler que des cartes de la m\xEAme cat\xE9gorie."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 39
+    m_Localized: "Eine carte cat\xE9gorie ne peut \xEAtre plac\xE9e que sur des cartes
+      de la m\xEAme cat\xE9gorie."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 40
+    m_Localized: "Tu ne peux empiler des cartes sur une carte cat\xE9gorie que dans
+      la fondation (pas dans une colonne)."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 41
+    m_Localized: "Seule une carte cat\xE9gorie peut \xEAtre plac\xE9e dans une fondation
+      vide."
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

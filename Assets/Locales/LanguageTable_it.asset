@@ -130,6 +130,76 @@ MonoBehaviour:
     m_Localized: Tutorial
     m_Metadata:
       m_Items: []
+  - m_Id: 29
+    m_Localized: Lingua
+    m_Metadata:
+      m_Items: []
+  - m_Id: 30
+    m_Localized: Livello {0}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 31
+    m_Localized: Ripristina acquisti
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32
+    m_Localized: "L'obiettivo \xE8 spostare tutte le carte nelle basi\n- Impilale
+      per <color=#ffa84a>categoria</color>\n- Inizia con una carta categoria\n- Per
+      muovere una carta, trascinala."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 33
+    m_Localized: 'Ottimo lavoro!
+
+      - Puoi anche spostare le carte <color=#ffa84a>tra
+      le colonne</color>
+
+      - Puoi impilarle se appartengono alla <color=#ffa84a>stessa
+      categoria</color>'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 34
+    m_Localized: 'Ti servono altre carte?
+
+      - Tocca il <color=#ffa84a>mazzo
+      di riserva</color> in alto a destra'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 35
+    m_Localized: "Quando una categoria \xE8 completa, viene <color=#ffa84a>eliminata</color>
+      e puoi <color=#ffa84a>iniziarne una nuova</color> l\xEC."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 36
+    m_Localized: 'Eccellente! Ora hai una <color=#ffa84a>colonna vuota.</color>
+
+      Puoi
+      spostarci un intero mazzo di carte.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 37
+    m_Localized: Ora finisci tutte le categorie per <color=#ffa84a>completare</color>
+      il livello.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 38
+    m_Localized: Puoi impilare solo carte della stessa categoria.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 39
+    m_Localized: "Una carta categoria pu\xF2 essere posizionata solo sopra carte
+      della stessa categoria."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 40
+    m_Localized: Puoi impilare le carte su una carta categoria solo nella base (non
+      in una colonna).
+    m_Metadata:
+      m_Items: []
+  - m_Id: 41
+    m_Localized: "Solo una carta categoria pu\xF2 essere inserita in una base vuota."
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []
