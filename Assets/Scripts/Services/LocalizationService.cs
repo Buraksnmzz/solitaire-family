@@ -10,6 +10,7 @@ using UnityEngine.Localization.Tables;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.UI;
 using UI.Signals;
+using UI.Settings;
 
 namespace Services
 {
@@ -17,7 +18,6 @@ namespace Services
     {
         public SystemLanguage Language { get; set; }
         public string DisplayName { get; set; }
-        public Sprite Flag { get; set; }
     }
 
     public class LocalizationService : ILocalizationService
@@ -48,7 +48,6 @@ namespace Services
                 {
                     Language = item.lang,
                     DisplayName = GetDisplayName(item.locale),
-                    //Flag = Resources.Load<Sprite>($"Flags/{item.locale.Identifier.Code}")
                 })
                 .ToList();
         }
@@ -76,9 +75,9 @@ namespace Services
             else if (locale == null)
             {
                 Debug.LogError($"Locale not found for language: {language}.");
+                TryHideWaitingPopup();
+                return;
             }
-            _settingsModel.CurrentLanguage = language;
-            _savedDataService.SaveData(_settingsModel);
 
             DispatchLanguageChangedWhenReady(language);
         }
@@ -87,6 +86,13 @@ namespace Services
         {
             if (!LocalizationSettings.InitializationOperation.IsDone)
             {
+                void OnInitialized(AsyncOperationHandle<LocalizationSettings> _)
+                {
+                    LocalizationSettings.InitializationOperation.Completed -= OnInitialized;
+                    DispatchLanguageChangedWhenReady(language);
+                }
+
+                LocalizationSettings.InitializationOperation.Completed += OnInitialized;
                 return;
             }
 
@@ -108,16 +114,23 @@ namespace Services
             }
         }
 
-        private void DispatchLanguageChanged(SystemLanguage language)
+        private void TryHideWaitingPopup()
         {
             try
             {
-                var eventDispatcherService = ServiceLocator.GetService<IEventDispatcherService>();
-                eventDispatcherService.Dispatch(new LanguageChangedSignal(language));
+                ServiceLocator.GetService<IUIService>().HidePopup<WaitingPresenter>();
             }
             catch
             {
             }
+        }
+
+        private void DispatchLanguageChanged(SystemLanguage language)
+        {
+            _settingsModel.CurrentLanguage = language;
+            _savedDataService.SaveData(_settingsModel);
+            var eventDispatcherService = ServiceLocator.GetService<IEventDispatcherService>();
+            eventDispatcherService.Dispatch(new LanguageChangedSignal(language));
         }
 
         public SystemLanguage GetCurrentLanguage()

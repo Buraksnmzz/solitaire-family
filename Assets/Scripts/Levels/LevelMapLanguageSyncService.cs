@@ -2,6 +2,7 @@ using System.Collections;
 using Loading;
 using Services;
 using UI.Signals;
+using UI.Settings;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -13,7 +14,9 @@ namespace Levels
         private readonly ILevelGeneratorService _levelGeneratorService;
         private readonly ISnapshotService _snapshotService;
         private readonly ILocalizationService _localizationService;
+        private readonly IUIService _uiService;
         private Coroutine _runningCoroutine;
+        private bool _isWaitingForLanguageChange;
 
         public LevelMapLanguageSyncService()
         {
@@ -21,6 +24,7 @@ namespace Levels
             _levelGeneratorService = ServiceLocator.GetService<ILevelGeneratorService>();
             _snapshotService = ServiceLocator.GetService<ISnapshotService>();
             _localizationService = ServiceLocator.GetService<ILocalizationService>();
+            _uiService = ServiceLocator.GetService<IUIService>();
             _eventDispatcherService.AddListener<LanguageChangeRequestedSignal>(OnLanguageChangeRequested);
         }
 
@@ -30,6 +34,8 @@ namespace Levels
             {
                 return;
             }
+
+            ShowWaiting();
 
             if (_runningCoroutine != null)
             {
@@ -45,12 +51,14 @@ namespace Levels
             var configurationJson = BootCache.ConfigurationJson;
             if (string.IsNullOrWhiteSpace(configurationJson))
             {
+                FailAndHideWaiting();
                 yield break;
             }
 
             var levelDataUrl = LevelDataUrlResolver.ResolveLevelDataUrl(configurationJson, language, false, false);
             if (string.IsNullOrWhiteSpace(levelDataUrl))
             {
+                FailAndHideWaiting();
                 yield break;
             }
 
@@ -60,21 +68,69 @@ namespace Levels
 
                 if (request.result != UnityWebRequest.Result.Success)
                 {
+                    FailAndHideWaiting();
                     yield break;
                 }
 
                 var levelsJson = request.downloadHandler.text;
                 if (string.IsNullOrWhiteSpace(levelsJson) || levelsJson == "{}")
                 {
+                    FailAndHideWaiting();
                     yield break;
                 }
 
-                BootCache.SetLevelsJson(levelsJson);
-                _levelGeneratorService.ParseLevelsJson(levelsJson);
-                _snapshotService.ClearSnapshot();
-
-                _localizationService.SetLanguage(language);
+                try
+                {
+                    BootCache.SetLevelsJson(levelsJson);
+                    _levelGeneratorService.ParseLevelsJson(levelsJson);
+                    _snapshotService.ClearSnapshot();
+                    _localizationService.SetLanguage(language);
+                }
+                catch
+                {
+                    FailAndHideWaiting();
+                }
             }
+        }
+
+        private void ShowWaiting()
+        {
+            if (_isWaitingForLanguageChange)
+            {
+                return;
+            }
+
+            _isWaitingForLanguageChange = true;
+            _eventDispatcherService.AddListener<LanguageChangedSignal>(OnLanguageChanged);
+            _uiService.ShowPopup<WaitingPresenter>();
+        }
+
+        private void OnLanguageChanged(LanguageChangedSignal _)
+        {
+            HideWaiting();
+        }
+
+        private void FailAndHideWaiting()
+        {
+            HideWaiting();
+        }
+
+        private void HideWaiting()
+        {
+            if (!_isWaitingForLanguageChange)
+            {
+                return;
+            }
+
+            _isWaitingForLanguageChange = false;
+            _eventDispatcherService.RemoveListener<LanguageChangedSignal>(OnLanguageChanged);
+
+            if (_runningCoroutine != null)
+            {
+                _runningCoroutine = null;
+            }
+
+            _uiService.HidePopup<WaitingPresenter>();
         }
     }
 }
