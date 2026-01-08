@@ -25,6 +25,10 @@ namespace UI.Tutorial
         private readonly float _jokerScaleDuration = 0.35f;
         private readonly float _continueButtonDelayAfterJoker = 0.15f;
         private readonly float _continueButtonScaleDuration = 0.35f;
+        private readonly float _continueButtonLoopScaleMultiplier = 1.08f;
+        private readonly float _continueButtonLoopScaleDuration = 0.8f;
+
+        private Tween _continueButtonLoopTween;
         
         private Vector3 _flag1InitialPosition;
         private Vector3 _flag2InitialPosition;
@@ -50,6 +54,18 @@ namespace UI.Tutorial
             base.Show();
             InitializeViewsBeforeAnimation();
             PlayIntroAnimation();
+        }
+
+        protected override void OnHidden()
+        {
+            base.OnHidden();
+            StopContinueButtonLoopAnimation();
+        }
+
+        protected override void OnDestroy()
+        {
+            StopContinueButtonLoopAnimation();
+            base.OnDestroy();
         }
         
         private void PlayIntroAnimation()
@@ -82,11 +98,14 @@ namespace UI.Tutorial
             sequence.Insert(_jokerScaleDelay + _continueButtonDelayAfterJoker + 3 * slideStagger,
                 continueButton.transform
                     .DOScale(_continueButtonInitialScale, _continueButtonScaleDuration)
-                    .SetEase(Ease.OutBack));
+                    .SetEase(Ease.OutBack)
+                    .OnComplete(StartContinueButtonLoopAnimation));
         }
         
         private void InitializeViewsBeforeAnimation()
         {
+            StopContinueButtonLoopAnimation();
+
             flag1.DOKill();
             flag2.DOKill();
             completedImage.DOKill();
@@ -103,6 +122,29 @@ namespace UI.Tutorial
             continueButton.interactable = true;
             levelText.DOFade(0, 0);
         }
+
+        private void StartContinueButtonLoopAnimation()
+        {
+            StopContinueButtonLoopAnimation();
+
+            if (!continueButton.interactable)
+            {
+                return;
+            }
+
+            continueButton.transform.localScale = _continueButtonInitialScale;
+
+            _continueButtonLoopTween = continueButton.transform
+                .DOScale(_continueButtonInitialScale * _continueButtonLoopScaleMultiplier, _continueButtonLoopScaleDuration)
+                .SetEase(Ease.InOutSine)
+                .SetLoops(-1, LoopType.Yoyo);
+        }
+
+        private void StopContinueButtonLoopAnimation()
+        {
+            _continueButtonLoopTween?.Kill();
+            _continueButtonLoopTween = null;
+        }
         
         private void CacheInitialTransforms()
         {
@@ -116,6 +158,7 @@ namespace UI.Tutorial
         public void DisableContinueButton()
         {
             continueButton.interactable = false;
+            StopContinueButtonLoopAnimation();
             continueButton.transform.DOScale(0, 0.3f).SetEase(Ease.InBack);
         }
     }

@@ -37,10 +37,14 @@ namespace UI.Win
         private readonly float _jokerScaleDuration = 0.35f;
         private readonly float _continueButtonDelayAfterJoker = 0.15f;
         private readonly float _continueButtonScaleDuration = 0.35f;
+        private readonly float _continueButtonLoopScaleMultiplier = 1.08f;
+        private readonly float _continueButtonLoopScaleDuration = 0.8f;
         private readonly float _coinScaleDuration = 0.2f;
         private readonly float _coinSpawnInterval = 0.08f;
         private readonly float _coinMoveDuration = 1.2f;
         private readonly float _coinMoveInterval = 0.2f;
+
+        private Tween _continueButtonLoopTween;
 
         public int finalCoins;
         private readonly int _coinAnimationCount = 8;
@@ -80,6 +84,18 @@ namespace UI.Win
 
         }
 
+        protected override void OnHidden()
+        {
+            base.OnHidden();
+            StopContinueButtonLoopAnimation();
+        }
+
+        protected override void OnDestroy()
+        {
+            StopContinueButtonLoopAnimation();
+            base.OnDestroy();
+        }
+
         public void SetLevelText(int level)
         {
             levelText.text = "Level " + level;
@@ -98,7 +114,7 @@ namespace UI.Win
         private void PlayIntroAnimation()
         {
             PlayParticles();
-            
+
             var slideStagger = 0.08f;
             var sequence = DOTween.Sequence();
 
@@ -137,7 +153,8 @@ namespace UI.Win
                 continueButton.transform
                     .DOScale(_continueButtonInitialScale, _continueButtonScaleDuration)
                     .SetEase(Ease.OutBack)
-                    .OnStart(() => IntroAnimationFinished?.Invoke()));
+                    .OnStart(() => IntroAnimationFinished?.Invoke())
+                    .OnComplete(StartContinueButtonLoopAnimation));
         }
 
         [ContextMenu("Continue")]
@@ -150,6 +167,8 @@ namespace UI.Win
 
         private void InitializeViewsBeforeAnimation()
         {
+            StopContinueButtonLoopAnimation();
+
             flag1.DOKill();
             flag2.DOKill();
             coinHolder.DOKill();
@@ -167,6 +186,29 @@ namespace UI.Win
             continueButton.transform.localScale = Vector3.zero;
             continueButton.interactable = true;
             levelText.DOFade(0, 0);
+        }
+
+        private void StartContinueButtonLoopAnimation()
+        {
+            StopContinueButtonLoopAnimation();
+
+            if (!continueButton.interactable)
+            {
+                return;
+            }
+
+            continueButton.transform.localScale = _continueButtonInitialScale;
+
+            _continueButtonLoopTween = continueButton.transform
+                .DOScale(_continueButtonInitialScale * _continueButtonLoopScaleMultiplier, _continueButtonLoopScaleDuration)
+                .SetEase(Ease.InOutSine)
+                .SetLoops(-1, LoopType.Yoyo);
+        }
+
+        private void StopContinueButtonLoopAnimation()
+        {
+            _continueButtonLoopTween?.Kill();
+            _continueButtonLoopTween = null;
         }
 
         public void PlayCoinAnimation(Action onCompleted)
@@ -202,7 +244,7 @@ namespace UI.Win
                                     topCoinImage.DOPunchScale(Vector3.one * 0.2f, 0.08f);
                                     Destroy(icon.gameObject);
                                     remainingIcons--;
-                                    if (remainingIcons == icons.Count-1)
+                                    if (remainingIcons == icons.Count - 1)
                                     {
                                         coinParticle.Play();
                                     }
@@ -229,6 +271,7 @@ namespace UI.Win
         public void DisableContinueButton()
         {
             continueButton.interactable = false;
+            StopContinueButtonLoopAnimation();
             continueButton.transform.DOScale(0, 0.3f).SetEase(Ease.InBack);
         }
     }

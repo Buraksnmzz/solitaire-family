@@ -798,12 +798,32 @@ PrefabInstance:
       value: "Cont\u0131nue"
       objectReference: {fileID: 0}
     - target: {fileID: 2832878791797708312, guid: f2114199c07f140e4b58518f280d7277, type: 3}
+      propertyPath: m_fontSize
+      value: 54
+      objectReference: {fileID: 0}
+    - target: {fileID: 2832878791797708312, guid: f2114199c07f140e4b58518f280d7277, type: 3}
+      propertyPath: m_fontSizeMax
+      value: 54
+      objectReference: {fileID: 0}
+    - target: {fileID: 2832878791797708312, guid: f2114199c07f140e4b58518f280d7277, type: 3}
       propertyPath: m_RaycastTarget
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5843345587664903968, guid: f2114199c07f140e4b58518f280d7277, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -15.4
       objectReference: {fileID: 0}
     - target: {fileID: 5870116319684892964, guid: f2114199c07f140e4b58518f280d7277, type: 3}
       propertyPath: m_Name
       value: LevelButton
+      objectReference: {fileID: 0}
+    - target: {fileID: 6176616563691898847, guid: f2114199c07f140e4b58518f280d7277, type: 3}
+      propertyPath: m_fontSize
+      value: 33
+      objectReference: {fileID: 0}
+    - target: {fileID: 6176616563691898847, guid: f2114199c07f140e4b58518f280d7277, type: 3}
+      propertyPath: m_fontSizeMax
+      value: 33
       objectReference: {fileID: 0}
     - target: {fileID: 6176616563691898847, guid: f2114199c07f140e4b58518f280d7277, type: 3}
       propertyPath: m_RaycastTarget
@@ -888,6 +908,10 @@ PrefabInstance:
     - target: {fileID: 7633217678190312245, guid: f2114199c07f140e4b58518f280d7277, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8231207354135765182, guid: f2114199c07f140e4b58518f280d7277, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -109.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
