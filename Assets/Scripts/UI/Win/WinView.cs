@@ -90,12 +90,6 @@ namespace UI.Win
             StopContinueButtonLoopAnimation();
         }
 
-        protected override void OnDestroy()
-        {
-            StopContinueButtonLoopAnimation();
-            base.OnDestroy();
-        }
-
         public void SetLevelText(int level)
         {
             levelText.text = "Level " + level;

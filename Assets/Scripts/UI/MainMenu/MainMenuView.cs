@@ -24,7 +24,7 @@ namespace UI.MainMenu
 
         private Tween _continueButtonLoopTween;
         private Vector3 _continueButtonInitialScale;
-        
+
         public event Action ContinueButtonClicked;
         public event Action SettingsButtonClicked;
         public event Action CoinButtonClicked;
@@ -35,10 +35,10 @@ namespace UI.MainMenu
 
             _continueButtonInitialScale = continueButton.transform.localScale;
 
-            continueButton.onClick.AddListener(()=>ContinueButtonClicked?.Invoke());
-            settingsButton.onClick.AddListener(()=>SettingsButtonClicked?.Invoke());
-            coinButton.onClick.AddListener(()=>CoinButtonClicked?.Invoke());
-            noAdsButton.onClick.AddListener(()=>NoAdsButtonClicked?.Invoke());
+            continueButton.onClick.AddListener(() => ContinueButtonClicked?.Invoke());
+            settingsButton.onClick.AddListener(() => SettingsButtonClicked?.Invoke());
+            coinButton.onClick.AddListener(() => CoinButtonClicked?.Invoke());
+            noAdsButton.onClick.AddListener(() => NoAdsButtonClicked?.Invoke());
         }
 
         protected override void OnShown()
@@ -54,12 +54,6 @@ namespace UI.MainMenu
         {
             base.OnHidden();
             StopContinueButtonLoopAnimation();
-        }
-
-        protected override void OnDestroy()
-        {
-            StopContinueButtonLoopAnimation();
-            base.OnDestroy();
         }
 
         public override void Show()
@@ -117,5 +111,5 @@ namespace UI.MainMenu
             noAdsButton.gameObject.SetActive(isTrue);
         }
     }
-    
+
 }

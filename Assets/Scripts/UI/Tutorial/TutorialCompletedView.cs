@@ -15,7 +15,7 @@ namespace UI.Tutorial
         [SerializeField] private CanvasGroup completedImageCanvasGroup;
         [SerializeField] private TextMeshProUGUI levelText;
         [SerializeField] private Transform jokerImage;
-        
+
         private readonly float _introSlideOffset = 600f;
         private readonly float _introSlideDuration = 0.8f;
         private readonly float _completedScaleDuration = 0.8f;
@@ -29,7 +29,7 @@ namespace UI.Tutorial
         private readonly float _continueButtonLoopScaleDuration = 0.8f;
 
         private Tween _continueButtonLoopTween;
-        
+
         private Vector3 _flag1InitialPosition;
         private Vector3 _flag2InitialPosition;
         private Vector3 _completedImageInitialScale;
@@ -37,7 +37,7 @@ namespace UI.Tutorial
         private Vector3 _continueButtonInitialScale;
 
         public event Action ContinueClicked;
-        
+
         private void Awake()
         {
             CacheInitialTransforms();
@@ -48,7 +48,7 @@ namespace UI.Tutorial
             if (continueButton != null)
                 continueButton.onClick.AddListener(() => ContinueClicked?.Invoke());
         }
-        
+
         public override void Show()
         {
             base.Show();
@@ -62,12 +62,6 @@ namespace UI.Tutorial
             StopContinueButtonLoopAnimation();
         }
 
-        protected override void OnDestroy()
-        {
-            StopContinueButtonLoopAnimation();
-            base.OnDestroy();
-        }
-        
         private void PlayIntroAnimation()
         {
             var slideStagger = 0.08f;
@@ -101,7 +95,7 @@ namespace UI.Tutorial
                     .SetEase(Ease.OutBack)
                     .OnComplete(StartContinueButtonLoopAnimation));
         }
-        
+
         private void InitializeViewsBeforeAnimation()
         {
             StopContinueButtonLoopAnimation();
@@ -145,7 +139,7 @@ namespace UI.Tutorial
             _continueButtonLoopTween?.Kill();
             _continueButtonLoopTween = null;
         }
-        
+
         private void CacheInitialTransforms()
         {
             _flag1InitialPosition = flag1.localPosition;
