@@ -205,6 +205,11 @@ MonoBehaviour:
     m_Localized: Only a category card can go in an empty foundation.
     m_Metadata:
       m_Items: []
+  - m_Id: 42
+    m_Localized: Pick a column to place the joker! It's a Wild Card that can connect
+      with any category!
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

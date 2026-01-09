@@ -192,6 +192,11 @@ MonoBehaviour:
     m_Localized: "Tylko karta kategorii mo\u017Ce trafi\u0107 na puste pole bazowe."
     m_Metadata:
       m_Items: []
+  - m_Id: 42
+    m_Localized: "Wybierz kolumn\u0119, aby umie\u015Bci\u0107 jokera! To dzika karta,
+      kt\xF3ra pasuje do ka\u017Cdej kategorii!"
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

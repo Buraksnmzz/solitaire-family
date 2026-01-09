@@ -252,7 +252,6 @@ namespace Gameplay
                 if (previousModel.Type == CardType.Joker)
                 {
                     previousTop.ApplyViewState(CardViewState.JokerBelow);
-                    return;
                 }
 
                 if (previousModel.Type == CardType.Category)

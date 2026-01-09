@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Card;
 using Collectible;
 using Configuration;
@@ -39,6 +40,7 @@ namespace UI.Gameplay
         private IHintService _hintService;
         private ISnapshotService _snapshotService;
         private bool _isGameWon;
+        private bool _isJokerPileSelectionActive;
         private CollectibleModel _collectibleModel;
         private GameConfigModel _gameConfigModel;
 
@@ -82,6 +84,7 @@ namespace UI.Gameplay
             View.DegubCompleteButtonClicked += OnDebugCompleteButtonClicked;
             View.DegubMoveButtonClicked += OnDegubMoveButtonClicked;
             View.OnCoinMoved += CoinMoved;
+            View.JokerPileSelected += OnJokerPileSelected;
         }
 
         private void OnCoinChanged(CoinChangedSignal _)
@@ -276,10 +279,53 @@ namespace UI.Gameplay
         {
             _soundService.PlaySound(ClipName.PowerUp);
             _hapticService.HapticLow();
-            View.board.GenerateJokerCard();
+
+            if (_isJokerPileSelectionActive)
+                return;
+
+            var activePileIndices = GetActivePileIndices();
+            if (activePileIndices.Count == 0)
+                return;
+
+            _isJokerPileSelectionActive = true;
+            var jokerMessage = _localizationService.GetLocalizedString(LocalizationStrings.PickAColumnToPlaceTheJoker);
+            View.ShowPersistentErrorMessage(jokerMessage);
+            View.ShowJokerPileSelection(activePileIndices);
+
             View.SetJokerAmount(totalJokers, _collectibleModel.totalCoins, _gameConfigModel.jokerCost);
             //View.SetJokerButtonInteractable(false);
             _savedDataService.SaveData(_collectibleModel);
+        }
+
+        private void OnJokerPileSelected(int pileIndex)
+        {
+            if (!_isJokerPileSelectionActive) return;
+
+            _isJokerPileSelectionActive = false;
+            View.HideErrorMessage();
+            View.HideJokerPileSelection();
+            View.board.GenerateJokerCard(pileIndex);
+            _soundService.PlaySound(ClipName.PowerUp);
+        }
+
+        private List<int> GetActivePileIndices()
+        {
+            var activePileIndices = new List<int>();
+            if (View == null) return activePileIndices;
+            if (View.board == null) return activePileIndices;
+
+            var piles = View.board.Piles;
+            if (piles == null) return activePileIndices;
+
+            for (var i = 0; i < piles.Count; i++)
+            {
+                var pile = piles[i];
+                if (pile == null) continue;
+                if (!pile.gameObject.activeInHierarchy) continue;
+                activePileIndices.Add(i);
+            }
+
+            return activePileIndices;
         }
 
         private void OnApplicationPaused(bool isPaused)

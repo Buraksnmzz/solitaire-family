@@ -206,6 +206,11 @@ MonoBehaviour:
     m_Localized: Hanya kad kategori boleh diletakkan di tapak yang kosong.
     m_Metadata:
       m_Items: []
+  - m_Id: 42
+    m_Localized: Pilih lajur untuk letakkan joker! Ia adalah Kad Liar yang boleh
+      disambungkan dengan mana-mana kategori!
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

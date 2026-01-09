@@ -193,6 +193,11 @@ MonoBehaviour:
       vide."
     m_Metadata:
       m_Items: []
+  - m_Id: 42
+    m_Localized: "Choisis une colonne pour placer le joker ! C'est une carte sp\xE9ciale
+      qui peut s'associer \xE0 n'importe quelle cat\xE9gorie !"
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

@@ -269,21 +269,29 @@ namespace Gameplay
             dealerEmptyImage.anchoredPosition = dealerRectTransform.anchoredPosition;
         }
 
-        public void GenerateJokerCard()
+        public void GenerateJokerCard(int pileIndex)
         {
+            if (pileIndex < 0) return;
+            if (pileIndex >= piles.Count) return;
+
+            var pile = piles[pileIndex];
+            if (pile == null) return;
+            if (!pile.gameObject.activeInHierarchy) return;
+
             var cardModel = new CardModel
             {
                 CategoryType = CardCategoryType.Image,
                 Type = CardType.Joker,
                 IsFaceUp = true
             };
+
             CardModels.Add(cardModel);
             var cardPresenter = new CardPresenter();
             CardPresenters.Add(cardPresenter);
-            var cardView = Instantiate(jokerCardView, piles[0].transform);
+            var cardView = Instantiate(jokerCardView, pile.transform);
             cardViews.Add(cardView);
             cardPresenter.Initialize(cardModel, cardView, _parent);
-            piles[0].AddCard(cardPresenter);
+            pile.AddCard(cardPresenter, 0, 0);
             cardView.AnimateGlow();
         }
 

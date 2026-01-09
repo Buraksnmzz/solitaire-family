@@ -200,6 +200,11 @@ MonoBehaviour:
     m_Localized: "Solo una carta categoria pu\xF2 essere inserita in una base vuota."
     m_Metadata:
       m_Items: []
+  - m_Id: 42
+    m_Localized: "Scegli una colonna per piazzare il joker! \xC8 una carta jolly
+      che pu\xF2 connettersi a qualsiasi categoria!"
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

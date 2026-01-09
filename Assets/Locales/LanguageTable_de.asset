@@ -201,6 +201,11 @@ MonoBehaviour:
       werden.
     m_Metadata:
       m_Items: []
+  - m_Id: 42
+    m_Localized: "W\xE4hle eine Spalte, um den Joker zu platzieren! Er ist ein Wildcard,
+      der mit jeder Kategorie kombiniert werden kann!"
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

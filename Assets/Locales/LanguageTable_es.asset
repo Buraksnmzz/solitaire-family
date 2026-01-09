@@ -191,6 +191,11 @@ MonoBehaviour:
     m_Localized: "Solo una carta de categor\xEDa puede ir en una fundaci\xF3n vac\xEDa."
     m_Metadata:
       m_Items: []
+  - m_Id: 42
+    m_Localized: "\xA1Elige una columna para colocar el comod\xEDn! \xA1Es una carta
+      salvaje que se conecta con cualquier categor\xEDa!"
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

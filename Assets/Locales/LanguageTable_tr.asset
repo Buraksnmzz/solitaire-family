@@ -192,6 +192,11 @@ MonoBehaviour:
     m_Localized: "Bo\u015F bir temele yaln\u0131zca bir kategori kart\u0131 yerle\u015Ftirilebilir."
     m_Metadata:
       m_Items: []
+  - m_Id: 42
+    m_Localized: "Jokeri yerle\u015Ftirmek i\xE7in bir s\xFCtun se\xE7! Her kategoriyle
+      birle\u015Febilen bir joker kart\u0131d\u0131r!"
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []
