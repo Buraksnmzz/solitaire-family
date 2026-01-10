@@ -51,7 +51,6 @@ public class Installer : MonoBehaviour
     {
         Debug.Log("Installing Services");
         ServiceLocator.Register<IPlacableErrorPersistenceService>(new PlacableErrorPersistenceService());
-        ServiceLocator.Register<IEventDispatcherService>(new EventDispatcherService());
         ServiceLocator.Register<IStyleService>(new StyleService());
         ServiceLocator.Register<ISoundService>(new SoundService());
         ServiceLocator.Register<IHapticService>(new HapticService());

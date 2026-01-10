@@ -21,6 +21,7 @@ namespace Card
         int _startSiblingIndex;
         CardPresenter[] _draggedPresenters;
         Vector3[] _startLocalPositions;
+        CardPresenter _dragRootPresenter;
         IEventDispatcherService _eventDispatcherService;
         IDragStateService _dragStateService;
         bool _isDragging;
@@ -49,8 +50,24 @@ namespace Card
         {
             if (_dragStateService == null) return;
             if (!_dragStateService.CanStartDrag()) return;
-            if (!IsDraggable()) return;
-            if (_tutorialMoveRestrictionService != null && _tutorialMoveRestrictionService.IsActive && !_tutorialMoveRestrictionService.IsDragAllowed(_presenter)) return;
+
+            var container = _presenter != null ? _presenter.GetContainer() : null;
+            if (container == null) return;
+
+            var stack = container.GetAllPlayableCards(_presenter);
+            _dragRootPresenter = stack.Count > 0 ? stack[0] : _presenter;
+
+            if (!IsDraggable())
+            {
+                _dragRootPresenter = null;
+                return;
+            }
+
+            if (_tutorialMoveRestrictionService != null && _tutorialMoveRestrictionService.IsActive && !_tutorialMoveRestrictionService.IsDragAllowed(_dragRootPresenter))
+            {
+                _dragRootPresenter = null;
+                return;
+            }
 
             DOTween.Complete(CardView.MovementTweenId);
 
@@ -64,13 +81,13 @@ namespace Card
 
 
             _startParent = transform.parent;
-            _startSiblingIndex = transform.GetSiblingIndex();
 
-            var container = _presenter.GetContainer();
-            if (container == null) return;
+            _startSiblingIndex = _dragRootPresenter != null && _dragRootPresenter.CardView != null
+                ? _dragRootPresenter.CardView.transform.GetSiblingIndex()
+                : transform.GetSiblingIndex();
 
-            var stack = container.GetCardsFrom(_presenter);
             _draggedPresenters = stack.ToArray();
+
             _startLocalPositions = new Vector3[_draggedPresenters.Length];
 
             for (var i = 0; i < _draggedPresenters.Length; i++)
@@ -146,17 +163,19 @@ namespace Card
 
             if (closestContainer != null && closestDistance <= snapDistance)
             {
-                if (_tutorialMoveRestrictionService != null && _tutorialMoveRestrictionService.IsActive && !_tutorialMoveRestrictionService.IsDropAllowed(_presenter, closestContainer))
+                var dragRootPresenter = _dragRootPresenter ?? _presenter;
+
+                if (_tutorialMoveRestrictionService != null && _tutorialMoveRestrictionService.IsActive && !_tutorialMoveRestrictionService.IsDropAllowed(dragRootPresenter, closestContainer))
                 {
                     closestContainer = null;
                 }
 
-                if (closestContainer != null && closestContainer.CanPlaceCard(_presenter))
+                if (closestContainer != null && closestContainer.CanPlaceCard(dragRootPresenter))
                 {
-                    var currentContainer = _presenter.GetContainer();
+                    var currentContainer = dragRootPresenter != null ? dragRootPresenter.GetContainer() : null;
                     if (currentContainer != null)
                     {
-                        var stack = currentContainer.GetCardsFrom(_presenter).ToArray();
+                        var stack = currentContainer.GetCardsFrom(dragRootPresenter).ToArray();
 
                         var movedFaceUpStates = new bool[stack.Length];
                         for (var i = 0; i < stack.Length; i++)
@@ -164,11 +183,11 @@ namespace Card
                             movedFaceUpStates[i] = stack[i].IsFaceUp;
                         }
 
-                        var before = currentContainer.GetCardsBefore(_presenter);
+                        var before = currentContainer.GetCardsBefore(dragRootPresenter);
                         var previousCard = before.Count > 0 ? before[^1] : null;
                         var previousCardWasFaceUp = previousCard is { IsFaceUp: true };
 
-                        currentContainer.RemoveCardsFrom(_presenter);
+                        currentContainer.RemoveCardsFrom(dragRootPresenter);
 
                         if (_soundService != null)
                         {
@@ -206,6 +225,10 @@ namespace Card
                         {
                             currentContainer.RevealTopCardIfNeeded();
                         }
+
+                        _draggedPresenters = null;
+                        _startLocalPositions = null;
+                        _dragRootPresenter = null;
                     }
                     return;
                 }
@@ -275,6 +298,7 @@ namespace Card
 
             _draggedPresenters = null;
             _startLocalPositions = null;
+            _dragRootPresenter = null;
         }
 
         bool IsDraggable()
@@ -295,10 +319,17 @@ namespace Card
                 return topCard == _presenter;
             }
 
+            var dragRootPresenter = _dragRootPresenter;
+            if (dragRootPresenter == null)
+            {
+                var stack = container.GetAllPlayableCards(_presenter);
+                dragRootPresenter = stack.Count > 0 ? stack[0] : _presenter;
+            }
+
             if (containerType == typeof(Pile))
             {
                 var pile = container as Pile;
-                return pile != null && pile.CanDrag(_presenter);
+                return pile != null && pile.CanDrag(dragRootPresenter);
             }
 
             return false;

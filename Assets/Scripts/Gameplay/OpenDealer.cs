@@ -10,6 +10,12 @@ namespace Gameplay
     {
         private readonly float _distanceMultiplier = 0.368f;
 
+        public override List<CardPresenter> GetAllPlayableCards(CardPresenter clickedPresenter)
+        {
+            if (clickedPresenter == null) return new List<CardPresenter>();
+            return new List<CardPresenter> { clickedPresenter };
+        }
+
         public override Vector3 GetCardLocalPosition(int index)
         {
             var cardRectTransform = (RectTransform)CardPresenters[0].CardView.transform;

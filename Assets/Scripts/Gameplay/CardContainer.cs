@@ -38,6 +38,37 @@ namespace Gameplay
 
         public CardPresenter GetTopCardPresenter() => CardPresenters.LastOrDefault();
 
+        public virtual List<CardPresenter> GetAllPlayableCards(CardPresenter clickedPresenter)
+        {
+            if (clickedPresenter == null) return new List<CardPresenter>();
+
+            var clickedIndex = CardPresenters.IndexOf(clickedPresenter);
+            if (clickedIndex < 0) return new List<CardPresenter>();
+
+            var clickedModel = clickedPresenter.CardModel;
+            if (clickedModel == null) return new List<CardPresenter>();
+
+            if (!clickedModel.IsFaceUp || clickedModel.Type == CardType.Joker)
+            {
+                return GetCardsFrom(clickedPresenter);
+            }
+
+            var startIndex = clickedIndex;
+            for (var i = clickedIndex - 1; i >= 0; i--)
+            {
+                var candidate = CardPresenters[i];
+                if (candidate == null) break;
+                var candidateModel = candidate.CardModel;
+                if (candidateModel == null) break;
+                if (!candidateModel.IsFaceUp) break;
+                if (candidateModel.Type == CardType.Joker) break;
+
+                startIndex = i;
+            }
+
+            return GetCardsFrom(CardPresenters[startIndex]);
+        }
+
         public bool CanPlaceCard(CardPresenter sourceCardPresenter)
         {
             if (!gameObject.activeInHierarchy) return false;

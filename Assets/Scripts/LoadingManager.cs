@@ -34,6 +34,7 @@ public class LoadingManager : MonoBehaviour
         }
 
         ServiceLocator.Register<ISavedDataService>(new SavedDataService());
+        ServiceLocator.Register<IEventDispatcherService>(new EventDispatcherService());
         ServiceLocator.Register<ILocalizationService>(new LocalizationService());
         ServiceLocator.Register<ILevelMapCacheService>(new LevelMapCacheService());
         _bootServicesInstalled = true;
