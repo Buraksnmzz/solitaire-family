@@ -76,7 +76,7 @@ namespace Configuration
 
 		public int GetLevelGoal(int levelIndex, int columnCount)
 		{
-			var overrideGoal = GetOverrideLevelGoal(levelIndex);
+			var overrideGoal = GetOverrideLevelGoal(levelIndex-1);
 			if (overrideGoal.HasValue)
 			{
 				return overrideGoal.Value;
