@@ -131,14 +131,14 @@ namespace Loading
                     return "ja";
                 case SystemLanguage.Korean:
                     return "ko";
-                case SystemLanguage.Indonesian:
-                    return "id";
+                // case SystemLanguage.Malay:
+                //     return "ms";
+                case SystemLanguage.Polish:
+                    return "pl";
                 case SystemLanguage.Vietnamese:
                     return "vi";
                 case SystemLanguage.Arabic:
                     return "ar";
-                case SystemLanguage.Hindi:
-                    return "hi";
                 default:
                     return string.Empty;
             }

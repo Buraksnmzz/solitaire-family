@@ -1,10 +1,9 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Networking;
 using Loading;
+using Levels;
 using Services;
 
 public class LoadingManager : MonoBehaviour
@@ -36,6 +35,7 @@ public class LoadingManager : MonoBehaviour
 
         ServiceLocator.Register<ISavedDataService>(new SavedDataService());
         ServiceLocator.Register<ILocalizationService>(new LocalizationService());
+        ServiceLocator.Register<ILevelMapCacheService>(new LevelMapCacheService());
         _bootServicesInstalled = true;
     }
 
@@ -111,17 +111,26 @@ public class LoadingManager : MonoBehaviour
     {
         var levelsJson = string.Empty;
         var configurationJson = string.IsNullOrEmpty(rawJson) ? GetLocalRawJson() : rawJson;
-        var levelDataUrl = LevelDataUrlResolver.ResolveLevelDataUrl(configurationJson, _startupLanguage);
+        var levelDataUrl = LevelDataUrlResolver.ResolveLevelDataUrl(configurationJson, _startupLanguage, false, false);
+        var cacheService = ServiceLocator.GetService<ILevelMapCacheService>();
         if (string.IsNullOrEmpty(levelDataUrl))
         {
-            levelsJson = GetLocalLevelJson();
+            levelsJson = cacheService.TryGetLevelsJson(_startupLanguage, out var cachedLevelsJson)
+                ? cachedLevelsJson
+                : GetLocalLevelJson();
         }
         else
         {
             yield return FetchLevelJson(levelDataUrl, value => levelsJson = value);
             if (string.IsNullOrEmpty(levelsJson) || levelsJson == "{}")
             {
-                levelsJson = GetLocalLevelJson();
+                levelsJson = cacheService.TryGetLevelsJson(_startupLanguage, out var cachedLevelsJson)
+                    ? cachedLevelsJson
+                    : GetLocalLevelJson();
+            }
+            else
+            {
+                cacheService.SaveLevelsJson(_startupLanguage, levelsJson);
             }
         }
         BootCache.SetLevelsJson(levelsJson);
