@@ -38,29 +38,29 @@
     "ColumnGoals": {
       "3": [
         {
-          "goal": 110,
+          "goal": 80,
           "probability": 80
         },
         {
-          "goal": 115,
+          "goal": 75,
           "probability": 10
         },
         {
-          "goal": 105,
+          "goal": 70,
           "probability": 10
         }
       ],
       "4": [
         {
-          "goal": 140,
-          "probability": 60
-        },
-        {
-          "goal": 150,
-          "probability": 30
+          "goal": 137,
+          "probability": 80
         },
         {
           "goal": 130,
+          "probability": 10
+        },
+        {
+          "goal": 125,
           "probability": 10
         }
       ],
@@ -70,7 +70,7 @@
           "probability": 70
         },
         {
-          "goal": 240,
+          "goal": 225,
           "probability": 20
         },
         {
@@ -82,11 +82,7 @@
     "LevelGoals": [
       {
         "level": 1,
-        "goal": 15
-      },
-      {
-        "level": 2,
-        "goal": 45
+        "goal": 50
       }
     ]
   }

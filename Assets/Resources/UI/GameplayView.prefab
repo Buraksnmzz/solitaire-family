@@ -330,6 +330,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8836402cd19f4383893f2ed4d7657925, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  restoreStock: {fileID: 6689422658466429220}
 --- !u!1 &474265034847928784
 GameObject:
   m_ObjectHideFlags: 0
@@ -6994,6 +6995,7 @@ MonoBehaviour:
   dealerButton: {fileID: 8785534998077312047}
   openDealer: {fileID: 3396777278615619709}
   dealerHint: {fileID: 8221398001374096023}
+  restoreStock: {fileID: 6689422658466429220}
 --- !u!114 &8785534998077312047
 MonoBehaviour:
   m_ObjectHideFlags: 0

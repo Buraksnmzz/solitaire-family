@@ -14,6 +14,7 @@ namespace Gameplay
         [SerializeField] private Button dealerButton;
         [SerializeField] private OpenDealer openDealer;
         [SerializeField] protected CanvasGroup dealerHint;
+        [SerializeField] private GameObject restoreStock;
         private List<CardModel> _cardModels;
         private IEventDispatcherService _eventDispatcherService;
         private ISoundService _soundService;
@@ -163,7 +164,13 @@ namespace Gameplay
         {
             Debug.Log("OnDealerButtonClick");
             if (_tutorialMoveRestrictionService != null && _tutorialMoveRestrictionService.IsActive && !_tutorialMoveRestrictionService.IsDragAllowed(GetTopCard())) return;
-
+            if (openDealer.GetCardsCount() == 0 && GetCardsCount() == 0)
+            {
+                restoreStock.SetActive(false);
+                return;
+            }
+            
+            restoreStock.SetActive(true);
             _hintSequence?.Kill();
             dealerHint.DOKill();
             dealerHint.gameObject.SetActive(false);

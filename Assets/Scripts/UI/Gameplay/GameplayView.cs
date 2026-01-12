@@ -59,6 +59,7 @@ public class GameplayView : BaseView
     [SerializeField] private ParticleSystem confettiParticle;
     [SerializeField] private ParticleSystem getMovesParticle;
     [SerializeField] private Transform bottomPanel;
+    
 
     private Sequence _sequence;
     private Sequence _coinSequence;

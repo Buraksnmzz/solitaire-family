@@ -9,6 +9,7 @@ namespace Gameplay
     public class OpenDealer : CardContainer
     {
         private readonly float _distanceMultiplier = 0.368f;
+        [SerializeField] private GameObject restoreStock;
 
         public override List<CardPresenter> GetAllPlayableCards(CardPresenter clickedPresenter)
         {
@@ -156,7 +157,13 @@ namespace Gameplay
         {
             base.RemoveCardsFrom(startPresenter);
 
-            if (CardPresenters.Count == 0) return;
+            if (CardPresenters.Count == 0)
+            {
+                restoreStock.SetActive(false);
+                return;
+            }
+            
+            restoreStock.SetActive(true);
 
             var startIndex = Mathf.Max(0, CardPresenters.Count - 3);
             for (var i = startIndex; i < CardPresenters.Count; i++)

@@ -8,6 +8,7 @@ using UI.Win;
 using UnityEngine;
 using UnityEngine.Serialization;
 using Tutorial;
+using UnityEngine.UI;
 
 namespace Gameplay
 {
@@ -233,8 +234,10 @@ namespace Gameplay
             pileParent.anchoredPosition =
                 _foundationCount <= 4 ? new Vector3(0, -610, 0) : new Vector3(0, -510, 0);
 
-            _itemWidth = _foundationCount <= 4 ? 142f : 108f;
+            _itemWidth = _foundationCount <= 4 ? 142f : 119f;
             _itemHeight = _itemWidth / widhtHeightRatio;
+            foundationParent.GetComponent<HorizontalLayoutGroup>().spacing = _foundationCount <= 4 ? 25 : 18;
+            pileParent.GetComponent<HorizontalLayoutGroup>().spacing = _foundationCount <= 4 ? 25 : 18;
 
             for (var index = 0; index < piles.Count; index++)
             {
