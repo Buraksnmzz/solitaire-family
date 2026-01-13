@@ -2021,6 +2021,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8836402cd19f4383893f2ed4d7657925, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  restoreStock: {fileID: 2595828578523651261}
 --- !u!1 &4243149106470671829
 GameObject:
   m_ObjectHideFlags: 0
@@ -4691,6 +4692,7 @@ MonoBehaviour:
   dealerButton: {fileID: 304714720286475817}
   openDealer: {fileID: 8081133985992640563}
   dealerHint: {fileID: 5641614822015465320}
+  restoreStock: {fileID: 2595828578523651261}
   handImage: {fileID: 4383261717968024562}
 --- !u!114 &304714720286475817
 MonoBehaviour:

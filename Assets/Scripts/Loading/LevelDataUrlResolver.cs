@@ -105,7 +105,7 @@ namespace Loading
             return string.Empty;
         }
 
-        private static string GetLanguageCode(SystemLanguage language)
+        public static string GetLanguageCode(SystemLanguage language)
         {
             switch (language)
             {

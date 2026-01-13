@@ -11,6 +11,8 @@ namespace Card
 {
     public class CardDragger : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
     {
+        static bool _isCompletingTweensForNewDrag;
+
         [SerializeField] float snapDistance = 70f;
 
         CardPresenter _presenter;
@@ -69,7 +71,9 @@ namespace Card
                 return;
             }
 
+            _isCompletingTweensForNewDrag = true;
             DOTween.Complete(CardView.MovementTweenId);
+            _isCompletingTweensForNewDrag = false;
 
             _dragStateService.StartDrag();
             _isDragging = true;
@@ -236,25 +240,95 @@ namespace Card
 
             if (_draggedPresenters != null)
             {
-                var remainingAnimations = _draggedPresenters.Length;
-                for (var i = 0; i < _draggedPresenters.Length; i++)
+                var draggedPresenters = _draggedPresenters;
+                var startLocalPositions = _startLocalPositions;
+                var startParent = _startParent;
+                var startParentRect = startParent as RectTransform;
+                var canvasTransform = _canvasTransform;
+                var startSiblingIndex = _startSiblingIndex;
+                var returnMovesRemaining = draggedPresenters.Length;
+
+                void DispatchMovementEnded()
                 {
-                    var presenter = _draggedPresenters[i];
+                    if (_eventDispatcherService != null)
+                    {
+                        _eventDispatcherService.Dispatch(new CardMovementStateChangedSignal(false));
+                    }
+                }
+
+                void RestoreSiblingOrder()
+                {
+                    for (var j = 0; j < draggedPresenters.Length; j++)
+                    {
+                        var view = draggedPresenters[j].CardView;
+                        if (view == null) continue;
+                        var rectTransform = view.transform as RectTransform;
+                        if (rectTransform == null) continue;
+                        if (rectTransform.parent != startParent) continue;
+                        rectTransform.SetSiblingIndex(startSiblingIndex + j);
+                    }
+                }
+
+                void StartWrongAnimation()
+                {
+                    var wrongAnimationsRemaining = draggedPresenters.Length;
+                    for (var j = 0; j < draggedPresenters.Length; j++)
+                    {
+                        var view = draggedPresenters[j].CardView;
+                        if (view == null)
+                        {
+                            wrongAnimationsRemaining--;
+                            continue;
+                        }
+                        var rectTransform = view.transform as RectTransform;
+                        if (rectTransform == null)
+                        {
+                            wrongAnimationsRemaining--;
+                            continue;
+                        }
+
+                        rectTransform.DOPunchPosition(Vector3.right * 10f, 0.3f)
+                            .SetId(CardView.MovementTweenId)
+                            .OnComplete(() =>
+                            {
+                                wrongAnimationsRemaining--;
+                                if (wrongAnimationsRemaining <= 0)
+                                {
+                                    DispatchMovementEnded();
+                                }
+                            });
+                    }
+
+                    if (wrongAnimationsRemaining <= 0)
+                    {
+                        DispatchMovementEnded();
+                    }
+                }
+
+                for (var i = 0; i < draggedPresenters.Length; i++)
+                {
+                    var presenter = draggedPresenters[i];
                     var view = presenter.CardView;
-                    if (view == null) continue;
+                    if (view == null)
+                    {
+                        returnMovesRemaining--;
+                        continue;
+                    }
                     var viewRectTransform = view.transform as RectTransform;
-                    if (viewRectTransform == null) continue;
+                    if (viewRectTransform == null)
+                    {
+                        returnMovesRemaining--;
+                        continue;
+                    }
+                    if (startParentRect == null || canvasTransform == null)
+                    {
+                        returnMovesRemaining--;
+                        continue;
+                    }
 
-                    var targetLocalInStartParent = _startLocalPositions[i];
-                    var startParentRect = _startParent as RectTransform;
-                    if (startParentRect == null) continue;
-
+                    var targetLocalInStartParent = startLocalPositions[i];
                     var worldTargetInStartParent = startParentRect.TransformPoint(targetLocalInStartParent);
-                    var canvasLocalTarget = _canvasTransform.InverseTransformPoint(worldTargetInStartParent);
-
-                    var siblingIndex = _startSiblingIndex + i;
-                    var wrongDuration = 0.3f;
-                    var wrongOffset = 1f;
+                    var canvasLocalTarget = canvasTransform.InverseTransformPoint(worldTargetInStartParent);
 
                     _soundService.PlaySound(ClipName.WrongMove);
                     _hapticService.HapticLow();
@@ -265,34 +339,35 @@ namespace Card
                         .SetEase(Ease.OutQuad)
                         .OnComplete(() =>
                         {
-                            viewRectTransform.SetParent(_startParent, true);
+                            viewRectTransform.SetParent(startParent, true);
                             viewRectTransform.localPosition = targetLocalInStartParent;
-                            viewRectTransform.SetSiblingIndex(siblingIndex);
 
-                            var startWorldX = viewRectTransform.position.x;
-                            viewRectTransform.DOPunchPosition(Vector3.right * 10f, wrongDuration)
-                                .SetId(CardView.MovementTweenId)
-                                .OnComplete(() =>
+                            returnMovesRemaining--;
+                            if (returnMovesRemaining > 0) return;
+
+                            RestoreSiblingOrder();
+
+                            if (_isCompletingTweensForNewDrag)
                             {
-                                remainingAnimations--;
-                                if (remainingAnimations <= 0)
-                                {
-                                    _eventDispatcherService.Dispatch(new CardMovementStateChangedSignal(false));
-                                }
-                            });
-                            // viewRectTransform.DOMoveX(startWorldX + wrongOffset, wrongDuration)
-                            //     .SetLoops(2, LoopType.Yoyo)
-                            //     .OnComplete(() =>
-                            //     {
-                            //         remainingAnimations--;
-                            //         if (remainingAnimations <= 0)
-                            //         {
-                            //             _eventDispatcherService.Dispatch(new CardMovementStateChangedSignal(false));
-                            //             _dragStateService.EndDrag();
-                            //             _isDragging = false;
-                            //         }
-                            //     });
+                                DispatchMovementEnded();
+                                return;
+                            }
+
+                            StartWrongAnimation();
                         });
+                }
+
+                if (returnMovesRemaining <= 0)
+                {
+                    RestoreSiblingOrder();
+                    if (_isCompletingTweensForNewDrag)
+                    {
+                        DispatchMovementEnded();
+                    }
+                    else
+                    {
+                        StartWrongAnimation();
+                    }
                 }
             }
 

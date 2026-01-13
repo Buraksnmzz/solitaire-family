@@ -15,6 +15,7 @@ using UI.Shop;
 using UI.Signals;
 using UI.Win;
 using Unity.VisualScripting;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace UI.Gameplay
@@ -143,6 +144,7 @@ namespace UI.Gameplay
 
             var levelProgressModel = _savedDataService.GetModel<LevelProgressModel>();
             levelProgressModel.CurrentLevelIndex++;
+            levelProgressModel.CurrentLevelAttemptCount = 1;
             _savedDataService.SaveData(levelProgressModel);
             if (_snapshotService.HasSnapShot())
             {
@@ -224,6 +226,8 @@ namespace UI.Gameplay
                 _snapshotService.ClearSnapshot();
             }
 
+            IncrementCurrentLevelAttemptCount();
+
             _uiService.ShowPopup<GameplayPresenter>();
         }
 
@@ -240,6 +244,7 @@ namespace UI.Gameplay
             }
             var levelProgress = _savedDataService.GetModel<LevelProgressModel>();
             levelProgress.CurrentLevelIndex++;
+            levelProgress.CurrentLevelAttemptCount = 1;
             _savedDataService.SaveData(levelProgress);
             _uiService.ShowPopup<GameplayPresenter>();
         }
@@ -355,7 +360,13 @@ namespace UI.Gameplay
                 if (_isGameWon)
                     return;
                 if (_hintService.GetPlayableMovements(View.Board).Count == 0)
+                {
                     _uiService.ShowPopup<NoMoreMovesPresenter>();
+                    YoogoLabManager.LogFirebaseEvent(
+                        StringConstants.FirebaseEventNoMoreMove,
+                        StringConstants.FirebaseParamLevelId, GetLevelId(_currentLevelIndex),
+                        StringConstants.FirebaseParamLanguage, GetLanguageCode());
+                }
             }
         }
 
@@ -474,7 +485,13 @@ namespace UI.Gameplay
             View.SetMovesCount(_movesCount);
             _isGameWon = View.Board.IsGameWon();
             if (_movesCount == 0 && !_isGameWon)
+            {
                 _uiService.ShowPopup<OutOfMovesPresenter>();
+                YoogoLabManager.LogFirebaseEvent(
+                    StringConstants.FirebaseEventOutOfMoves,
+                    StringConstants.FirebaseParamLevelId, GetLevelId(_currentLevelIndex),
+                    StringConstants.FirebaseParamLanguage, GetLanguageCode());
+            }
 
             if (!_isGameWon)
                 return;
@@ -492,7 +509,9 @@ namespace UI.Gameplay
 
             var levelProgressModel = _savedDataService.GetModel<LevelProgressModel>();
             YoogoLabManager.LevelEnd(levelProgressModel.CurrentLevelIndex);
+            TrackLevelEnd(levelProgressModel.CurrentLevelIndex);
             levelProgressModel.CurrentLevelIndex++;
+            levelProgressModel.CurrentLevelAttemptCount = 1;
             _savedDataService.SaveData(levelProgressModel);
             if (_snapshotService.HasSnapShot())
             {
@@ -517,10 +536,76 @@ namespace UI.Gameplay
 
         void StartNewLevel()
         {
+            EnsureCurrentLevelAttemptInitialized();
+            TrackLevelStart();
             _movesCount = _totalGoalCount;
             View.SetupBoard(_levelData, _currentLevelIndex);
             View.SetMovesCount(_movesCount);
             View.SetUndoButtonInteractable(false);
+        }
+
+        private void EnsureCurrentLevelAttemptInitialized()
+        {
+            var levelProgressModel = _savedDataService.GetModel<LevelProgressModel>();
+            if (levelProgressModel.CurrentLevelAttemptCount <= 0)
+            {
+                levelProgressModel.CurrentLevelAttemptCount = 1;
+                _savedDataService.SaveData(levelProgressModel);
+            }
+        }
+
+        private void IncrementCurrentLevelAttemptCount()
+        {
+            var levelProgressModel = _savedDataService.GetModel<LevelProgressModel>();
+            var nextAttemptCount = levelProgressModel.CurrentLevelAttemptCount + 1;
+            levelProgressModel.CurrentLevelAttemptCount = Mathf.Max(1, nextAttemptCount);
+            _savedDataService.SaveData(levelProgressModel);
+        }
+
+        private void TrackLevelStart()
+        {
+            var levelProgressModel = _savedDataService.GetModel<LevelProgressModel>();
+            var levelId = GetLevelId(_currentLevelIndex);
+            var languageCode = GetLanguageCode();
+            var mode = StringConstants.FirebaseModeNormal;
+            var attempt = GetAttemptString(levelProgressModel.CurrentLevelAttemptCount);
+
+            YoogoLabManager.LogFirebaseEvent(
+                StringConstants.FirebaseEventLevelStart,
+                StringConstants.FirebaseParamLevelId, levelId,
+                StringConstants.FirebaseParamLanguage, languageCode,
+                StringConstants.FirebaseParamMode, mode,
+                StringConstants.FirebaseParamAttempt, attempt);
+        }
+
+        private void TrackLevelEnd(int levelIndex)
+        {
+            var levelId = GetLevelId(levelIndex);
+            var languageCode = GetLanguageCode();
+            var mode = StringConstants.FirebaseModeNormal;
+
+            YoogoLabManager.LogFirebaseEvent(
+                StringConstants.FirebaseEventLevelEnd,
+                StringConstants.FirebaseParamLevelId, levelId,
+                StringConstants.FirebaseParamLanguage, languageCode,
+                StringConstants.FirebaseParamMode, mode);
+        }
+
+        private string GetLanguageCode()
+        {
+            var language = _localizationService.GetCurrentLanguage();
+            var code = Loading.LevelDataUrlResolver.GetLanguageCode(language);
+            return string.IsNullOrWhiteSpace(code) ? "en" : code;
+        }
+
+        private static string GetLevelId(int levelIndex)
+        {
+            return $"{StringConstants.FirebaseLevelIdPrefix}{levelIndex:D5}";
+        }
+
+        private static string GetAttemptString(int attemptCount)
+        {
+            return $"{StringConstants.FirebaseAttemptPrefix}{attemptCount}";
         }
 
         bool TryResumeFromSnapshot(SnapShotModel snapshot)
