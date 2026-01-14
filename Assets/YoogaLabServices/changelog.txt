@@ -1,0 +1,123 @@
+Changelog — Version 2.0.0
+Date: 2025-06-03
+
+Changes & Improvements:
+-Updated AdjustManager to initialize even when ATT is denied, ensuring ad revenue tracking continues correctly.
+
+-Removed deprecated Amazon Ads integration from PluginAdsManagerController — AppLovin is now the sole ad network.
+
+-Fixed IAP receipt handling logic to ensure No Ads purchase is correctly recognized after restore and install.
+
+-Unified session tracking logic in PluginSessionManager (switched to use SetString for install time and added const keys).
+
+-Improved Crashlytics logging by replacing Crashlytics.Log() with structured LogException() calls for better stack trace reporting.
+
+-Adjusted ad revenue logging to occur only on OnAdRevenuePaidEvent instead of also on OnAdClickedEvent.
+
+-Removed conditional Adjust revenue skipping on ATT denial to align with Adjust’s guidelines.
+
+-General testing and bug fixes related to internal testing purchases, Play Store restore behavior, and first session ad control.
+
+- Added null checks for parameters in YoogoLabManager.LogEvent()
+
+-----------------------------------------------------------------------
+
+Changelog — Version 2.0.1
+Date: 2025-07-23
+
+- Added a new remote config param for ad revenue
+
+- Added a custom firebase revenue log per days installed through the Remote Config
+
+- Refactored Session Manager to be easier to parse on dates
+
+- Updated local project Unity In App Purchases to 4.13.0
+
+- Updated local project Max mediation package to 8.3.1 (google billing support)
+
+- Removed Amazon package from project
+
+-------------------------------------------------------------------------
+
+Changelog — Version 2.0.2
+Date: 2025-08-6
+
+- Added versioning control display on SDKManager
+- Added editor class of SKDManager
+- Increased project version to 2.0.2
+-------------------------------------------------------------------------
+
+Changelog — Version 2.0.3
+Date: 2025-08-7
+
+- created the change log internal viewer/editor
+- fixed the versioning indication on SdkManager
+
+-------------------------------------------------------------------------
+
+Changelog — Version 2.0.4
+Date: 2025-08-07
+
+- Added auto version increase
+- refactored editor window changes
+
+-------------------------------------------------------------------------
+
+Changelog — Version 2.0.5
+Date: 2025-08-07
+
+- Centralized config values into a json file that lives in Resources
+- Created new config system that assigns the app ids per feature from the json
+- Cleaned up Adjut/Ads/Revenue classes to get the ids from the initializer
+- Included ios Tracking declaration into the json and auto inject it.
+- Google mobile ads app ids and tracking declaration are auto assigned on initalize
+- Created an editor window to view/edit/import/extract the YoogaLabPluginConfing.json file
+
+-------------------------------------------------------------------------
+
+Changelog — Version 2.0.6
+Date: 2025-08-07
+
+- Added a welcome screen with some basic reminders/instructions on injection and validation
+
+-------------------------------------------------------------------------
+
+Changelog — Version 2.0.7
+Date: 2025-08-21
+
+- Refactored the RemoteConfig puller to separate the plugin related params vs the global ones
+- Added a AB test param to defer the first IS of each session after the instal.
+
+-------------------------------------------------------------------------
+
+Changelog — Version 2.0.8
+Date: 2025-08-22
+
+- Added an AB test 
+- Added a local function to make the plugin aware of no ads purchases
+
+-------------------------------------------------------------------------
+
+Changelog — Version 2.0.9
+Date: 2025-10-21
+
+Updated firebase version from 12.2 to 13.4
+
+-------------------------------------------------------------------------
+
+Changelog — Version 2.1.1
+Date: 2025-12-08
+
+-Refactor system for a modular take on the services
+-Included namespaces
+-Renamed system to YoogalabServices
+- Updated Adjust to v5.5.0
+
+-------------------------------------------------------------------------
+
+Changelog — Version 2.1.2
+Date: 2026-01-03
+
+- Created a UnityMainThread class set on the services prefab to handle async callbacks
+
+-------------------------------------------------------------------------

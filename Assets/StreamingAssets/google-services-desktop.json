@@ -1,0 +1,31 @@
+{
+  "project_info": {
+    "project_number": "327554143266",
+    "project_id": "solitaire-family",
+    "storage_bucket": "solitaire-family.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:327554143266:ios:8881ec9b93cc6fc832267b",
+        "android_client_info": {
+          "package_name": "com.yoogalabgaming.solitaire.family"
+        }
+      },
+      "api_key": [
+        {
+          "current_key": "AIzaSyBEb59Q15qGy_cV-jKl2flcJI-y2NvWm54"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 0
+        },
+        "appinvite_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

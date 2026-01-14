@@ -157,6 +157,7 @@ namespace Gameplay
                     _savedDataService.GetModel<GameConfigModel>().shouldShowIsOnFoundationComplete)
                     YoogoLabManager.ShowInterstitial();
             });
+
             foreach (var presenter in presentersToRemove)
             {
                 if (presenter.CardView == null) continue;

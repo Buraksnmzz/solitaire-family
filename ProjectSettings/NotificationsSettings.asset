@@ -17,9 +17,9 @@
                 "UnityAddTimeSensitiveEntitlement"
             ],
             "m_Values": [
-                "True",
-                "7",
                 "False",
+                "7",
+                "True",
                 "False",
                 "-1",
                 "False",
@@ -35,12 +35,31 @@
                 "UnityNotificationAndroidCustomActivityString"
             ],
             "m_Values": [
-                "False",
-                "0",
-                "False",
+                "True",
+                "1",
+                "True",
                 "com.unity3d.player.UnityPlayerActivity"
             ]
         },
-        "DrawableResources": []
+        "DrawableResources": [
+            {
+                "Id": "icon_0",
+                "Type": 0,
+                "Asset": {
+                    "fileID": 2800000,
+                    "guid": "a25f00747dabd40e681270e2e3120a0f",
+                    "type": 3
+                }
+            },
+            {
+                "Id": "icon_1",
+                "Type": 1,
+                "Asset": {
+                    "fileID": 2800000,
+                    "guid": "a25f00747dabd40e681270e2e3120a0f",
+                    "type": 3
+                }
+            }
+        ]
     }
 }

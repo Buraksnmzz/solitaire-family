@@ -35,6 +35,11 @@ namespace Loading
             "shopCoinRewards"
         };
 
+        private static readonly HashSet<string> BoolKeys = new HashSet<string>(KeyComparer)
+        {
+            "shouldShowIsOnFoundationComplete"
+        };
+
         public static bool TryBuildConfigurationJson(string baseConfigurationJson, string remoteConfigRawJson, out string mergedConfigurationJson)
         {
             mergedConfigurationJson = string.Empty;
@@ -129,10 +134,21 @@ namespace Loading
 
                 allRequiredValuesFound = false;
             }
-
             if (!allRequiredValuesFound)
             {
                 return false;
+            }
+
+            foreach (var key in BoolKeys)
+            {
+                if (TryGetValue(remote, key, out var rawValue)
+                    && bool.TryParse(rawValue, out var boolValue))
+                {
+                    root[key] = boolValue;
+                    continue;
+                }
+
+                allRequiredValuesFound = false;
             }
 
             structuredConfig = root;

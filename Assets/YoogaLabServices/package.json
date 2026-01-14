@@ -1,0 +1,6 @@
+{
+    "name": "com.yoogalab.plugin",
+    "version": "2.1.2",
+    "displayName": "YoogoLab Ad/Analytics Plugin",
+    "description": "A Unity plugin integrating Firebase, Adjust, and AppLovin Max SDK."
+}

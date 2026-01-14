@@ -68,6 +68,10 @@ public class Installer : MonoBehaviour
         ServiceLocator.Register<IIAPService>(new IAPService());
         ServiceLocator.Register<IAdsService>(new AdsService());
 
+        var savedDataService = ServiceLocator.GetService<ISavedDataService>();
+        if (!savedDataService.GetModel<SettingsModel>().IsNoAds)
+            YoogoLabManager.ShowBanner();
+
         var uiService = ServiceLocator.GetService<IUIService>();
         if (PlayerPrefs.GetInt(StringConstants.IsTutorialShown) == 0)
         {

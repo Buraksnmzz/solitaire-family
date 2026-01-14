@@ -84,8 +84,8 @@ namespace IAP
         {
             if (IsInitialized) return;
 
-            //var options = new InitializationOptions().SetEnvironmentName("production");
-            var options = new InitializationOptions().SetEnvironmentName("test");
+            var options = new InitializationOptions().SetEnvironmentName("production");
+            //var options = new InitializationOptions().SetEnvironmentName("test");
             await UnityServices.InitializeAsync(options);
             var module = StandardPurchasingModule.Instance();
             var builder = ConfigurationBuilder.Instance(module);
