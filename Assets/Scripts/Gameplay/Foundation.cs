@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
 using Card;
+using Configuration;
 using DG.Tweening;
 using UI.Signals;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace Gameplay
@@ -15,6 +17,7 @@ namespace Gameplay
         [SerializeField] private Image glowImage;
         [SerializeField] private ParticleSystem completeParticle;
         private ISavedDataService _savedDataService;
+        [SerializeField] private Board board;
 
 
         private void Start()
@@ -149,7 +152,9 @@ namespace Gameplay
             DOVirtual.DelayedCall(_completeScaleUpDuration + _completeScaleDownDuration, () =>
             {
                 completeParticle.Play();
-                if (!_savedDataService.GetModel<SettingsModel>().IsNoAds)
+                var isLastCategoryCompletion = board != null && board.IsGameWon();
+                if (!isLastCategoryCompletion && !_savedDataService.GetModel<SettingsModel>().IsNoAds &&
+                    _savedDataService.GetModel<GameConfigModel>().shouldShowIsOnFoundationComplete)
                     YoogoLabManager.ShowInterstitial();
             });
             foreach (var presenter in presentersToRemove)

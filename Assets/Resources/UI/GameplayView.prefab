@@ -423,6 +423,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   glowImage: {fileID: 6209516708247299563}
   completeParticle: {fileID: 576465658964017807}
+  board: {fileID: 3235187306076201371}
 --- !u!1 &554004178471313811
 GameObject:
   m_ObjectHideFlags: 0
@@ -515,6 +516,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   glowImage: {fileID: 3016692022573300029}
   completeParticle: {fileID: 2363393550665833399}
+  board: {fileID: 3235187306076201371}
 --- !u!1 &617556651558433243
 GameObject:
   m_ObjectHideFlags: 0
@@ -1743,6 +1745,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   glowImage: {fileID: 3025113639151143724}
   completeParticle: {fileID: 6267358330860071649}
+  board: {fileID: 3235187306076201371}
 --- !u!1 &2213568283827438182
 GameObject:
   m_ObjectHideFlags: 0
@@ -1956,6 +1959,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   glowImage: {fileID: 8483689542535246867}
   completeParticle: {fileID: 1326282877691020577}
+  board: {fileID: 3235187306076201371}
 --- !u!1 &2254694761523926582
 GameObject:
   m_ObjectHideFlags: 0
@@ -2358,6 +2362,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   glowImage: {fileID: 5617510711288293007}
   completeParticle: {fileID: 1296707279753621593}
+  board: {fileID: 3235187306076201371}
 --- !u!1 &2975764139903955615
 GameObject:
   m_ObjectHideFlags: 0
