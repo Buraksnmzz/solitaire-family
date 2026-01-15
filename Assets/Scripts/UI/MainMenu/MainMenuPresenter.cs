@@ -37,8 +37,6 @@ namespace UI.MainMenu
             View.SettingsButtonClicked += OnSettingsButtonClicked;
             View.CoinButtonClicked += OnCoinButtonCLicked;
             View.NoAdsButtonClicked += OnNoAdsButtonClicked;
-            //if (!_savedDataService.GetModel<SettingsModel>().IsNoAds)
-            //    YoogoLabManager.ShowBanner();
         }
 
         private void OnCoinChanged(CoinChangedSignal _)
@@ -48,7 +46,7 @@ namespace UI.MainMenu
 
         private void OnNoAdsButtonClicked()
         {
-            _iapService.Purchase("solitairefam_noads", GiveReward);
+            _iapService.Purchase(ProductIds.NoAdsOnly, GiveReward);
         }
 
         private void GiveReward(bool success)

@@ -27,7 +27,6 @@ namespace UI.Settings
             _settingsModel = _savedDataService.GetModel<SettingsModel>();
 
 #if UNITY_IOS
-            //shouldShow = !_settingsModel.IsNoAds;
             shouldShow = true;
 #else
                 shouldShow = false;

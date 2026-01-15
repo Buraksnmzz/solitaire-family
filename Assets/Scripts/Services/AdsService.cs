@@ -20,8 +20,6 @@ namespace Services
         
         public void GetReward(Action<bool> callback)
         {
-            //callback?.Invoke(true);
-            //return;
             YoogoLabManager.RewardedAvailable(
                 onAvailable: () =>
                 {
