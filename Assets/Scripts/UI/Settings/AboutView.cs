@@ -6,19 +6,17 @@ namespace UI.Settings
 {
     public class AboutView: BaseView
     {
-        [SerializeField] private Button privacySettingsButton;
         [SerializeField] private Button privacyPolicyButton;
         [SerializeField] private Button termsOfServiceButton;
         [SerializeField] private Button closeButton;
+        [SerializeField] private Button contactUsButton;
         [SerializeField] private LegalTextView legalTextView;
-
-        public event Action PrivacySettingsClicked;
         
         private void Start()
         {
-            privacySettingsButton.onClick.AddListener(()=>PrivacySettingsClicked?.Invoke());
             privacyPolicyButton.onClick.AddListener(OnPrivacyPolicyClicked);
             termsOfServiceButton.onClick.AddListener(OnTermsOfServiceClicked);
+            contactUsButton.onClick.AddListener(OnContactUsClicked);
             closeButton.onClick.AddListener(Hide);
         }
         
