@@ -300,6 +300,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   glowImage: {fileID: 3042290658802793254}
   completeParticle: {fileID: 0}
+  board: {fileID: 0}
 --- !u!1 &953725372526638370
 GameObject:
   m_ObjectHideFlags: 0
@@ -1530,6 +1531,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   glowImage: {fileID: 8036397377102360717}
   completeParticle: {fileID: 0}
+  board: {fileID: 0}
 --- !u!1 &3411920391578929388
 GameObject:
   m_ObjectHideFlags: 0
@@ -2951,6 +2953,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   glowImage: {fileID: 4909787557968090459}
   completeParticle: {fileID: 0}
+  board: {fileID: 0}
 --- !u!1 &5962015812939023828
 GameObject:
   m_ObjectHideFlags: 0
@@ -3107,6 +3110,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   glowImage: {fileID: 8195895377676823}
   completeParticle: {fileID: 0}
+  board: {fileID: 0}
 --- !u!1 &6079747463297683783
 GameObject:
   m_ObjectHideFlags: 0
@@ -3569,6 +3573,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   glowImage: {fileID: 2597394541326051870}
   completeParticle: {fileID: 0}
+  board: {fileID: 0}
 --- !u!1 &7036340367772649794
 GameObject:
   m_ObjectHideFlags: 0
@@ -4278,7 +4283,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 0, y: 60}
+  m_AnchoredPosition: {x: 0, y: 30}
   m_SizeDelta: {x: -40, y: 240}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!222 &2580044169653933509
