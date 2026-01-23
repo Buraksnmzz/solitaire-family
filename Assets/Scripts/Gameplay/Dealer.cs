@@ -3,6 +3,7 @@ using Card;
 using Core.Scripts.Services;
 using DG.Tweening;
 using Gameplay.PlacableRules;
+using Services.Drag;
 using UI.Signals;
 using UnityEngine;
 using UnityEngine.UI;
@@ -20,7 +21,9 @@ namespace Gameplay
         private ISoundService _soundService;
         protected Sequence _hintSequence;
         private ITutorialMoveRestrictionService _tutorialMoveRestrictionService;
+        private IDragStateService _dragStateService;
         IHapticService _hapticService;
+        bool _isCardMovementActive;
 
         protected virtual float DefaultHintFadeDuration => 0.7f;
         protected virtual float DefaultHintHoldDuration => 0.2f;
@@ -31,6 +34,7 @@ namespace Gameplay
             _tutorialMoveRestrictionService = ServiceLocator.GetService<ITutorialMoveRestrictionService>();
             _soundService = ServiceLocator.GetService<ISoundService>();
             _hapticService = ServiceLocator.GetService<IHapticService>();
+            _dragStateService = ServiceLocator.GetService<IDragStateService>();
             _cardModels = new List<CardModel>(cardModels);
             CardPresenters = new List<CardPresenter>(cardPresenters);
 
@@ -124,8 +128,25 @@ namespace Gameplay
             _soundService = ServiceLocator.GetService<ISoundService>();
             _hapticService = ServiceLocator.GetService<IHapticService>();
             _eventDispatcherService = ServiceLocator.GetService<IEventDispatcherService>();
+            _dragStateService = ServiceLocator.GetService<IDragStateService>();
             dealerButton.onClick.RemoveAllListeners();
             dealerButton.onClick.AddListener(OnDealerButtonClick);
+            UpdateDealerButtonState();
+        }
+
+        void OnEnable()
+        {
+            if (_eventDispatcherService == null)
+            {
+                _eventDispatcherService = ServiceLocator.GetService<IEventDispatcherService>();
+            }
+
+            _eventDispatcherService?.AddListener<CardMovementStateChangedSignal>(OnCardMovementStateChanged);
+        }
+
+        void OnDisable()
+        {
+            _eventDispatcherService?.RemoveListener<CardMovementStateChangedSignal>(OnCardMovementStateChanged);
         }
 
         public void PlayHintCue()
@@ -163,6 +184,8 @@ namespace Gameplay
         private void OnDealerButtonClick()
         {
             Debug.Log("OnDealerButtonClick");
+            if (_dragStateService != null && !_dragStateService.CanStartDrag()) return;
+            if (_isCardMovementActive) return;
             if (_tutorialMoveRestrictionService != null && _tutorialMoveRestrictionService.IsActive && !_tutorialMoveRestrictionService.IsDragAllowed(GetTopCard())) return;
             if (openDealer.GetCardsCount() == 0 && GetCardsCount() == 0)
             {
@@ -228,6 +251,18 @@ namespace Gameplay
             {
                 _eventDispatcherService.Dispatch(new CardMovePerformedSignal(openDealer, this, movedPresenters, movedStates, null, false));
             }
+        }
+
+        void OnCardMovementStateChanged(CardMovementStateChangedSignal signal)
+        {
+            _isCardMovementActive = signal.IsMoving;
+            UpdateDealerButtonState();
+        }
+
+        void UpdateDealerButtonState()
+        {
+            if (dealerButton == null) return;
+            dealerButton.interactable = !_isCardMovementActive;
         }
     }
 }
