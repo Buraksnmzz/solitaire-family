@@ -198,6 +198,18 @@ MonoBehaviour:
       qui peut s'associer \xE0 n'importe quelle cat\xE9gorie !"
     m_Metadata:
       m_Items: []
+  - m_Id: 43
+    m_Localized: "R\xE9compense"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 44
+    m_Localized: OK
+    m_Metadata:
+      m_Items: []
+  - m_Id: 45
+    m_Localized: "Pubs supprim\xE9es"
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

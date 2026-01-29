@@ -197,6 +197,18 @@ MonoBehaviour:
       birle\u015Febilen bir joker kart\u0131d\u0131r!"
     m_Metadata:
       m_Items: []
+  - m_Id: 43
+    m_Localized: "\xD6d\xFCl"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 44
+    m_Localized: Tamam
+    m_Metadata:
+      m_Items: []
+  - m_Id: 45
+    m_Localized: "Reklamlar Kald\u0131r\u0131ld\u0131"
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

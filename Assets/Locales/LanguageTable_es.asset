@@ -196,6 +196,18 @@ MonoBehaviour:
       salvaje que se conecta con cualquier categor\xEDa!"
     m_Metadata:
       m_Items: []
+  - m_Id: 43
+    m_Localized: Recompensa
+    m_Metadata:
+      m_Items: []
+  - m_Id: 44
+    m_Localized: OK
+    m_Metadata:
+      m_Items: []
+  - m_Id: 45
+    m_Localized: Anuncios eliminados
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

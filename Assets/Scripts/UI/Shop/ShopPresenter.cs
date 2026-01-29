@@ -5,6 +5,7 @@ using Services;
 using UI.MainMenu;
 using UI.Signals;
 using Unity.VisualScripting;
+using UnityEngine;
 
 namespace UI.Shop
 {
@@ -15,6 +16,8 @@ namespace UI.Shop
         ISoundService _soundService;
         IHapticService _hapticService;
         IAdsService  _adsService;
+        IUIService _uiService;
+        private Transform _buttonTransform;
         
         protected override void OnInitialize()
         {
@@ -23,10 +26,24 @@ namespace UI.Shop
             _eventDispatcherService = ServiceLocator.GetService<IEventDispatcherService>();
             _soundService = ServiceLocator.GetService<ISoundService>();
             _eventDispatcherService.AddListener<RewardGivenSignal>(OnRewardGiven);
+            _eventDispatcherService.AddListener<ShopRewardClosedSignal>(OnShopRewardClosed);
             _hapticService = ServiceLocator.GetService<IHapticService>();
             _adsService = ServiceLocator.GetService<IAdsService>();
+            _uiService = ServiceLocator.GetService<IUIService>();
             View.OnIconMoved += IconMoved;
             View.RewardedVideoButtonClicked += OnRewardedVideoButtonClicked;
+        }
+
+        private void OnShopRewardClosed(ShopRewardClosedSignal shopRewardClosedSignal)
+        {
+            var isNoAds = _savedDataService.GetModel<SettingsModel>().IsNoAds;
+            if (shopRewardClosedSignal.IsNoAdsOnly)
+            {
+                View.SetNoAdsButtons(true);
+                return;
+            }
+            
+            View.PlayCoinAnimation(() => View.SetNoAdsButtons(isNoAds), _buttonTransform);
         }
 
         private void OnRewardedVideoButtonClicked()
@@ -61,8 +78,9 @@ namespace UI.Shop
             _soundService.PlaySound(ClipName.ShopPurchase);
             _hapticService.HapticLow();
             View.totalCoins = _savedDataService.GetModel<CollectibleModel>().totalCoins;
-            var isNoAds = _savedDataService.GetModel<SettingsModel>().IsNoAds;
-            View.PlayCoinAnimation(() => View.SetNoAdsButtons(isNoAds), rewardGivenSignal.ButtonTransform);
+            _buttonTransform = rewardGivenSignal.ButtonTransform;
+            //var isNoAds = _savedDataService.GetModel<SettingsModel>().IsNoAds;
+            //View.PlayCoinAnimation(() => View.SetNoAdsButtons(isNoAds), rewardGivenSignal.ButtonTransform);
         }
 
         public override void ViewShown()

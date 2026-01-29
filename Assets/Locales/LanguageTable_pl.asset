@@ -197,6 +197,18 @@ MonoBehaviour:
       kt\xF3ra pasuje do ka\u017Cdej kategorii!"
     m_Metadata:
       m_Items: []
+  - m_Id: 43
+    m_Localized: Nagroda
+    m_Metadata:
+      m_Items: []
+  - m_Id: 44
+    m_Localized: OK
+    m_Metadata:
+      m_Items: []
+  - m_Id: 45
+    m_Localized: "Reklamy usuni\u0119te"
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

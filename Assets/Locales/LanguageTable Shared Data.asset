@@ -183,6 +183,18 @@ MonoBehaviour:
     m_Key: PICK_A_COLUMN_TO_PLACE_THE_JOKER
     m_Metadata:
       m_Items: []
+  - m_Id: 43
+    m_Key: REWARD
+    m_Metadata:
+      m_Items: []
+  - m_Id: 44
+    m_Key: OK
+    m_Metadata:
+      m_Items: []
+  - m_Id: 45
+    m_Key: ADS_REMOVED
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

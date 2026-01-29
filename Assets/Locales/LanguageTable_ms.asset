@@ -211,6 +211,18 @@ MonoBehaviour:
       disambungkan dengan mana-mana kategori!
     m_Metadata:
       m_Items: []
+  - m_Id: 43
+    m_Localized: Ganjaran
+    m_Metadata:
+      m_Items: []
+  - m_Id: 44
+    m_Localized: OK
+    m_Metadata:
+      m_Items: []
+  - m_Id: 45
+    m_Localized: Iklan Dibuang
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

@@ -200,6 +200,18 @@ MonoBehaviour:
       que pode se conectar com qualquer categoria!"
     m_Metadata:
       m_Items: []
+  - m_Id: 43
+    m_Localized: Recompensa
+    m_Metadata:
+      m_Items: []
+  - m_Id: 44
+    m_Localized: OK
+    m_Metadata:
+      m_Items: []
+  - m_Id: 45
+    m_Localized: "An\xFAncios removidos"
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

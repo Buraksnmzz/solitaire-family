@@ -23,12 +23,14 @@ namespace UI.Shop
         private IIAPService _iapService;
         protected IEventDispatcherService EventDispatcherService;
         protected ISavedDataService SavedDataService;
+        protected IUIService UIService;
 
         private void Awake()
         {
             _iapService = ServiceLocator.GetService<IIAPService>();
             SavedDataService = ServiceLocator.GetService<ISavedDataService>();
             EventDispatcherService = ServiceLocator.GetService<IEventDispatcherService>();
+            UIService = ServiceLocator.GetService<IUIService>();
             if (purchaseButton != null)
             {
                 purchaseButton.onClick.RemoveAllListeners();
@@ -78,6 +80,12 @@ namespace UI.Shop
                 var reward = GetProductReward();
                 var collectibleModel = SavedDataService.GetModel<CollectibleModel>();
                 collectibleModel.totalCoins += reward.Coins;
+                var shopRewardData = new ShopRewardData
+                {
+                    CoinReward = reward.Coins,
+                    RewardType = RewardType.Coin,
+                };
+                UIService.ShowPopup<ShopRewardPresenter, ShopRewardData>(shopRewardData);
                 SavedDataService.SaveData(collectibleModel);
                 EventDispatcherService.Dispatch(new RewardGivenSignal(transform));
             }

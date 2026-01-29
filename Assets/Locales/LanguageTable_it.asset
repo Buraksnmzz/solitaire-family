@@ -205,6 +205,18 @@ MonoBehaviour:
       che pu\xF2 connettersi a qualsiasi categoria!"
     m_Metadata:
       m_Items: []
+  - m_Id: 43
+    m_Localized: Premio
+    m_Metadata:
+      m_Items: []
+  - m_Id: 44
+    m_Localized: OK
+    m_Metadata:
+      m_Items: []
+  - m_Id: 45
+    m_Localized: "Pubblicit\xE0 rimossa"
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

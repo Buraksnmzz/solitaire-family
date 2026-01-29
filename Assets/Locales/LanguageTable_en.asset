@@ -210,6 +210,18 @@ MonoBehaviour:
       with any category!
     m_Metadata:
       m_Items: []
+  - m_Id: 43
+    m_Localized: Reward
+    m_Metadata:
+      m_Items: []
+  - m_Id: 44
+    m_Localized: Ok
+    m_Metadata:
+      m_Items: []
+  - m_Id: 45
+    m_Localized: Ads Removed
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

@@ -37,6 +37,16 @@ namespace UI.Shop
                 collectibleModel.totalUndo += reward.Undos;
                 collectibleModel.totalJokers += reward.Jokers;
                 settingsModel.IsNoAds = true;
+                var shopRewardData = new ShopRewardData
+                {
+                    CoinReward = reward.Coins,
+                    HintReward = reward.Hints,
+                    UndoReward = reward.Undos,
+                    JokerReward = reward.Jokers,
+                    IsNoAds = true,
+                    RewardType = RewardType.Pack,
+                };
+                UIService.ShowPopup<ShopRewardPresenter, ShopRewardData>(shopRewardData);
                 SavedDataService.SaveData(collectibleModel);
                 SavedDataService.SaveData(settingsModel);
                 EventDispatcherService.Dispatch(new RewardGivenSignal(transform));
