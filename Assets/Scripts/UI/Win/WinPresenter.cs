@@ -51,6 +51,7 @@ namespace UI.Win
                 {
 #if UNITY_IOS
                     YoogoLabManager.ShowNativeReview();
+                    PlayerPrefs.SetInt(StringConstants.HasRatedGame, 1);
                     return;
 #endif
                     _uiService.ShowPopup<RateUsPresenter>();
