@@ -49,6 +49,10 @@ namespace UI.Win
             {
                 if (triggerLevels[i] == currentLevel)
                 {
+#if UNITY_IOS
+                    YoogoLabManager.ShowNativeReview();
+                    return;
+#endif
                     _uiService.ShowPopup<RateUsPresenter>();
                     break;
                 }
