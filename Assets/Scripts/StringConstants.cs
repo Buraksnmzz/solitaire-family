@@ -21,7 +21,8 @@ public class StringConstants
     public const string FirebaseLevelIdPrefix = "LevelID_";
     public const string FirebaseAttemptPrefix = "Attempt_";
     public const string FirebaseModeNormal = "Normal";
+    public const string FirebaseModeMath = "Math";
     public const string FirebaseEventNoMoreMove = "NoMoreMove";
     public const string FirebaseEventOutOfMoves = "OutOfMoves";
-    
+
 }

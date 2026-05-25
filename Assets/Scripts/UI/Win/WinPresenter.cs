@@ -40,11 +40,12 @@ namespace UI.Win
                 return;
             var configModel = _savedDataService.GetModel<GameConfigModel>();
             var levelProgressModel = _savedDataService.GetModel<LevelProgressModel>();
+            var gameMode = _savedDataService.GetModel<GameModeSelectionModel>().SelectedGameMode;
             var triggerLevels = configModel.rateUsTriggerLevels;
             if (triggerLevels == null || triggerLevels.Length == 0)
                 return;
 
-            var currentLevel = levelProgressModel.CurrentLevelIndex;
+            var currentLevel = levelProgressModel.GetCurrentLevelIndex(gameMode);
             for (var i = 0; i < triggerLevels.Length; i++)
             {
                 if (triggerLevels[i] == currentLevel)
@@ -66,8 +67,9 @@ namespace UI.Win
             var collectibleModel = _savedDataService.GetModel<CollectibleModel>();
             var configModel = _savedDataService.GetModel<GameConfigModel>();
             var levelProgressModel = _savedDataService.GetModel<LevelProgressModel>();
+            var gameMode = _savedDataService.GetModel<GameModeSelectionModel>().SelectedGameMode;
             View.SetCoinText(collectibleModel.totalCoins);
-            View.SetLevelText(levelProgressModel.CurrentLevelIndex-1);
+            View.SetLevelText(levelProgressModel.GetCurrentLevelIndex(gameMode) - 1);
             View.SetCoinAmountToCollectText(configModel.earnedCoinAtLevelEnd);
             collectibleModel.totalCoins += configModel.earnedCoinAtLevelEnd;
             View.finalCoins = collectibleModel.totalCoins;
@@ -87,7 +89,7 @@ namespace UI.Win
                     _uiService.ShowPopup<GameplayPresenter>();
                     View.Hide();
                 });
-                
+
             });
         }
     }

@@ -1,6 +1,7 @@
 using System;
 using Collectible;
 using Goal;
+using Levels;
 using Newtonsoft.Json;
 using Random = UnityEngine.Random;
 
@@ -14,6 +15,7 @@ namespace Configuration
 		}
 
 		public GoalConfigModel GoalConfig { get; private set; }
+		public GoalConfigModel MathGoalConfig { get; private set; }
 		private int[] _rateUsTriggerLevels;
 
 		[System.Serializable]
@@ -24,6 +26,9 @@ namespace Configuration
 
 			[JsonProperty("goalConfig")]
 			public GoalConfigModel GoalConfig { get; set; }
+
+			[JsonProperty("mathGoalConfig")]
+			public GoalConfigModel MathGoalConfig { get; set; }
 
 			[JsonProperty("totalHintGiven")]
 			public int TotalHintGiven { get; set; }
@@ -54,16 +59,16 @@ namespace Configuration
 
 			[JsonProperty("extraMovesCost")]
 			public int ExtraMovesCost { get; set; }
-			
+
 			[JsonProperty("dailyAdsWatchAmount")]
 			public int DailyAdsWatchAmount { get; set; }
 
 			[JsonProperty("rateUsTrigger")]
 			public string RateUsTrigger { get; set; }
-			
+
 			[JsonProperty("rewardedVideoCoinAmount")]
 			public int RewardedVideoCoinAmount { get; set; }
-			
+
 			[JsonProperty("extraGivenMovesCount")]
 			public int ExtraGivenMovesCount { get; set; }
 
@@ -74,15 +79,16 @@ namespace Configuration
 			public string ShopCoinRewards { get; set; }
 		}
 
-		public int GetLevelGoal(int levelIndex, int columnCount)
+		public int GetLevelGoal(GameMode gameMode, int levelIndex, int columnCount)
 		{
-			var overrideGoal = GetOverrideLevelGoal(levelIndex-1);
+			var goalConfig = GetGoalConfig(gameMode);
+			var overrideGoal = GetOverrideLevelGoal(goalConfig, levelIndex - 1);
 			if (overrideGoal.HasValue)
 			{
 				return overrideGoal.Value;
 			}
 
-			return GetProbabilisticGoal(columnCount);
+			return GetProbabilisticGoal(goalConfig, columnCount);
 		}
 
 		public void Initialize(string rawJson)
@@ -91,9 +97,11 @@ namespace Configuration
 			if (root == null)
 			{
 				GoalConfig = null;
+				MathGoalConfig = null;
 				return;
 			}
 			GoalConfig = root.GoalConfig;
+			MathGoalConfig = root.MathGoalConfig ?? root.GoalConfig;
 			InitializeCollectibleModel(root);
 			InitializeConfigModel(root);
 		}
@@ -202,16 +210,21 @@ namespace Configuration
 			return result;
 		}
 
-		private int? GetOverrideLevelGoal(int levelIndex)
+		private GoalConfigModel GetGoalConfig(GameMode gameMode)
 		{
-			if (GoalConfig == null || GoalConfig.LevelGoals == null)
+			return gameMode == GameMode.Math ? MathGoalConfig : GoalConfig;
+		}
+
+		private int? GetOverrideLevelGoal(GoalConfigModel goalConfig, int levelIndex)
+		{
+			if (goalConfig == null || goalConfig.LevelGoals == null)
 			{
 				return null;
 			}
 
-			for (var i = 0; i < GoalConfig.LevelGoals.Count; i++)
+			for (var i = 0; i < goalConfig.LevelGoals.Count; i++)
 			{
-				var levelGoalModel = GoalConfig.LevelGoals[i];
+				var levelGoalModel = goalConfig.LevelGoals[i];
 				if (levelGoalModel.Level == levelIndex)
 				{
 					return levelGoalModel.Goal;
@@ -221,15 +234,15 @@ namespace Configuration
 			return null;
 		}
 
-		private int GetProbabilisticGoal(int columnCount)
+		private int GetProbabilisticGoal(GoalConfigModel goalConfig, int columnCount)
 		{
-			if (GoalConfig == null || GoalConfig.ColumnGoals == null)
+			if (goalConfig == null || goalConfig.ColumnGoals == null)
 			{
 				return 0;
 			}
 
 			var columnKey = columnCount.ToString();
-			if (!GoalConfig.ColumnGoals.TryGetValue(columnKey, out var probabilityList) || probabilityList == null || probabilityList.Count == 0)
+			if (!goalConfig.ColumnGoals.TryGetValue(columnKey, out var probabilityList) || probabilityList == null || probabilityList.Count == 0)
 			{
 				return 0;
 			}

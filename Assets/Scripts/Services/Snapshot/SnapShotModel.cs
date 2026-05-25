@@ -6,6 +6,7 @@ using Levels;
 [Serializable]
 public class SnapShotModel : IModel
 {
+    public GameMode GameMode;
     public int LevelIndex;
     public int MovesCount;
     public List<CardSnapshot> Cards = new List<CardSnapshot>();

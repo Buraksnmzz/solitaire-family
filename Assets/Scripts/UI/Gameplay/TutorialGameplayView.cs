@@ -8,15 +8,26 @@ namespace UI.Gameplay
 {
     public class TutorialGameplayView : BaseView
     {
-        public Board board;
+        [SerializeField] private Board board;
         [SerializeField] private CanvasGroup errorImage;
         [SerializeField] private TextMeshProUGUI errorText;
-        [SerializeField] private TutorialConfig tutorialConfig;
+        [SerializeField] private TutorialConfig classicTutorialConfig;
+        [SerializeField] private TutorialConfig mathTutorialConfig;
         [SerializeField] private ParticleSystem confettiParticle;
         public Board Board => board;
-        public TutorialConfig TutorialConfig => tutorialConfig;
 
-        public void SetupBoardWithoutShuffle(LevelData levelData, int currentLevelIndex)
+        public TutorialConfig GetTutorialConfig(GameMode gameMode)
+        {
+            switch (gameMode)
+            {
+                case GameMode.Math:
+                    return mathTutorialConfig;
+                default:
+                    return classicTutorialConfig;
+            }
+        }
+
+        public void SetupBoardWithoutShuffle(LevelData levelData, int currentLevelIndex, TutorialConfig tutorialConfig)
         {
             var deckConfig = tutorialConfig != null ? tutorialConfig.deckConfig : null;
             board.Setup(levelData, currentLevelIndex, panel, null, false, deckConfig);

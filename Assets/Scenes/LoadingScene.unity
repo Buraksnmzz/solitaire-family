@@ -355,6 +355,7 @@ MonoBehaviour:
   gameSceneName: MainScene
   localConfigurationJson: {fileID: 4900000, guid: a2614416a587749f5a7332d6ebe8b120, type: 3}
   localLevelsJson: {fileID: 4900000, guid: 4001337c2562e4a1dbb6521ee8605c4f, type: 3}
+  localMathLevelsJson: {fileID: 4900000, guid: 640dcff85db344c94806aeb4a3086e55, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

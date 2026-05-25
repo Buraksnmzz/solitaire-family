@@ -32,6 +32,7 @@ namespace UI.Gameplay
         Tween _hintLoopTween;
         bool _isDragging;
         TutorialConfig _tutorialConfig;
+        GameMode _gameMode;
         int _currentStepIndex;
         int _currentStepMoveIndex;
         CardPresenter _currentPresenter;
@@ -63,12 +64,13 @@ namespace UI.Gameplay
             base.ViewShown();
             _isGameWon = false;
             _hintLoopTween?.Kill();
-            _tutorialConfig = View.TutorialConfig;
+            _gameMode = _savedDataService.GetModel<GameModeSelectionModel>().SelectedGameMode;
+            _tutorialConfig = View.GetTutorialConfig(_gameMode);
             _currentStepIndex = 0;
             _currentStepMoveIndex = 0;
             UpdateInstructionText();
-            var levelData = _levelGeneratorService.GetLevelData(0);
-            View.SetupBoardWithoutShuffle(levelData, _currentLevelIndex);
+            var levelData = _levelGeneratorService.GetLevelData(_gameMode, 0);
+            View.SetupBoardWithoutShuffle(levelData, _currentLevelIndex, _tutorialConfig);
             DOVirtual.DelayedCall(1, () =>
             {
                 PrepareNextStep();
@@ -170,7 +172,9 @@ namespace UI.Gameplay
                 PlayerPrefs.Save();
                 View.SetErrorImage(false);
                 var levelProgressModel = _savedDataService.GetModel<LevelProgressModel>();
-                levelProgressModel.CurrentLevelIndex++;
+                var currentLevelIndex = levelProgressModel.GetCurrentLevelIndex(_gameMode);
+                levelProgressModel.SetCurrentLevelIndex(_gameMode, currentLevelIndex + 1);
+                levelProgressModel.TutorialCompleted = true;
                 _savedDataService.SaveData(levelProgressModel);
 
                 DOVirtual.DelayedCall(0.8f, () =>

@@ -100,11 +100,30 @@ namespace Loading
                 return false;
             }
 
+            JObject mathGoalConfigObject = null;
+            if ((TryGetValue(remote, "mathGoalConfig", out var rawMathGoalConfig)
+                 || TryGetValue(remote, "MathGoalConfig", out rawMathGoalConfig))
+                && !string.IsNullOrWhiteSpace(rawMathGoalConfig)
+                && !TryParseJObject(rawMathGoalConfig, out mathGoalConfigObject))
+            {
+                return false;
+            }
+
             var root = new JObject
             {
                 ["levelDataUrls"] = levelDataUrlsObject,
                 ["goalConfig"] = goalConfigObject
             };
+
+            if (mathGoalConfigObject != null)
+            {
+                root["mathGoalConfig"] = mathGoalConfigObject;
+            }
+
+            if (TryGetValue(remote, "mathLevelDataUrl", out var rawMathLevelDataUrl) && !string.IsNullOrWhiteSpace(rawMathLevelDataUrl))
+            {
+                root["mathLevelDataUrl"] = rawMathLevelDataUrl;
+            }
 
             var allRequiredValuesFound = true;
 

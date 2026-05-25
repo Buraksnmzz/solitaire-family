@@ -94,7 +94,7 @@ namespace Levels
 
                 try
                 {
-                    _levelMapCacheService.SaveLevelsJson(language, levelsJson);
+                    _levelMapCacheService.SaveLevelsJson(GameMode.Classic, language, levelsJson);
                     ApplyLevelsAndSwitchLanguage(language, levelsJson);
                 }
                 catch
@@ -106,7 +106,7 @@ namespace Levels
 
         private bool TryApplyCachedLevelsForLanguage(SystemLanguage language)
         {
-            if (!_levelMapCacheService.TryGetLevelsJson(language, out var cachedLevelsJson))
+            if (!_levelMapCacheService.TryGetLevelsJson(GameMode.Classic, language, out var cachedLevelsJson))
             {
                 return false;
             }
@@ -124,8 +124,8 @@ namespace Levels
 
         private void ApplyLevelsAndSwitchLanguage(SystemLanguage language, string levelsJson)
         {
-            BootCache.SetLevelsJson(levelsJson);
-            _levelGeneratorService.ParseLevelsJson(levelsJson);
+            BootCache.SetLevelsJson(GameMode.Classic, levelsJson);
+            _levelGeneratorService.ParseLevelsJson(GameMode.Classic, levelsJson);
             _snapshotService.ClearSnapshot();
             _localizationService.SetLanguage(language);
         }

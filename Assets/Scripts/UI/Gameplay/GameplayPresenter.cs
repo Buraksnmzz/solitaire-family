@@ -44,6 +44,7 @@ namespace UI.Gameplay
         private bool _isJokerPileSelectionActive;
         private CollectibleModel _collectibleModel;
         private GameConfigModel _gameConfigModel;
+        private GameMode _gameMode;
 
         protected override void OnInitialize()
         {
@@ -57,7 +58,6 @@ namespace UI.Gameplay
             _undoService = ServiceLocator.GetService<IUndoService>();
             _hintService = ServiceLocator.GetService<IHintService>();
             _snapshotService = ServiceLocator.GetService<ISnapshotService>();
-            _currentLevelIndex = _savedDataService.GetModel<LevelProgressModel>().CurrentLevelIndex;
             _adsService = ServiceLocator.GetService<IAdsService>();
             _gameConfigModel = _savedDataService.GetModel<GameConfigModel>();
             _hapticService = ServiceLocator.GetService<IHapticService>();
@@ -142,9 +142,9 @@ namespace UI.Gameplay
             _collectibleModel.totalCoins += earnedCoinsFromMoves;
             _savedDataService.SaveData(_collectibleModel);
 
-            var levelProgressModel = _savedDataService.GetModel<LevelProgressModel>();
-            levelProgressModel.CurrentLevelIndex++;
-            levelProgressModel.CurrentLevelAttemptCount = 1;
+            var levelProgressModel = GetLevelProgressModel();
+            levelProgressModel.SetCurrentLevelIndex(_gameMode, levelProgressModel.GetCurrentLevelIndex(_gameMode) + 1);
+            levelProgressModel.SetCurrentLevelAttemptCount(_gameMode, 1);
             _savedDataService.SaveData(levelProgressModel);
             if (_snapshotService.HasSnapShot())
             {
@@ -242,9 +242,9 @@ namespace UI.Gameplay
             {
                 _snapshotService.ClearSnapshot();
             }
-            var levelProgress = _savedDataService.GetModel<LevelProgressModel>();
-            levelProgress.CurrentLevelIndex++;
-            levelProgress.CurrentLevelAttemptCount = 1;
+            var levelProgress = GetLevelProgressModel();
+            levelProgress.SetCurrentLevelIndex(_gameMode, levelProgress.GetCurrentLevelIndex(_gameMode) + 1);
+            levelProgress.SetCurrentLevelAttemptCount(_gameMode, 1);
             _savedDataService.SaveData(levelProgress);
             _uiService.ShowPopup<GameplayPresenter>();
         }
@@ -452,11 +452,16 @@ namespace UI.Gameplay
         public override void ViewShown()
         {
             _isGameWon = false;
-            _currentLevelIndex = _savedDataService.GetModel<LevelProgressModel>().CurrentLevelIndex;
-            _totalColumnCount = _levelGeneratorService.GetLevelColumnCount(_currentLevelIndex);
-            _categoryCardCount = _levelGeneratorService.GetLevelCategoryCardCount(_currentLevelIndex);
-            _totalGoalCount = _configurationService.GetLevelGoal(_currentLevelIndex + 1, _totalColumnCount);
-            _levelData = _levelGeneratorService.GetLevelData(_currentLevelIndex);
+            _gameMode = _savedDataService.GetModel<GameModeSelectionModel>().SelectedGameMode;
+            var levelProgressModel = GetLevelProgressModel();
+            if (levelProgressModel.EnsurePlayableLevelInitialized(_gameMode))
+                _savedDataService.SaveData(levelProgressModel);
+
+            _currentLevelIndex = levelProgressModel.GetCurrentLevelIndex(_gameMode);
+            _totalColumnCount = _levelGeneratorService.GetLevelColumnCount(_gameMode, _currentLevelIndex);
+            _categoryCardCount = _levelGeneratorService.GetLevelCategoryCardCount(_gameMode, _currentLevelIndex);
+            _totalGoalCount = _configurationService.GetLevelGoal(_gameMode, _currentLevelIndex + 1, _totalColumnCount);
+            _levelData = _levelGeneratorService.GetLevelData(_gameMode, _currentLevelIndex);
             _movesCount = _totalGoalCount;
             _collectibleModel = _savedDataService.GetModel<CollectibleModel>();
             View.SetJokerAmount(_collectibleModel.totalJokers, _collectibleModel.totalCoins, _gameConfigModel.jokerCost);
@@ -507,11 +512,12 @@ namespace UI.Gameplay
             _collectibleModel.totalCoins += earnedCoinsFromMoves;
             _savedDataService.SaveData(_collectibleModel);
 
-            var levelProgressModel = _savedDataService.GetModel<LevelProgressModel>();
-            YoogoLabManager.LevelEnd(levelProgressModel.CurrentLevelIndex);
-            TrackLevelEnd(levelProgressModel.CurrentLevelIndex);
-            levelProgressModel.CurrentLevelIndex++;
-            levelProgressModel.CurrentLevelAttemptCount = 1;
+            var levelProgressModel = GetLevelProgressModel();
+            var completedLevelIndex = levelProgressModel.GetCurrentLevelIndex(_gameMode);
+            YoogoLabManager.LevelEnd(completedLevelIndex);
+            TrackLevelEnd(completedLevelIndex);
+            levelProgressModel.SetCurrentLevelIndex(_gameMode, completedLevelIndex + 1);
+            levelProgressModel.SetCurrentLevelAttemptCount(_gameMode, 1);
             _savedDataService.SaveData(levelProgressModel);
             if (_snapshotService.HasSnapShot())
             {
@@ -546,29 +552,29 @@ namespace UI.Gameplay
 
         private void EnsureCurrentLevelAttemptInitialized()
         {
-            var levelProgressModel = _savedDataService.GetModel<LevelProgressModel>();
-            if (levelProgressModel.CurrentLevelAttemptCount <= 0)
+            var levelProgressModel = GetLevelProgressModel();
+            if (levelProgressModel.GetCurrentLevelAttemptCount(_gameMode) <= 0)
             {
-                levelProgressModel.CurrentLevelAttemptCount = 1;
+                levelProgressModel.SetCurrentLevelAttemptCount(_gameMode, 1);
                 _savedDataService.SaveData(levelProgressModel);
             }
         }
 
         private void IncrementCurrentLevelAttemptCount()
         {
-            var levelProgressModel = _savedDataService.GetModel<LevelProgressModel>();
-            var nextAttemptCount = levelProgressModel.CurrentLevelAttemptCount + 1;
-            levelProgressModel.CurrentLevelAttemptCount = Mathf.Max(1, nextAttemptCount);
+            var levelProgressModel = GetLevelProgressModel();
+            var nextAttemptCount = levelProgressModel.GetCurrentLevelAttemptCount(_gameMode) + 1;
+            levelProgressModel.SetCurrentLevelAttemptCount(_gameMode, Mathf.Max(1, nextAttemptCount));
             _savedDataService.SaveData(levelProgressModel);
         }
 
         private void TrackLevelStart()
         {
-            var levelProgressModel = _savedDataService.GetModel<LevelProgressModel>();
+            var levelProgressModel = GetLevelProgressModel();
             var levelId = GetLevelId(_currentLevelIndex);
             var languageCode = GetLanguageCode();
-            var mode = StringConstants.FirebaseModeNormal;
-            var attempt = GetAttemptString(levelProgressModel.CurrentLevelAttemptCount);
+            var mode = GetFirebaseMode();
+            var attempt = GetAttemptString(levelProgressModel.GetCurrentLevelAttemptCount(_gameMode));
 
             YoogoLabManager.LogFirebaseEvent(
                 StringConstants.FirebaseEventLevelStart,
@@ -582,7 +588,7 @@ namespace UI.Gameplay
         {
             var levelId = GetLevelId(levelIndex);
             var languageCode = GetLanguageCode();
-            var mode = StringConstants.FirebaseModeNormal;
+            var mode = GetFirebaseMode();
 
             YoogoLabManager.LogFirebaseEvent(
                 StringConstants.FirebaseEventLevelEnd,
@@ -613,16 +619,19 @@ namespace UI.Gameplay
             if (snapshot == null)
                 return false;
 
+            if (snapshot.GameMode != _gameMode)
+                return false;
+
             if (snapshot.Cards == null || snapshot.Cards.Count == 0)
                 return false;
 
             if (snapshot.LevelIndex != _currentLevelIndex)
             {
                 _currentLevelIndex = snapshot.LevelIndex;
-                _totalColumnCount = _levelGeneratorService.GetLevelColumnCount(_currentLevelIndex);
-                _categoryCardCount = _levelGeneratorService.GetLevelCategoryCardCount(_currentLevelIndex);
-                _totalGoalCount = _configurationService.GetLevelGoal(_currentLevelIndex, _totalColumnCount);
-                _levelData = _levelGeneratorService.GetLevelData(_currentLevelIndex);
+                _totalColumnCount = _levelGeneratorService.GetLevelColumnCount(_gameMode, _currentLevelIndex);
+                _categoryCardCount = _levelGeneratorService.GetLevelCategoryCardCount(_gameMode, _currentLevelIndex);
+                _totalGoalCount = _configurationService.GetLevelGoal(_gameMode, _currentLevelIndex, _totalColumnCount);
+                _levelData = _levelGeneratorService.GetLevelData(_gameMode, _currentLevelIndex);
             }
 
             _movesCount = snapshot.MovesCount;
@@ -645,7 +654,18 @@ namespace UI.Gameplay
                 return;
             }
 
+            snapshot.GameMode = _gameMode;
             _snapshotService.SaveSnapshot(snapshot);
+        }
+
+        private LevelProgressModel GetLevelProgressModel()
+        {
+            return _savedDataService.GetModel<LevelProgressModel>();
+        }
+
+        private string GetFirebaseMode()
+        {
+            return _gameMode == GameMode.Math ? StringConstants.FirebaseModeMath : StringConstants.FirebaseModeNormal;
         }
     }
 }

@@ -9,13 +9,13 @@ namespace Levels
         {
         }
 
-        public bool TryGetLevelsJson(SystemLanguage language, out string levelsJson)
+        public bool TryGetLevelsJson(GameMode gameMode, SystemLanguage language, out string levelsJson)
         {
             levelsJson = string.Empty;
 
             try
             {
-                var filePath = GetLevelsJsonFilePath(language);
+                var filePath = GetLevelsJsonFilePath(gameMode, language);
                 if (!File.Exists(filePath))
                 {
                     return false;
@@ -36,7 +36,7 @@ namespace Levels
             }
         }
 
-        public void SaveLevelsJson(SystemLanguage language, string levelsJson)
+        public void SaveLevelsJson(GameMode gameMode, SystemLanguage language, string levelsJson)
         {
             if (string.IsNullOrWhiteSpace(levelsJson) || levelsJson == "{}")
             {
@@ -47,7 +47,7 @@ namespace Levels
             {
                 EnsureCacheDirectoryExists();
 
-                var filePath = GetLevelsJsonFilePath(language);
+                var filePath = GetLevelsJsonFilePath(gameMode, language);
                 var tempFilePath = filePath + ".tmp";
                 File.WriteAllText(tempFilePath, levelsJson);
 
@@ -78,9 +78,11 @@ namespace Levels
             Directory.CreateDirectory(directoryPath);
         }
 
-        private static string GetLevelsJsonFilePath(SystemLanguage language)
+        private static string GetLevelsJsonFilePath(GameMode gameMode, SystemLanguage language)
         {
-            var fileName = $"level_map_{(int)language}.json";
+            var fileName = gameMode == GameMode.Classic
+                ? $"level_map_{(int)language}.json"
+                : $"level_map_{gameMode.ToString().ToLowerInvariant()}.json";
             return Path.Combine(GetCacheDirectoryPath(), fileName);
         }
 

@@ -8,9 +8,12 @@ using Services;
 
 public class LoadingManager : MonoBehaviour
 {
+    private const string EmptyJsonObject = "{}";
+
     [SerializeField] private string gameSceneName = "MainScene";
     [SerializeField] private TextAsset localConfigurationJson;
     [SerializeField] private TextAsset localLevelsJson;
+    [SerializeField] private TextAsset localMathLevelsJson;
 
     private static bool _bootServicesInstalled;
     private SystemLanguage _startupLanguage;
@@ -110,31 +113,41 @@ public class LoadingManager : MonoBehaviour
 
     private IEnumerator InitializeLevels(string rawJson)
     {
-        var levelsJson = string.Empty;
         var configurationJson = string.IsNullOrEmpty(rawJson) ? GetLocalRawJson() : rawJson;
-        var levelDataUrl = LevelDataUrlResolver.ResolveLevelDataUrl(configurationJson, _startupLanguage, false, false);
+        var classicLevelDataUrl = LevelDataUrlResolver.ResolveLevelDataUrl(configurationJson, _startupLanguage, false, false);
+        var mathLevelDataUrl = LevelDataUrlResolver.ResolveMathLevelDataUrl(configurationJson);
+
+        yield return InitializeLevelsForMode(GameMode.Classic, classicLevelDataUrl, _startupLanguage, GetLocalLevelJson());
+        yield return InitializeLevelsForMode(GameMode.Math, mathLevelDataUrl, SystemLanguage.Unknown, GetLocalMathLevelJson());
+    }
+
+    private IEnumerator InitializeLevelsForMode(GameMode gameMode, string levelDataUrl, SystemLanguage language, string localLevels)
+    {
+        var levelsJson = string.Empty;
         var cacheService = ServiceLocator.GetService<ILevelMapCacheService>();
+
         if (string.IsNullOrEmpty(levelDataUrl))
         {
-            levelsJson = cacheService.TryGetLevelsJson(_startupLanguage, out var cachedLevelsJson)
+            levelsJson = cacheService.TryGetLevelsJson(gameMode, language, out var cachedLevelsJson)
                 ? cachedLevelsJson
-                : GetLocalLevelJson();
+                : localLevels;
         }
         else
         {
             yield return FetchLevelJson(levelDataUrl, value => levelsJson = value);
-            if (string.IsNullOrEmpty(levelsJson) || levelsJson == "{}")
+            if (string.IsNullOrEmpty(levelsJson) || levelsJson == EmptyJsonObject)
             {
-                levelsJson = cacheService.TryGetLevelsJson(_startupLanguage, out var cachedLevelsJson)
+                levelsJson = cacheService.TryGetLevelsJson(gameMode, language, out var cachedLevelsJson)
                     ? cachedLevelsJson
-                    : GetLocalLevelJson();
+                    : localLevels;
             }
             else
             {
-                cacheService.SaveLevelsJson(_startupLanguage, levelsJson);
+                cacheService.SaveLevelsJson(gameMode, language, levelsJson);
             }
         }
-        BootCache.SetLevelsJson(levelsJson);
+
+        BootCache.SetLevelsJson(gameMode, levelsJson);
     }
 
     private IEnumerator FetchLevelJson(string levelDataUrl, System.Action<string> onComplete)
@@ -166,5 +179,10 @@ public class LoadingManager : MonoBehaviour
     private string GetLocalLevelJson()
     {
         return localLevelsJson != null ? localLevelsJson.text : string.Empty;
+    }
+
+    private string GetLocalMathLevelJson()
+    {
+        return localMathLevelsJson != null ? localMathLevelsJson.text : string.Empty;
     }
 }

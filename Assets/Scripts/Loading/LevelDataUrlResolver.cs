@@ -59,6 +59,28 @@ namespace Loading
             return GetFirstLevelDataUrl(configurationJson);
         }
 
+        public static string ResolveMathLevelDataUrl(string configurationJson)
+        {
+            if (string.IsNullOrWhiteSpace(configurationJson))
+            {
+                return string.Empty;
+            }
+
+            GameConfigurationRoot root;
+            try
+            {
+                root = JsonConvert.DeserializeObject<GameConfigurationRoot>(configurationJson);
+            }
+            catch
+            {
+                return string.Empty;
+            }
+
+            return root == null || string.IsNullOrWhiteSpace(root.mathLevelDataUrl)
+                ? string.Empty
+                : root.mathLevelDataUrl;
+        }
+
         private static string GetLanguageSpecificLevelDataUrl(GameConfigurationRoot root, SystemLanguage language, bool allowFallbackToEnglish)
         {
             var map = new Dictionary<string, string>(root.levelDataUrls, StringComparer.OrdinalIgnoreCase);
@@ -148,6 +170,7 @@ namespace Loading
         private class GameConfigurationRoot
         {
             public Dictionary<string, string> levelDataUrls;
+            public string mathLevelDataUrl;
         }
     }
 }

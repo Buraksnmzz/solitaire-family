@@ -1,6 +1,7 @@
 using Core.Scripts.Services;
 using Services;
 using UI.Gameplay;
+using UI.GameModeSelection;
 using UI.MainMenu;
 using UnityEngine;
 
@@ -30,6 +31,7 @@ namespace UI.Tutorial
             PlayerPrefs.Save();
             _uiService.HidePopup<TutorialCompletedPresenter>();
             _uiService.HidePopup<TutorialGamePresenter>();
+            _uiService.HidePopup<GameModeSelectionPresenter>();
             _uiService.ShowPopup<GameplayPresenter>();
             View.DisableContinueButton();
         }

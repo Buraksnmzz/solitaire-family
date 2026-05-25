@@ -46,6 +46,20 @@ namespace Services
                 levelProgressModel = new LevelProgressModel();
                 SaveData(levelProgressModel);
             }
+
+            var gameModeSelectionModel = LoadData<GameModeSelectionModel>();
+            if (gameModeSelectionModel == null)
+            {
+                gameModeSelectionModel = new GameModeSelectionModel();
+                SaveData(gameModeSelectionModel);
+            }
+
+            var gameModeSnapshotStoreModel = LoadData<GameModeSnapshotStoreModel>();
+            if (gameModeSnapshotStoreModel == null)
+            {
+                gameModeSnapshotStoreModel = new GameModeSnapshotStoreModel();
+                SaveData(gameModeSnapshotStoreModel);
+            }
         }
         public T GetModel<T>() where T : IModel
         {

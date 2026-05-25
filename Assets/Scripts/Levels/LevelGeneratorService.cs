@@ -1,43 +1,44 @@
 using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
-using UnityEngine;
 
 namespace Levels
 {
-    public class LevelGeneratorService : ILevelGeneratorService
-    {
-	    ISavedDataService _savedDataService;
-        public LevelGeneratorService(string levelJson)
-        {
-	        _savedDataService = ServiceLocator.GetService<ISavedDataService>();
-            ParseLevelsJson(levelJson);
-        }
+	public class LevelGeneratorService : ILevelGeneratorService
+	{
+		ISavedDataService _savedDataService;
+		private readonly Dictionary<GameMode, LevelMap> _levelMaps = new Dictionary<GameMode, LevelMap>();
 
-        public LevelData GetCurrentLevelData()
+		public LevelGeneratorService(string classicLevelJson, string mathLevelJson)
 		{
-			var currentLevel = _savedDataService.GetModel<LevelProgressModel>().CurrentLevelIndex;
-			return CurrentLevelMap.levelsList[currentLevel];
+			_savedDataService = ServiceLocator.GetService<ISavedDataService>();
+			ParseLevelsJson(GameMode.Classic, classicLevelJson);
+			ParseLevelsJson(GameMode.Math, mathLevelJson);
 		}
 
-		public LevelData GetLevelData(int levelIndex)
+
+		public LevelData GetCurrentLevelData(GameMode gameMode)
 		{
-			return CurrentLevelMap.levelsList[levelIndex];
+			var currentLevel = _savedDataService.GetModel<LevelProgressModel>().GetCurrentLevelIndex(gameMode);
+			return GetLevelMap(gameMode).levelsList[currentLevel];
 		}
 
-		public int GetLevelColumnCount(int levelIndex)
+		public LevelData GetLevelData(GameMode gameMode, int levelIndex)
 		{
-			return CurrentLevelMap.levelsList[levelIndex].columns;
+			return GetLevelMap(gameMode).levelsList[levelIndex];
 		}
 
-		public int GetLevelCategoryCardCount(int levelIndex)
+		public int GetLevelColumnCount(GameMode gameMode, int levelIndex)
 		{
-			return CurrentLevelMap.levelsList[levelIndex].categories.Count;
+			return GetLevelMap(gameMode).levelsList[levelIndex].columns;
 		}
 
-		private LevelMap CurrentLevelMap { get; set; }
+		public int GetLevelCategoryCardCount(GameMode gameMode, int levelIndex)
+		{
+			return GetLevelMap(gameMode).levelsList[levelIndex].categories.Count;
+		}
 
-		public LevelMap ParseLevelsJson(string levelJson)
+		public LevelMap ParseLevelsJson(GameMode gameMode, string levelJson)
 		{
 			var levels = JsonConvert.DeserializeObject<List<LevelData>>(levelJson) ?? new List<LevelData>();
 			var map = new LevelMap
@@ -45,8 +46,13 @@ namespace Levels
 				levelsList = levels
 			};
 
-			CurrentLevelMap = map;
+			_levelMaps[gameMode] = map;
 			return map;
 		}
-    }
+
+		private LevelMap GetLevelMap(GameMode gameMode)
+		{
+			return _levelMaps.TryGetValue(gameMode, out var levelMap) ? levelMap : new LevelMap { levelsList = new List<LevelData>() };
+		}
+	}
 }

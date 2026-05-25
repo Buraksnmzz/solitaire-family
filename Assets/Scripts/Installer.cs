@@ -8,6 +8,7 @@ using Services.Hint;
 using UnityEngine;
 using Loading;
 using Services.Drag;
+using UI.GameModeSelection;
 using UI.MainMenu;
 using UI.Gameplay;
 using UI.Shop;
@@ -57,7 +58,7 @@ public class Installer : MonoBehaviour
         ServiceLocator.Register<IUIService>(new UIService(uiRoot));
         ServiceLocator.Register<ISnapshotService>(new SnapshotService());
         ServiceLocator.Register<ICollectibelService>(new CollectibleService());
-        ServiceLocator.Register<ILevelGeneratorService>(new LevelGeneratorService(BootCache.LevelsJson));
+        ServiceLocator.Register<ILevelGeneratorService>(new LevelGeneratorService(BootCache.GetLevelsJson(GameMode.Classic), BootCache.GetLevelsJson(GameMode.Math)));
         ServiceLocator.Register<ILevelMapLanguageSyncService>(new LevelMapLanguageSyncService());
         ServiceLocator.Register<IConfigurationService>(new ConfigurationService(BootCache.ConfigurationJson));
         ServiceLocator.Register<IDailyAdsService>(new DailyAdsService());
@@ -71,7 +72,7 @@ public class Installer : MonoBehaviour
         var uiService = ServiceLocator.GetService<IUIService>();
         if (PlayerPrefs.GetInt(StringConstants.IsTutorialShown) == 0)
         {
-            uiService.ShowPopup<TutorialGamePresenter>();
+            uiService.ShowPopup<GameModeSelectionPresenter>();
         }
         else
         {

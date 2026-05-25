@@ -34,9 +34,15 @@ namespace UI.MainMenu
             _localizationService = ServiceLocator.GetService<ILocalizationService>();
             View.SetBackgroundImageFromRemote(_savedDataService.GetModel<GameConfigModel>().backgroundImageId - 1);
             View.ContinueButtonClicked += OnContinueButtonClicked;
+            View.ContinueButtonMathClicked += OnContinueButtonMathClicked;
             View.SettingsButtonClicked += OnSettingsButtonClicked;
             View.CoinButtonClicked += OnCoinButtonCLicked;
             View.NoAdsButtonClicked += OnNoAdsButtonClicked;
+        }
+
+        private void OnContinueButtonMathClicked()
+        {
+            StartGame(GameMode.Math);
         }
 
         private void OnCoinChanged(CoinChangedSignal _)
@@ -101,13 +107,31 @@ namespace UI.MainMenu
 
         private void RefreshLevelText()
         {
-            var currentLevel = _savedDataService.GetModel<LevelProgressModel>().CurrentLevelIndex;
-            var levelText = _localizationService.GetLocalizedString(LocalizationStrings.LevelX, currentLevel);
-            View.SetLevelText(levelText);
+            var levelProgressModel = _savedDataService.GetModel<LevelProgressModel>();
+            var classicLevelInitialized = levelProgressModel.EnsurePlayableLevelInitialized(GameMode.Classic);
+            var mathLevelInitialized = levelProgressModel.EnsurePlayableLevelInitialized(GameMode.Math);
+            if (classicLevelInitialized || mathLevelInitialized)
+                _savedDataService.SaveData(levelProgressModel);
+
+            var classicLevelText = _localizationService.GetLocalizedString(
+                LocalizationStrings.LevelX,
+                levelProgressModel.GetCurrentLevelIndex(GameMode.Classic));
+            var mathLevelText = _localizationService.GetLocalizedString(
+                LocalizationStrings.LevelX,
+                levelProgressModel.GetCurrentLevelIndex(GameMode.Math));
+            View.SetLevelTexts(classicLevelText, mathLevelText);
         }
 
         private void OnContinueButtonClicked()
         {
+            StartGame(GameMode.Classic);
+        }
+
+        private void StartGame(GameMode gameMode)
+        {
+            var gameModeSelectionModel = _savedDataService.GetModel<GameModeSelectionModel>();
+            gameModeSelectionModel.SelectedGameMode = gameMode;
+            _savedDataService.SaveData(gameModeSelectionModel);
             _uiService.HidePopup<MainMenuPresenter>();
             _uiService.ShowPopup<GameplayPresenter>();
         }

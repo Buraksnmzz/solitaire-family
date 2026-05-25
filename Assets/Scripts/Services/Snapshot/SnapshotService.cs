@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Levels;
 
 public class SnapshotService : ISnapshotService
 {
@@ -15,17 +16,21 @@ public class SnapshotService : ISnapshotService
             return;
 
         snapshot.Cards ??= new List<CardSnapshot>();
-        _savedDataService.SaveData(snapshot);
+        var snapshotStore = _savedDataService.LoadData<GameModeSnapshotStoreModel>();
+        snapshotStore.SetSnapshot(snapshot.GameMode, snapshot);
+        _savedDataService.SaveData(snapshotStore);
     }
 
     public void ClearSnapshot()
     {
-        _savedDataService.DeleteData<SnapShotModel>();
+        var snapshotStore = _savedDataService.LoadData<GameModeSnapshotStoreModel>();
+        snapshotStore.SetSnapshot(GetSelectedGameMode(), null);
+        _savedDataService.SaveData(snapshotStore);
     }
 
     public bool HasSnapShot()
     {
-        var snapshot = _savedDataService.LoadData<SnapShotModel>();
+        var snapshot = LoadSnapshot();
         if (snapshot == null)
             return false;
 
@@ -34,6 +39,12 @@ public class SnapshotService : ISnapshotService
 
     public SnapShotModel LoadSnapshot()
     {
-        return _savedDataService.LoadData<SnapShotModel>();
+        var snapshotStore = _savedDataService.LoadData<GameModeSnapshotStoreModel>();
+        return snapshotStore.GetSnapshot(GetSelectedGameMode());
+    }
+
+    private GameMode GetSelectedGameMode()
+    {
+        return _savedDataService.GetModel<GameModeSelectionModel>().SelectedGameMode;
     }
 }
