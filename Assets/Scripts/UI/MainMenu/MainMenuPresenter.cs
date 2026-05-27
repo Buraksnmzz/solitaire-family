@@ -32,7 +32,7 @@ namespace UI.MainMenu
             _eventDispatcherService.AddListener<CoinChangedSignal>(OnCoinChanged);
             _iapService = ServiceLocator.GetService<IIAPService>();
             _localizationService = ServiceLocator.GetService<ILocalizationService>();
-            View.SetBackgroundImageFromRemote(_savedDataService.GetModel<GameConfigModel>().backgroundImageId - 1);
+            RefreshBackgroundImage();
             View.ContinueButtonClicked += OnContinueButtonClicked;
             View.ContinueButtonMathClicked += OnContinueButtonMathClicked;
             View.SettingsButtonClicked += OnSettingsButtonClicked;
@@ -88,6 +88,7 @@ namespace UI.MainMenu
 
             _eventDispatcherService.AddListener<LanguageChangedSignal>(OnLanguageChanged);
 
+            RefreshBackgroundImage();
             RefreshLevelText();
             View.SetCoinText(_savedDataService.GetModel<CollectibleModel>().totalCoins);
             var settingsModel = _savedDataService.GetModel<SettingsModel>();
@@ -119,7 +120,23 @@ namespace UI.MainMenu
             var mathLevelText = _localizationService.GetLocalizedString(
                 LocalizationStrings.LevelX,
                 levelProgressModel.GetCurrentLevelIndex(GameMode.Math));
+
             View.SetLevelTexts(classicLevelText, mathLevelText);
+            
+            var selectedGameMode = _savedDataService.GetModel<GameModeSelectionModel>().SelectedGameMode;
+            var wordText = _localizationService.GetLocalizedString(LocalizationStrings.Word);
+            var mathText = _localizationService.GetLocalizedString(LocalizationStrings.Math);
+            if(selectedGameMode == GameMode.Classic)
+                View.SetLogoText(wordText);
+            else if(selectedGameMode == GameMode.Math)
+                View.SetLogoText(mathText);
+        }
+
+        private void RefreshBackgroundImage()
+        {
+            var backgroundImageId = _savedDataService.GetModel<GameConfigModel>().backgroundImageId - 1;
+            var selectedGameMode = _savedDataService.GetModel<GameModeSelectionModel>().SelectedGameMode;
+            View.SetBackgroundImageFromRemote(backgroundImageId, selectedGameMode);
         }
 
         private void OnContinueButtonClicked()

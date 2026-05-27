@@ -472,6 +472,7 @@ namespace UI.Gameplay
             View.SetLevelText(levelText);
             View.SetGameplayInputBlocked(false);
             base.ViewShown();
+            RefreshBackgroundImage();
             if (_snapshotService.HasSnapShot())
             {
                 var snapshot = _snapshotService.LoadSnapshot();
@@ -481,6 +482,12 @@ namespace UI.Gameplay
                 _snapshotService.ClearSnapshot();
             }
             StartNewLevel();
+        }
+
+        private void RefreshBackgroundImage()
+        {
+            var selectedGameMode = _savedDataService.GetModel<GameModeSelectionModel>().SelectedGameMode;
+            View.SetBackgroundImage(selectedGameMode);
         }
 
         void OnMoveCountRequested(MoveCountRequestedSignal signal)

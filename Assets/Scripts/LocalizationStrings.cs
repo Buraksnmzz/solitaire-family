@@ -7,5 +7,7 @@ namespace UnityEngine.UI
         public const string YouCanAddXMoves = "YOU_CAN_ADD_X_MOVES";
         public const string LevelX = "LEVEL_X";
         public const string PickAColumnToPlaceTheJoker = "PICK_A_COLUMN_TO_PLACE_THE_JOKER";
+        public const string Math = "MATH";
+        public const string Word = "WORD";
     }
 }

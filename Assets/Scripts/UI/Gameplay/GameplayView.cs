@@ -59,6 +59,8 @@ public class GameplayView : BaseView
     [SerializeField] private ParticleSystem confettiParticle;
     [SerializeField] private ParticleSystem getMovesParticle;
     [SerializeField] private Transform bottomPanel;
+    [SerializeField] private Sprite classicBackgroundSprite;
+    [SerializeField] private Sprite mathBackgroundSprite;
     
 
     private Sequence _sequence;
@@ -518,5 +520,10 @@ public class GameplayView : BaseView
     public void PlayGetMovesParticle()
     {
         getMovesParticle.Play();
+    }
+
+    public void SetBackgroundImage(GameMode selectedGameMode)
+    {
+        backgroundImage.sprite = selectedGameMode == GameMode.Math ? mathBackgroundSprite : classicBackgroundSprite;
     }
 }

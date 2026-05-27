@@ -7536,6 +7536,8 @@ MonoBehaviour:
   confettiParticle: {fileID: 189694140256730606}
   getMovesParticle: {fileID: 5132119339536239315}
   bottomPanel: {fileID: 9002695876481500346}
+  classicBackgroundSprite: {fileID: 21300000, guid: e2cbf41b3be834f679019f88d7792210, type: 3}
+  mathBackgroundSprite: {fileID: 21300000, guid: b1bd12b52070247b88ff6b97cb024579, type: 3}
 --- !u!114 &8188636935371010217 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8493961421456829881, guid: 5e00244a9bfc9446b8feb7649af3f8ff, type: 3}
