@@ -218,6 +218,19 @@ MonoBehaviour:
     m_Localized: Werbung entfernt
     m_Metadata:
       m_Items: []
+  - m_Id: 52473769959088128
+    m_Localized: "M\xF6chtest du mit \"<color=#4eff2d>Wort</color>\" oder \"<color=#01aeff>Mathe</color>\"
+      beginnen?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 52473769975865344
+    m_Localized: Mathe
+    m_Metadata:
+      m_Items: []
+  - m_Id: 52473769975865345
+    m_Localized: Wort
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

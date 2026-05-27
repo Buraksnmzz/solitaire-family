@@ -209,6 +209,19 @@ MonoBehaviour:
     m_Localized: "Reklamy usuni\u0119te"
     m_Metadata:
       m_Items: []
+  - m_Id: 52473769959088128
+    m_Localized: "Czy chcesz zacz\u0105\u0107 od \"<color=#4eff2d>S\u0142owo</color>\"
+      czy \"<color=#01aeff>Matematyka</color>\"?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 52473769975865344
+    m_Localized: Matematyka
+    m_Metadata:
+      m_Items: []
+  - m_Id: 52473769975865345
+    m_Localized: "S\u0142owa"
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

@@ -217,6 +217,18 @@ MonoBehaviour:
     m_Localized: "Pubblicit\xE0 rimossa"
     m_Metadata:
       m_Items: []
+  - m_Id: 52473769959088128
+    m_Localized: Vuoi iniziare con "<color=#4eff2d>Parole</color>" o "<color=#01aeff>Matematica</color>"?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 52473769975865344
+    m_Localized: Matematica
+    m_Metadata:
+      m_Items: []
+  - m_Id: 52473769975865345
+    m_Localized: Parola
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []
