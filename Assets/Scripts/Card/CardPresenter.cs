@@ -86,6 +86,12 @@ namespace Card
             return useStackedDisplayText;
         }
 
+        public void ClearPendingMainTextStackedDisplay()
+        {
+            _useStackedDisplayTextOnNextTopState = false;
+            SetMainTextUsesStackedDisplay(false);
+        }
+
         public void SetMainTextUsesStackedDisplay(bool useStackedDisplay)
         {
             if (CardView == null) return;

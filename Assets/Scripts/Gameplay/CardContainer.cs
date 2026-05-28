@@ -170,6 +170,15 @@ namespace Gameplay
             topCardPresenter.SetFaceUp(true, FlipDuration * 2.5f);
         }
 
+        public void RefreshTopCardState()
+        {
+            var topCardPresenter = GetTopCardPresenter();
+            if (topCardPresenter == null)
+                return;
+
+            OnTopCardChangedAfterRemove(topCardPresenter);
+        }
+
         public IReadOnlyList<CardPresenter> GetAllCards()
         {
             return CardPresenters.ToList();

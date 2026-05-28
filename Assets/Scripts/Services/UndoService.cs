@@ -64,12 +64,15 @@ namespace Services
                     removed.SetFaceUp(shouldBeFaceUp, 0.2f);
                 }
 
+                removed.ClearPendingMainTextStackedDisplay();
+
                 _lastFromContainer.AddCard(removed);
             }
 
             if (_lastPreviousCard != null && !_lastPreviousCardWasFaceUp && _lastPreviousCard.IsFaceUp)
             {
                 _lastPreviousCard.SetFaceUp(false, 0.2f);
+                _lastFromContainer.RefreshTopCardState();
             }
 
             UndoAvailable = false;

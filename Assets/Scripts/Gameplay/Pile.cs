@@ -280,7 +280,7 @@ namespace Gameplay
         void ApplyTopCardState(CardPresenter presenter)
         {
             var model = presenter.CardModel;
-            presenter.SetMainTextUsesStackedDisplay(presenter.ConsumeMainTextStackedDisplay());
+            presenter.SetMainTextUsesStackedDisplay(presenter.ConsumeMainTextStackedDisplay() || HasFaceUpStackAtTop());
 
             if (model.Type == CardType.Joker)
             {
@@ -302,6 +302,22 @@ namespace Gameplay
             {
                 presenter.ApplyViewState(CardViewState.ContentImageTopNoCategoryInfo);
             }
+        }
+
+        bool HasFaceUpStackAtTop()
+        {
+            var faceUpCount = 0;
+
+            for (var index = CardPresenters.Count - 1; index >= 0; index--)
+            {
+                var presenter = CardPresenters[index];
+                if (presenter == null || !presenter.IsFaceUp)
+                    break;
+
+                faceUpCount++;
+            }
+
+            return faceUpCount > 1;
         }
 
     }
