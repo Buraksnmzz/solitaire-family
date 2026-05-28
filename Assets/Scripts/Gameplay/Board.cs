@@ -306,6 +306,28 @@ namespace Gameplay
             cardView.AnimateGlow();
         }
 
+        public void RemoveCardsFromBoardState(IEnumerable<CardPresenter> presenters)
+        {
+            if (presenters == null)
+                return;
+
+            foreach (var presenter in presenters)
+            {
+                if (presenter == null)
+                    continue;
+
+                CardPresenters.Remove(presenter);
+
+                var cardModel = presenter.CardModel;
+                if (cardModel != null)
+                    CardModels.Remove(cardModel);
+
+                var cardView = presenter.CardView;
+                if (cardView != null)
+                    cardViews.Remove(cardView);
+            }
+        }
+
         public SnapShotModel CreateSnapshot(int movesCount, int levelIndex)
         {
             var snapshot = new SnapShotModel

@@ -51,6 +51,7 @@ namespace Gameplay
                 {
                     var presenter = presentersToRemove[^1];
                     presenter.SetContentCount(presenter.CardModel.ContentCount, presenter.CardModel.ContentCount);
+                    board?.RemoveCardsFromBoardState(presentersToRemove);
                     SoundService.PlaySound(ClipName.FoundationCompleted);
                     HapticService.HapticMedium();
                     DOVirtual.DelayedCall(moveDuration, () => CheckAndHandleCompletion(presentersToRemove));
