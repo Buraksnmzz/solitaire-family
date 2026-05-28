@@ -80,6 +80,7 @@ namespace Gameplay
             if (previousTop != null)
             {
                 var previousModel = previousTop.CardModel;
+                previousTop.SetRightTextUsesStackedDisplay(false);
 
                 if (previousModel.Type == CardType.Category)
                 {
@@ -107,6 +108,7 @@ namespace Gameplay
         void ApplyTopCardState(CardPresenter presenter)
         {
             var model = presenter.CardModel;
+            presenter.SetRightTextUsesStackedDisplay(false);
 
             if (model.Type == CardType.Category)
             {
@@ -162,7 +164,7 @@ namespace Gameplay
                 restoreStock.SetActive(false);
                 return;
             }
-            
+
             restoreStock.SetActive(true);
 
             var startIndex = Mathf.Max(0, CardPresenters.Count - 3);

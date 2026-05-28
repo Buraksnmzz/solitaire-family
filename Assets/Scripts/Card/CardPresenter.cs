@@ -7,6 +7,7 @@ namespace Card
     {
         public CardModel CardModel;
         public CardView CardView;
+        private bool _useStackedDisplayTextOnNextTopState;
         public bool IsFaceUp => CardModel.IsFaceUp;
 
 
@@ -36,6 +37,8 @@ namespace Card
         public void SetContainer(CardContainer container)
         {
             CardModel.Container = container;
+            CardView?.SetMainTextUsesStackedDisplay(false);
+            CardView?.SetRightTextUsesStackedDisplay(true);
         }
 
         public void SetFaceUp(bool isFaceUp, float duration, float delay = 0)
@@ -69,6 +72,30 @@ namespace Card
         {
             if (CardView == null) return;
             CardView.SetState(state);
+        }
+
+        public void MarkMainTextForStackedDisplay()
+        {
+            _useStackedDisplayTextOnNextTopState = true;
+        }
+
+        public bool ConsumeMainTextStackedDisplay()
+        {
+            var useStackedDisplayText = _useStackedDisplayTextOnNextTopState;
+            _useStackedDisplayTextOnNextTopState = false;
+            return useStackedDisplayText;
+        }
+
+        public void SetMainTextUsesStackedDisplay(bool useStackedDisplay)
+        {
+            if (CardView == null) return;
+            CardView.SetMainTextUsesStackedDisplay(useStackedDisplay);
+        }
+
+        public void SetRightTextUsesStackedDisplay(bool useStackedDisplay)
+        {
+            if (CardView == null) return;
+            CardView.SetRightTextUsesStackedDisplay(useStackedDisplay);
         }
 
         public void SetContentCount(int currentCount, int totalCount)

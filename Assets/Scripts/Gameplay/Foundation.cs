@@ -56,7 +56,7 @@ namespace Gameplay
                     DOVirtual.DelayedCall(moveDuration, () => CheckAndHandleCompletion(presentersToRemove));
                 }
             }
-            
+
             OnCardAdded(null, cardPresenter);
             TryUpdateCategoryAndTopContentStatesForStackCase();
         }
@@ -64,6 +64,7 @@ namespace Gameplay
         protected override void OnCardAdded(CardPresenter previousTop, CardPresenter newTop)
         {
             var model = newTop.CardModel;
+            newTop.SetMainTextUsesStackedDisplay(newTop.ConsumeMainTextStackedDisplay() || CardPresenters.Count > 1);
 
             if (model.Type == CardType.Category)
             {
@@ -93,10 +94,21 @@ namespace Gameplay
         protected override void OnTopCardChangedAfterRemove(CardPresenter newTop)
         {
             var model = newTop.CardModel;
+            newTop.SetMainTextUsesStackedDisplay(CardPresenters.Count > 1);
 
             if (model.Type == CardType.Category)
             {
                 newTop.ApplyViewState(CardViewState.CategoryTop);
+                return;
+            }
+
+            if (model.CategoryType == Levels.CardCategoryType.Text)
+            {
+                newTop.ApplyViewState(CardViewState.ContentTextTopWithCategoryInfo);
+            }
+            else
+            {
+                newTop.ApplyViewState(CardViewState.ContentImageTopWithCategoryInfo);
             }
         }
 
@@ -130,6 +142,7 @@ namespace Gameplay
             CardPresenters.Insert(0, lastPresenter);
 
             lastPresenter.ApplyViewState(CardViewState.CategoryBelowWithCategoryInfo);
+            previousPresenter.SetMainTextUsesStackedDisplay(true);
             previousPresenter.ApplyViewState(previousPresenter.CardModel.CategoryType == Levels.CardCategoryType.Text
                 ? CardViewState.ContentTextTopWithCategoryInfo
                 : CardViewState.ContentImageTopWithCategoryInfo);
@@ -144,7 +157,7 @@ namespace Gameplay
             glowImage.transform.SetAsLastSibling();
             var glowSequence = DOTween.Sequence();
 
-            glowSequence.Append(glowImage.DOFade(1f, _completeScaleUpDuration/2));
+            glowSequence.Append(glowImage.DOFade(1f, _completeScaleUpDuration / 2));
             glowSequence.Join(glowImage.transform.DOScale(Vector3.one * 1.14f, _completeScaleUpDuration));
             glowSequence.Append(glowImage.transform.DOScale(Vector3.one, _completeScaleUpDuration));
             glowSequence.Append(glowImage.DOFade(0f, _completeScaleDownDuration));

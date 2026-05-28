@@ -280,6 +280,7 @@ namespace Gameplay
         void ApplyTopCardState(CardPresenter presenter)
         {
             var model = presenter.CardModel;
+            presenter.SetMainTextUsesStackedDisplay(presenter.ConsumeMainTextStackedDisplay());
 
             if (model.Type == CardType.Joker)
             {

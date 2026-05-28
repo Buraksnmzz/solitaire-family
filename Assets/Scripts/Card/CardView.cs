@@ -12,6 +12,10 @@ namespace Card
     {
         public const string MovementTweenId = "CardMovement";
 
+        private CardModel _cardModel;
+        private bool _useStackedDisplayTextOnMain;
+        private bool _useStackedDisplayTextOnSide;
+
         [SerializeField] TextMeshProUGUI contentCountText;
         [SerializeField] TextMeshProUGUI mainText;
         [SerializeField] TextMeshProUGUI rightText;
@@ -64,14 +68,20 @@ namespace Card
 
         public void Initialize(CardModel cardModel)
         {
+            _cardModel = cardModel;
+            _useStackedDisplayTextOnMain = false;
+            _useStackedDisplayTextOnSide = true;
             SetContentCountText(0, cardModel.ContentCount);
+            var stackedDisplayText = string.IsNullOrWhiteSpace(cardModel.StackedDisplayText)
+                ? null
+                : cardModel.StackedDisplayText;
             if (cardModel.Type == CardType.Category)
             {
                 if (mainText != null) mainText.text = cardModel.CategoryName;
-                if (rightText != null) rightText.text = cardModel.CategoryName;
-                if (upText != null) upText.text = cardModel.CategoryName;
+                if (rightText != null) rightText.text = stackedDisplayText ?? cardModel.CategoryName;
+                if (upText != null) upText.text = stackedDisplayText ?? cardModel.CategoryName;
                 if (crownImage != null) crownImage.gameObject.SetActive(true);
-                if (upCategoryName != null) upCategoryName.SetText(cardModel.CategoryName);
+                if (upCategoryName != null) upCategoryName.SetText(stackedDisplayText ?? cardModel.CategoryName);
                 if (upCategoryInfoImage != null) upCategoryInfoImage.SetActive(false);
                 SetCategoryTopState();
             }
@@ -80,8 +90,8 @@ namespace Card
                 if (cardModel.CategoryType == CardCategoryType.Text)
                 {
                     if (mainText != null) mainText.text = cardModel.ContentName;
-                    if (rightText != null) rightText.text = cardModel.ContentName;
-                    if (upText != null) upText.text = cardModel.ContentName;
+                    if (rightText != null) rightText.text = stackedDisplayText ?? cardModel.ContentName;
+                    if (upText != null) upText.text = stackedDisplayText ?? cardModel.ContentName;
                     SetContentTextTopNoCategoryInfoState();
                 }
                 else
@@ -99,7 +109,22 @@ namespace Card
             if (cardModel.Type == CardType.Joker)
                 return;
 
+            RefreshMainText();
+            RefreshRightText();
+
             SetRotation(false);
+        }
+
+        public void SetMainTextUsesStackedDisplay(bool useStackedDisplayOnMain)
+        {
+            _useStackedDisplayTextOnMain = useStackedDisplayOnMain;
+            RefreshMainText();
+        }
+
+        public void SetRightTextUsesStackedDisplay(bool useStackedDisplayOnSide)
+        {
+            _useStackedDisplayTextOnSide = useStackedDisplayOnSide;
+            RefreshRightText();
         }
 
         public void SetParent(Transform parent, bool worldPositionStays)
@@ -175,6 +200,58 @@ namespace Card
                 .SetId(MovementTweenId)
                 .SetEase(ease)
                 .OnComplete(() => { onComplete?.Invoke(); });
+        }
+
+        void RefreshMainText()
+        {
+            if (_cardModel == null)
+                return;
+
+            var stackedDisplayText = string.IsNullOrWhiteSpace(_cardModel.StackedDisplayText)
+                ? null
+                : _cardModel.StackedDisplayText;
+
+            if (_cardModel.Type == CardType.Category)
+            {
+                if (mainText != null)
+                    mainText.text = _useStackedDisplayTextOnMain && stackedDisplayText != null
+                        ? stackedDisplayText
+                        : _cardModel.CategoryName;
+                return;
+            }
+
+            if (_cardModel.Type != CardType.Content || _cardModel.CategoryType != CardCategoryType.Text)
+                return;
+
+            if (mainText != null)
+                mainText.text = _useStackedDisplayTextOnMain && stackedDisplayText != null
+                    ? stackedDisplayText
+                    : _cardModel.ContentName;
+        }
+
+        void RefreshRightText()
+        {
+            if (_cardModel == null || rightText == null)
+                return;
+
+            var stackedDisplayText = string.IsNullOrWhiteSpace(_cardModel.StackedDisplayText)
+                ? null
+                : _cardModel.StackedDisplayText;
+
+            if (_cardModel.Type == CardType.Category)
+            {
+                rightText.text = _useStackedDisplayTextOnSide && stackedDisplayText != null
+                    ? stackedDisplayText
+                    : _cardModel.CategoryName;
+                return;
+            }
+
+            if (_cardModel.Type != CardType.Content || _cardModel.CategoryType != CardCategoryType.Text)
+                return;
+
+            rightText.text = _useStackedDisplayTextOnSide && stackedDisplayText != null
+                ? stackedDisplayText
+                : _cardModel.ContentName;
         }
 
         private void SetAllInactive()

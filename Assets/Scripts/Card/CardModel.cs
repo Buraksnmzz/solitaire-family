@@ -9,6 +9,7 @@ namespace Card
         public CardCategoryType CategoryType;
         public string CategoryName;
         public string ContentName;
+        public string StackedDisplayText;
         public int ContentCount;
         public int CurrentContentCount;
         public CardContainer Container;

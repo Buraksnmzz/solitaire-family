@@ -208,9 +208,15 @@ namespace Card
                             }
                         }
 
+                        var shouldShowStackedMainText = closestContainer.GetTopCardPresenter() != null || stack.Length > 1;
                         for (var i = 0; i < stack.Length; i++)
                         {
                             var presenter = stack[i];
+                            if (shouldShowStackedMainText && i == stack.Length - 1)
+                            {
+                                presenter.MarkMainTextForStackedDisplay();
+                            }
+
                             closestContainer.AddCard(presenter);
                         }
 

@@ -9,6 +9,7 @@ using UnityEngine;
 using UnityEngine.Serialization;
 using Tutorial;
 using UnityEngine.UI;
+using Services;
 
 namespace Gameplay
 {
@@ -41,6 +42,8 @@ namespace Gameplay
         private IPlacableRule _foundationRule;
         private IPlacableRule _noPlacableRule;
         IEventDispatcherService _eventDispatcher;
+        private ISavedDataService _savedDataService;
+        private GameMode _gameMode;
         private Transform _parent;
 
         public Dealer Dealer => dealer;
@@ -53,6 +56,8 @@ namespace Gameplay
         public void Setup(LevelData levelData, int currentLevelIndex, Transform parent, SnapShotModel snapshot = null, bool shuffleDeck = true, TutorialDeckConfig deckConfig = null)
         {
             ResetBoardState();
+            _savedDataService ??= ServiceLocator.GetService<ISavedDataService>();
+            _gameMode = _savedDataService.GetModel<GameModeSelectionModel>().SelectedGameMode;
             _parent = parent;
             _foundationCount = levelData.columns;
             _categoryDatas = levelData.categories;
@@ -119,6 +124,7 @@ namespace Gameplay
                         CategoryName = category.name,
                         Type = CardType.Content,
                         ContentName = content,
+                        StackedDisplayText = GetStackedDisplayText(category.name),
                         ContentCount = category.contentValues.Count,
                         IsFaceUp = false
                     };
@@ -135,6 +141,7 @@ namespace Gameplay
                     CategoryType = category.cardCategoryType,
                     CategoryName = category.name,
                     Type = CardType.Category,
+                    StackedDisplayText = GetStackedDisplayText(category.name),
                     ContentCount = category.contentValues.Count,
                     IsFaceUp = false
                 };
@@ -392,6 +399,7 @@ namespace Gameplay
                     CategoryType = cardData.CategoryType,
                     CategoryName = cardData.CategoryName,
                     ContentName = cardData.ContentName,
+                    StackedDisplayText = GetStackedDisplayText(cardData.CategoryName),
                     ContentCount = cardData.ContentCount,
                     CurrentContentCount = cardData.CurrentContentCount,
                     IsFaceUp = cardData.IsFaceUp
@@ -435,8 +443,75 @@ namespace Gameplay
             CardPresenters.AddRange(tempPresenters);
             cardViews.Clear();
             cardViews.AddRange(tempViews);
+            ApplySnapshotStackedDisplayState();
 
             return true;
+        }
+
+        void ApplySnapshotStackedDisplayState()
+        {
+            if (_gameMode != GameMode.Math)
+                return;
+
+            ApplySnapshotPileStackedDisplayState();
+            ApplySnapshotFoundationStackedDisplayState();
+        }
+
+        void ApplySnapshotPileStackedDisplayState()
+        {
+            if (piles == null)
+                return;
+
+            foreach (var pile in piles)
+            {
+                if (pile == null)
+                    continue;
+
+                var cards = pile.GetAllCards();
+                if (cards == null || cards.Count == 0)
+                    continue;
+
+                var faceUpStackCount = 0;
+                for (var index = cards.Count - 1; index >= 0; index--)
+                {
+                    var presenter = cards[index];
+                    if (presenter == null || !presenter.IsFaceUp)
+                        break;
+
+                    faceUpStackCount++;
+                }
+
+                if (faceUpStackCount <= 1)
+                    continue;
+
+                var topPresenter = pile.GetTopCardPresenter();
+                if (topPresenter == null)
+                    continue;
+
+                topPresenter.SetMainTextUsesStackedDisplay(true);
+            }
+        }
+
+        void ApplySnapshotFoundationStackedDisplayState()
+        {
+            if (foundations == null)
+                return;
+
+            foreach (var foundation in foundations)
+            {
+                if (foundation == null)
+                    continue;
+
+                var cards = foundation.GetAllCards();
+                if (cards == null || cards.Count <= 1)
+                    continue;
+
+                var topPresenter = foundation.GetTopCardPresenter();
+                if (topPresenter == null)
+                    continue;
+
+                topPresenter.SetMainTextUsesStackedDisplay(true);
+            }
         }
 
         bool AreContainerIndicesValid(IEnumerable<CardSnapshot> cards)
@@ -523,6 +598,74 @@ namespace Gameplay
             {
                 if (view != null)
                     Destroy(view.gameObject);
+            }
+        }
+
+        string GetStackedDisplayText(string categoryName)
+        {
+            if (_gameMode != GameMode.Math)
+                return null;
+
+            if (string.IsNullOrWhiteSpace(categoryName))
+                return null;
+
+            return TryEvaluateMathExpression(categoryName, out var result)
+                ? result.ToString()
+                : categoryName;
+        }
+
+        bool TryEvaluateMathExpression(string expression, out int result)
+        {
+            result = 0;
+            if (string.IsNullOrWhiteSpace(expression))
+                return false;
+
+            var normalizedExpression = expression.Replace(" ", string.Empty);
+            if (int.TryParse(normalizedExpression, out result))
+                return true;
+
+            var operatorIndex = -1;
+            char operation = default;
+            for (var index = 1; index < normalizedExpression.Length; index++)
+            {
+                var currentCharacter = normalizedExpression[index];
+                if (currentCharacter != '+' && currentCharacter != '-' && currentCharacter != '/' &&
+                    currentCharacter != 'x' && currentCharacter != 'X' && currentCharacter != '×')
+                    continue;
+
+                operatorIndex = index;
+                operation = currentCharacter;
+                break;
+            }
+
+            if (operatorIndex <= 0 || operatorIndex >= normalizedExpression.Length - 1)
+                return false;
+
+            var leftSide = normalizedExpression.Substring(0, operatorIndex);
+            var rightSide = normalizedExpression.Substring(operatorIndex + 1);
+            if (!int.TryParse(leftSide, out var leftValue) || !int.TryParse(rightSide, out var rightValue))
+                return false;
+
+            switch (operation)
+            {
+                case '+':
+                    result = leftValue + rightValue;
+                    return true;
+                case '-':
+                    result = leftValue - rightValue;
+                    return true;
+                case '/':
+                    if (rightValue == 0)
+                        return false;
+                    result = leftValue / rightValue;
+                    return true;
+                case 'x':
+                case 'X':
+                case '×':
+                    result = leftValue * rightValue;
+                    return true;
+                default:
+                    return false;
             }
         }
 
