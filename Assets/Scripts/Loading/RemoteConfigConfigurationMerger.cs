@@ -35,6 +35,11 @@ namespace Loading
             "shopCoinRewards"
         };
 
+        private static readonly HashSet<string> OptionalBooleanKeys = new HashSet<string>(KeyComparer)
+        {
+            "shouldShowMathResult"
+        };
+
         public static bool TryBuildConfigurationJson(string baseConfigurationJson, string remoteConfigRawJson, out string mergedConfigurationJson)
         {
             mergedConfigurationJson = string.Empty;
@@ -149,6 +154,14 @@ namespace Loading
                 allRequiredValuesFound = false;
             }
 
+            foreach (var key in OptionalBooleanKeys)
+            {
+                if (TryGetValue(remote, key, out var rawValue) && TryParseBool(rawValue, out var boolValue))
+                {
+                    root[key] = boolValue;
+                }
+            }
+
             if (!allRequiredValuesFound)
             {
                 return false;
@@ -205,6 +218,17 @@ namespace Loading
             }
 
             return int.TryParse(rawValue, NumberStyles.Integer, CultureInfo.InvariantCulture, out value);
+        }
+
+        private static bool TryParseBool(string rawValue, out bool value)
+        {
+            value = false;
+            if (string.IsNullOrWhiteSpace(rawValue))
+            {
+                return false;
+            }
+
+            return bool.TryParse(rawValue, out value);
         }
     }
 }

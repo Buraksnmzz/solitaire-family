@@ -77,6 +77,9 @@ namespace Configuration
 
 			[JsonProperty("shopCoinRewards")]
 			public string ShopCoinRewards { get; set; }
+
+			[JsonProperty("shouldShowMathResult")]
+			public bool? ShouldShowMathResult { get; set; }
 		}
 
 		public int GetLevelGoal(GameMode gameMode, int levelIndex, int columnCount)
@@ -138,6 +141,7 @@ namespace Configuration
 			gameConfigModel.rateUsTriggerLevels = _rateUsTriggerLevels;
 			gameConfigModel.rewardedVideoCoinAmount = root.RewardedVideoCoinAmount;
 			gameConfigModel.extraGivenMovesCount = root.ExtraGivenMovesCount;
+			gameConfigModel.shouldShowMathResult = root.ShouldShowMathResult ?? true;
 			InitializeShopRewards(gameConfigModel, root);
 			savedDataService.SaveData(gameConfigModel);
 		}

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Card;
+using Configuration;
 using Gameplay.PlacableRules;
 using Levels;
 using UI.Signals;
@@ -604,6 +605,9 @@ namespace Gameplay
         string GetStackedDisplayText(string categoryName)
         {
             if (_gameMode != GameMode.Math)
+                return null;
+
+            if (!_savedDataService.GetModel<GameConfigModel>().shouldShowMathResult)
                 return null;
 
             if (string.IsNullOrWhiteSpace(categoryName))

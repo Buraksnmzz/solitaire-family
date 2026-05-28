@@ -26,6 +26,7 @@ namespace Configuration
         public int shopCoinReward3 = 25000;
         public int shopCoinReward4 = 50000;
         public int shopCoinReward5 = 100000;
+        public bool shouldShowMathResult = true;
         public bool shouldShowIsOnFoundationComplete = true;
     }
 }
