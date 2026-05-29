@@ -14,6 +14,8 @@ namespace UI.Gameplay
         [SerializeField] private TutorialConfig classicTutorialConfig;
         [SerializeField] private TutorialConfig mathTutorialConfig;
         [SerializeField] private ParticleSystem confettiParticle;
+        [SerializeField] private Sprite classicBackground;
+        [SerializeField] private Sprite mathBackground;
         public Board Board => board;
 
         public TutorialConfig GetTutorialConfig(GameMode gameMode)
@@ -31,6 +33,14 @@ namespace UI.Gameplay
         {
             var deckConfig = tutorialConfig != null ? tutorialConfig.deckConfig : null;
             board.Setup(levelData, currentLevelIndex, panel, null, false, deckConfig);
+        }
+
+        public void SetBackgroundImage(GameMode gameMode)
+        {
+            if (backgroundImage == null)
+                return;
+
+            backgroundImage.sprite = gameMode == GameMode.Math ? mathBackground : classicBackground;
         }
 
         public void ShowInstructionMessage(string instruction)

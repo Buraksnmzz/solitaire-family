@@ -3174,6 +3174,8 @@ MonoBehaviour:
   classicTutorialConfig: {fileID: 11400000, guid: 7bab1fa26db834cc8b6bf45a25e8cd08, type: 2}
   mathTutorialConfig: {fileID: 11400000, guid: 10fc043c89c9843b09edc6874c155117, type: 2}
   confettiParticle: {fileID: 2000077879907829155}
+  classicBackground: {fileID: 21300000, guid: e2cbf41b3be834f679019f88d7792210, type: 3}
+  mathBackground: {fileID: 21300000, guid: b1bd12b52070247b88ff6b97cb024579, type: 3}
 --- !u!1 &6200671165480267205
 GameObject:
   m_ObjectHideFlags: 0

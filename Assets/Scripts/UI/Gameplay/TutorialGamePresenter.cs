@@ -65,6 +65,7 @@ namespace UI.Gameplay
             _isGameWon = false;
             _hintLoopTween?.Kill();
             _gameMode = _savedDataService.GetModel<GameModeSelectionModel>().SelectedGameMode;
+            View.SetBackgroundImage(_gameMode);
             _tutorialConfig = View.GetTutorialConfig(_gameMode);
             _currentStepIndex = 0;
             _currentStepMoveIndex = 0;

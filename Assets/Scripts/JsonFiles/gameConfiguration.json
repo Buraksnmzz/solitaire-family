@@ -93,35 +93,35 @@
     "ColumnGoals": {
       "3": [
         {
-          "goal": 40,
+          "goal": 90,
           "probability": 80
         },
         {
-          "goal": 35,
+          "goal": 80,
           "probability": 10
         },
         {
-          "goal": 30,
+          "goal": 70,
           "probability": 10
         }
       ],
       "4": [
         {
-          "goal": 55,
+          "goal": 115,
           "probability": 80
         },
         {
-          "goal": 50,
+          "goal": 110,
           "probability": 10
         },
         {
-          "goal": 45,
+          "goal": 100,
           "probability": 10
         }
       ],
       "5": [
         {
-          "goal": 160,
+          "goal": 135,
           "probability": 70
         },
         {
