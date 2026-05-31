@@ -27,6 +27,15 @@ namespace Levels
                     return false;
                 }
 
+                if (gameMode == GameMode.Math)
+                {
+                    if (MathLevelMapProtection.TryUnprotect(cached, out var unprotectedLevelsJson))
+                    {
+                        levelsJson = unprotectedLevelsJson;
+                        return true;
+                    }
+                }
+
                 levelsJson = cached;
                 return true;
             }
@@ -49,7 +58,10 @@ namespace Levels
 
                 var filePath = GetLevelsJsonFilePath(gameMode, language);
                 var tempFilePath = filePath + ".tmp";
-                File.WriteAllText(tempFilePath, levelsJson);
+                var contentToWrite = gameMode == GameMode.Math
+                    ? MathLevelMapProtection.Protect(levelsJson)
+                    : levelsJson;
+                File.WriteAllText(tempFilePath, contentToWrite);
 
                 if (File.Exists(filePath))
                 {

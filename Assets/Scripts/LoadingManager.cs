@@ -183,6 +183,14 @@ public class LoadingManager : MonoBehaviour
 
     private string GetLocalMathLevelJson()
     {
-        return localMathLevelsJson != null ? localMathLevelsJson.text : string.Empty;
+        if (localMathLevelsJson == null)
+        {
+            return string.Empty;
+        }
+
+        var rawContent = localMathLevelsJson.text;
+        return MathLevelMapProtection.TryUnprotect(rawContent, out var plainText)
+            ? plainText
+            : rawContent;
     }
 }
