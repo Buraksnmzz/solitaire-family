@@ -37,7 +37,7 @@ namespace Services
                 },
                 onUnavailable: () =>
                 {
-                    callback?.Invoke(false);
+                    
                 });
         }
     }

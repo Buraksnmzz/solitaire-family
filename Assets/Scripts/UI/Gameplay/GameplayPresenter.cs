@@ -71,7 +71,7 @@ namespace UI.Gameplay
             _eventDispatcherService.AddListener<AddMovesClickedSignal>(OnAddMovesClicked);
             _eventDispatcherService.AddListener<ContinueWithCoinAddMovesSignal>(OnContinueWithCoinAddMoves);
             _eventDispatcherService.AddListener<ContinueWithCoinAddJokerSignal>(OnContinueWithCoinAddJoker);
-            _eventDispatcherService.AddListener<JokerClickedSignal>(OnJokerClickedFromNoMoreMoves);
+            _eventDispatcherService.AddListener<JokerClickedSignal>(OnJokerRewardedFromNoMoreMoves);
             _eventDispatcherService.AddListener<RewardGivenSignal>(OnRewardGiven);
             _eventDispatcherService.AddListener<MainMenuButtonClickSignal>(OnMainMenuButtonClick);
             _eventDispatcherService.AddListener<CoinChangedSignal>(OnCoinChanged);
@@ -164,19 +164,9 @@ namespace UI.Gameplay
             HandleJoker(_collectibleModel.totalJokers);
         }
 
-        private void OnJokerClickedFromNoMoreMoves(JokerClickedSignal _)
+        private void OnJokerRewardedFromNoMoreMoves(JokerClickedSignal _)
         {
-            _adsService.GetReward(CallbackJoker);
-        }
-
-        private void CallbackJoker(bool success)
-        {
-            if (success)
-                HandleJoker(_collectibleModel.totalJokers);
-            else
-            {
-                RestartGame();
-            }
+            HandleJoker(_collectibleModel.totalJokers);
         }
 
         private void OnContinueWithCoinAddMoves(ContinueWithCoinAddMovesSignal _)
@@ -192,17 +182,7 @@ namespace UI.Gameplay
 
         private void OnAddMovesClicked(AddMovesClickedSignal _)
         {
-            _adsService.GetReward(CallbackAddMoves);
-        }
-
-        private void CallbackAddMoves(bool success)
-        {
-            if (success)
-                HandleAddMoves();
-            else
-            {
-                RestartGame();
-            }
+            HandleAddMoves();
         }
 
         private void HandleAddMoves()

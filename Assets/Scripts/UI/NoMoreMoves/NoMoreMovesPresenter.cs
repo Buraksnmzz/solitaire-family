@@ -41,12 +41,22 @@ namespace UI.NoMoreMoves
 
         private void OnJokerClick()
         {
-            if(!_adsService.IsRewardedAvailable())
+            if (!_adsService.IsRewardedAvailable())
                 return;
-            
+
             if (!_dailyAdsService.CanUseAd())
             {
                 UpdateUsage();
+                return;
+            }
+
+            _adsService.GetReward(OnJokerRewardCompleted);
+        }
+
+        private void OnJokerRewardCompleted(bool success)
+        {
+            if (!success)
+            {
                 return;
             }
 

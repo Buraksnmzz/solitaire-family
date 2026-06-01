@@ -63,12 +63,22 @@ namespace UI.OutOfMoves
 
         private void OnAddMovesClick()
         {
-            if(!_adsService.IsRewardedAvailable())
+            if (!_adsService.IsRewardedAvailable())
                 return;
-            
+
             if (!_dailyAdsService.CanUseAd())
             {
                 UpdateUsage();
+                return;
+            }
+
+            _adsService.GetReward(OnAddMovesRewardCompleted);
+        }
+
+        private void OnAddMovesRewardCompleted(bool success)
+        {
+            if (!success)
+            {
                 return;
             }
 
