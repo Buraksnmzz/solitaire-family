@@ -203,16 +203,16 @@ MonoBehaviour:
     m_Localized: "\u5E83\u544A\u3092\u524A\u9664\u3057\u307E\u3057\u305F"
     m_Metadata:
       m_Items: []
-  - m_Id: 52473769959088128
-    m_Localized: "<color=#4eff2d>\u5358\u8A9E</color> \u3068 \"<color=#01aeff>\u6570\u5B66</color>\"
+  - m_Id: 46
+    m_Localized: "<color=#01aeff>\u6570\u5B66</color> \u3068 \"<color=#4eff2d>\u5358\u8A9E</color>\"
       \u306E\u3069\u3061\u3089\u304B\u3089\u59CB\u3081\u307E\u3059\u304B\uFF1F"
     m_Metadata:
       m_Items: []
-  - m_Id: 52473769975865344
+  - m_Id: 47
     m_Localized: "\u7B97\u6570"
     m_Metadata:
       m_Items: []
-  - m_Id: 52473769975865345
+  - m_Id: 48
     m_Localized: "\u3053\u3068\u3070"
     m_Metadata:
       m_Items: []

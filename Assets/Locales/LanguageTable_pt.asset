@@ -212,16 +212,16 @@ MonoBehaviour:
     m_Localized: "An\xFAncios removidos"
     m_Metadata:
       m_Items: []
-  - m_Id: 52473769959088128
-    m_Localized: "Voc\xEA gostaria de come\xE7ar com \"<color=#4eff2d>Palavra</color>\"
-      ou \"<color=#01aeff>Matem\xE1tica</color>\"?"
+  - m_Id: 46
+    m_Localized: "Voc\xEA gostaria de come\xE7ar com \"<color=#01aeff>Matem\xE1tica</color>\"
+      ou \"<color=#4eff2d>Palavra</color>\"?"
     m_Metadata:
       m_Items: []
-  - m_Id: 52473769975865344
+  - m_Id: 47
     m_Localized: "Matem\xE1tica"
     m_Metadata:
       m_Items: []
-  - m_Id: 52473769975865345
+  - m_Id: 48
     m_Localized: Palavra
     m_Metadata:
       m_Items: []

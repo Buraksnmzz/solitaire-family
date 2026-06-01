@@ -209,16 +209,16 @@ MonoBehaviour:
     m_Localized: "Reklamlar Kald\u0131r\u0131ld\u0131"
     m_Metadata:
       m_Items: []
-  - m_Id: 52473769959088128
-    m_Localized: "\"<color=#4eff2d>Kelime</color>\" mi yoksa \"<color=#01aeff>Matematik</color>\"
+  - m_Id: 46
+    m_Localized: "\"<color=#01aeff>Matematik</color>\" mi yoksa \"<color=#4eff2d>Kelime</color>\"
       ile mi ba\u015Flamak istersin?"
     m_Metadata:
       m_Items: []
-  - m_Id: 52473769975865344
+  - m_Id: 47
     m_Localized: Matematik
     m_Metadata:
       m_Items: []
-  - m_Id: 52473769975865345
+  - m_Id: 48
     m_Localized: Kelime
     m_Metadata:
       m_Items: []

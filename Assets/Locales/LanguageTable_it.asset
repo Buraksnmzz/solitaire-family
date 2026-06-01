@@ -217,15 +217,15 @@ MonoBehaviour:
     m_Localized: "Pubblicit\xE0 rimossa"
     m_Metadata:
       m_Items: []
-  - m_Id: 52473769959088128
-    m_Localized: Vuoi iniziare con "<color=#4eff2d>Parole</color>" o "<color=#01aeff>Matematica</color>"?
+  - m_Id: 46
+    m_Localized: Vuoi iniziare con "<color=#01aeff>Matematica</color>" o "<color=#4eff2d>Parole</color>"?
     m_Metadata:
       m_Items: []
-  - m_Id: 52473769975865344
+  - m_Id: 47
     m_Localized: Matematica
     m_Metadata:
       m_Items: []
-  - m_Id: 52473769975865345
+  - m_Id: 48
     m_Localized: Parola
     m_Metadata:
       m_Items: []
