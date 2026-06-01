@@ -580,7 +580,8 @@ namespace UI.Gameplay
             var levelProgressModel = GetLevelProgressModel();
             var levelId = GetLevelId(_currentLevelIndex);
             var languageCode = GetLanguageCode();
-            var mode = GetFirebaseMode();
+            var mode = StringConstants.FirebaseModeNormal;
+            var gameplayMode = GetFirebaseGameplayMode();
             var attempt = GetAttemptString(levelProgressModel.GetCurrentLevelAttemptCount(_gameMode));
 
             YoogoLabManager.LogFirebaseEvent(
@@ -588,20 +589,23 @@ namespace UI.Gameplay
                 StringConstants.FirebaseParamLevelId, levelId,
                 StringConstants.FirebaseParamLanguage, languageCode,
                 StringConstants.FirebaseParamMode, mode,
-                StringConstants.FirebaseParamAttempt, attempt);
+                StringConstants.FirebaseParamAttempt, attempt,
+                StringConstants.FirebaseParamGameplay, gameplayMode);
         }
 
         private void TrackLevelEnd(int levelIndex)
         {
             var levelId = GetLevelId(levelIndex);
             var languageCode = GetLanguageCode();
-            var mode = GetFirebaseMode();
+            var mode = StringConstants.FirebaseModeNormal;
+            var gameplayMode = GetFirebaseGameplayMode();
 
             YoogoLabManager.LogFirebaseEvent(
                 StringConstants.FirebaseEventLevelEnd,
                 StringConstants.FirebaseParamLevelId, levelId,
                 StringConstants.FirebaseParamLanguage, languageCode,
-                StringConstants.FirebaseParamMode, mode);
+                StringConstants.FirebaseParamMode, mode,
+                StringConstants.FirebaseParamGameplay, gameplayMode);
         }
 
         private string GetLanguageCode()
@@ -670,9 +674,9 @@ namespace UI.Gameplay
             return _savedDataService.GetModel<LevelProgressModel>();
         }
 
-        private string GetFirebaseMode()
+        private string GetFirebaseGameplayMode()
         {
-            return _gameMode == GameMode.Math ? StringConstants.FirebaseModeMath : StringConstants.FirebaseModeNormal;
+            return _gameMode == GameMode.Math ? StringConstants.FirebaseGameplayMath : StringConstants.FirebaseGameplayWord;
         }
     }
 }

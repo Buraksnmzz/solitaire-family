@@ -17,11 +17,13 @@ public class StringConstants
     public const string FirebaseParamLanguage = "Language";
     public const string FirebaseParamMode = "Mode";
     public const string FirebaseParamAttempt = "Attempt";
+    public const string FirebaseParamGameplay = "Gameplay";
 
     public const string FirebaseLevelIdPrefix = "LevelID_";
     public const string FirebaseAttemptPrefix = "Attempt_";
     public const string FirebaseModeNormal = "Normal";
-    public const string FirebaseModeMath = "Math";
+    public const string FirebaseGameplayMath = "Math";
+    public const string FirebaseGameplayWord = "Word";
     public const string FirebaseEventNoMoreMove = "NoMoreMove";
     public const string FirebaseEventOutOfMoves = "OutOfMoves";
 
