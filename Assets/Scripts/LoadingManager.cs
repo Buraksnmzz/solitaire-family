@@ -59,7 +59,7 @@ public class LoadingManager : MonoBehaviour
     private IEnumerator InitializeGame()
     {
         float timeoutTimer = 0f;
-        const float maxWaitTime = 5f;
+        const float maxWaitTime = 2f;
 
         YoogoLabManager.TryStartGame(() =>
         {

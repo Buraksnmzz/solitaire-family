@@ -1,0 +1,15 @@
+{
+    "adjustAppTokenAndroid": "721a2olewnpc",
+    "adjustAppTokenIOS": "thb7b9uz91c0",
+    "adBannerKeyAndroid": "7dffcf5502b8db70",
+    "adInterstitialKeyAndroid": "a8b41f97f082e99a",
+    "adRewardedKeyAndroid": "aba5e9b8388a43ca",
+    "adBannerKeyIOS": "872c071f67e604d1",
+    "adInterstitialKeyIOS": "63acd4483197dc9f",
+    "adRewardedKeyIOS": "95b4bb4138c357f0",
+    "revenueAPIKeyAndroid": "9ls8zx",
+    "revenueAPIKeyIOS": "yqncop",
+    "googleMobileAdsAppIdAndroid": "ca-app-pub-5273501233915465~7838658577",
+    "googleMobileAdsAppIdIOS": "ca-app-pub-5273501233915465~8517315427",
+    "iosTrackingUsageDescription": "This identifier will be used to deliver personalized ads to you."
+}

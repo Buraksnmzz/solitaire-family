@@ -56,5 +56,5 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "CrossMathPuzzle.sln"
+    "dotnet.defaultSolution": "Solitair.sln"
 }

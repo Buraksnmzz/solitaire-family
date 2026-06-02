@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/YoogaLabServices/Scenes/BootstraperScene.unity
+    guid: d5688a46e158bce4fbed6d721a373611
+  - enabled: 1
     path: Assets/Scenes/LoadingScene.unity
     guid: bf0ee5b9da904474c84489981ed6339b
   - enabled: 1
