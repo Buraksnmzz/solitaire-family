@@ -33,7 +33,7 @@
   "rewardedVideoCoinAmount": 500,
   "extraGivenMovesCount": 10,
   "shouldShowMathResult": true,
-  "shouldShowIsOnFoundationComplete": true,
+  "shouldShowIsOnFoundationComplete": false,
   "rateUsTrigger": "2,4,7",
   "noAdsPackRewards": "9000,5,5,5",
   "shopCoinRewards": "1500,7000,25000,50000,100000",

@@ -3,6 +3,7 @@ using Collectible;
 using Goal;
 using Levels;
 using Newtonsoft.Json;
+using UnityEngine;
 using Random = UnityEngine.Random;
 
 namespace Configuration
@@ -77,6 +78,9 @@ namespace Configuration
 
 			[JsonProperty("shopCoinRewards")]
 			public string ShopCoinRewards { get; set; }
+			
+			[JsonProperty("shouldShowIsOnFoundationComplete")]
+			public bool? ShouldShowIsOnFoundationComplete { get; set; }
 
 			[JsonProperty("shouldShowMathResult")]
 			public bool? ShouldShowMathResult { get; set; }
@@ -142,6 +146,23 @@ namespace Configuration
 			gameConfigModel.rewardedVideoCoinAmount = root.RewardedVideoCoinAmount;
 			gameConfigModel.extraGivenMovesCount = root.ExtraGivenMovesCount;
 			gameConfigModel.shouldShowMathResult = root.ShouldShowMathResult ?? true;
+			if (root.ShouldShowIsOnFoundationComplete.HasValue)
+			{
+				gameConfigModel.shouldShowIsOnFoundationComplete =
+					root.ShouldShowIsOnFoundationComplete.Value;
+
+				Debug.Log(
+					"[CONFIG APPLY] RC override shouldShowIsOnFoundationComplete = " +
+					root.ShouldShowIsOnFoundationComplete.Value
+				);
+			}
+			else
+			{
+				Debug.LogWarning(
+					"[CONFIG APPLY] RC key missing or null → keeping LOCAL value = " +
+					gameConfigModel.shouldShowIsOnFoundationComplete
+				);
+			}
 			InitializeShopRewards(gameConfigModel, root);
 			savedDataService.SaveData(gameConfigModel);
 		}

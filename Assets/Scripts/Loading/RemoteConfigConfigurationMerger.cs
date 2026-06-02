@@ -34,9 +34,10 @@ namespace Loading
             "noAdsPackRewards",
             "shopCoinRewards"
         };
-
-        private static readonly HashSet<string> OptionalBooleanKeys = new HashSet<string>(KeyComparer)
+        
+        private static readonly HashSet<string> BoolKeys = new HashSet<string>(KeyComparer)
         {
+            "shouldShowIsOnFoundationComplete",
             "shouldShowMathResult"
         };
 
@@ -153,13 +154,17 @@ namespace Loading
 
                 allRequiredValuesFound = false;
             }
-
-            foreach (var key in OptionalBooleanKeys)
+            
+            foreach (var key in BoolKeys)
             {
-                if (TryGetValue(remote, key, out var rawValue) && TryParseBool(rawValue, out var boolValue))
+                if (TryGetValue(remote, key, out var rawValue)
+                    && bool.TryParse(rawValue, out var boolValue))
                 {
                     root[key] = boolValue;
+                    continue;
                 }
+
+                allRequiredValuesFound = false;
             }
 
             if (!allRequiredValuesFound)

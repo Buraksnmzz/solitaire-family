@@ -19,5 +19,7 @@
   "mathGoalConfig": "{     \"ColumnGoals\": {       \"3\": [         {           \"goal\": 90,           \"probability\": 80         },         {           \"goal\": 80,           \"probability\": 10         },         {           \"goal\": 70,           \"probability\": 10         }       ],       \"4\": [         {           \"goal\": 115,           \"probability\": 60         },         {           \"goal\": 110,           \"probability\": 30         },         {           \"goal\": 100,           \"probability\": 10         }       ],       \"5\": [         {           \"goal\": 135,           \"probability\": 70         },         {           \"goal\": 150,           \"probability\": 20         },         {           \"goal\": 130,           \"probability\": 10         }       ]     },     \"LevelGoals\": [       {         \"level\": 1,         \"goal\": 90       },       {         \"level\": 2,         \"goal\": )0       },       {         \"level\": 13,         \"goal\": 115       }     ]   }",
   "noAdsPackRewards": "9000,5,5,5",
   "hintCost": "900",
-  "earnedCoinPerMoveLeft": "2"
+  "earnedCoinPerMoveLeft": "2",
+  "shouldShowIsOnFoundationComplete": "false",
+  "shouldShowMathResult": true
 }
