@@ -1,6 +1,7 @@
 using Collectible;
 using Configuration;
 using Core.Scripts.Services;
+using DG.Tweening;
 using IAP;
 using Levels;
 using Services;
@@ -70,9 +71,7 @@ public class Installer : MonoBehaviour
         ServiceLocator.Register<IAdsService>(new AdsService());
         
         var savedDataService = ServiceLocator.GetService<ISavedDataService>();
-        if (!savedDataService.GetModel<SettingsModel>().IsNoAds)
-            YoogoLabManager.ShowBanner();
-
+        
         var uiService = ServiceLocator.GetService<IUIService>();
         if (PlayerPrefs.GetInt(StringConstants.IsTutorialShown) == 0)
         {
@@ -81,6 +80,11 @@ public class Installer : MonoBehaviour
         else
         {
             uiService.ShowPopup<MainMenuPresenter>();
+            DOVirtual.DelayedCall(2, () =>
+            {
+                if (!savedDataService.GetModel<SettingsModel>().IsNoAds)
+                    YoogoLabManager.ShowBanner();
+            });
         }
     }
 

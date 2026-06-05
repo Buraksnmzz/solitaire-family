@@ -19,7 +19,7 @@ public class SafeAreaHelper : MonoBehaviour
         _savedDataService = ServiceLocator.GetService<ISavedDataService>();
         _eventDispatcherService.AddListener<BannerVisibilityChangedSignal>(OnBannerVisibilityChanged);
         _isBannerVisible = !_savedDataService.GetModel<SettingsModel>().IsNoAds;
-        Refresh();
+        //Refresh();
     }
         
     private void OnBannerVisibilityChanged(BannerVisibilityChangedSignal signal)
@@ -27,6 +27,8 @@ public class SafeAreaHelper : MonoBehaviour
         _isBannerVisible = signal.Visible;
         if(!_isBannerVisible)
             YoogoLabManager.HideBanner();
+        else
+            YoogoLabManager.ShowBanner();
         Refresh();
     }
 

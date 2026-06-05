@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using DG.Tweening;
+using UI.Signals;
 using Unity.Services.Core;
 using Unity.Services.Core.Environments;
 using UnityEngine;
@@ -11,6 +13,7 @@ namespace IAP
     {
         private readonly ICollectibelService _collectibleService;
         private readonly ISavedDataService _savedDataService;
+        private readonly IEventDispatcherService _eventDispatcherService;
 
         private IStoreController m_StoreController;
         private IExtensionProvider m_StoreExtensionProvider;
@@ -29,6 +32,7 @@ namespace IAP
         {
             _collectibleService = ServiceLocator.GetService<ICollectibelService>();
             _savedDataService = ServiceLocator.GetService<ISavedDataService>();
+            _eventDispatcherService = ServiceLocator.GetService<IEventDispatcherService>();
             InitializePurchasing();
         }
 
@@ -105,19 +109,54 @@ namespace IAP
 #if UNITY_IOS
             appleExtensions = extensions.GetExtension<IAppleExtensions>();
 #endif
+#if UNITY_ANDROID
+            DOVirtual.DelayedCall(2f, SyncNoAdsEntitlementFromStore);
+#endif
             IsInitialized = true;
+        }
+        
+        private void SyncNoAdsEntitlementFromStore()
+        {
+            var settingsModel = _savedDataService.GetModel<SettingsModel>();
+
+            var noAds = m_StoreController.products.WithID(NoAdsProductID);
+            var noAdsPack = m_StoreController.products.WithID(NoAdsPackProductID);
+
+            bool ownsNoAds =
+                (noAds != null && noAds.hasReceipt) ||
+                (noAdsPack != null && noAdsPack.hasReceipt);
+
+            Debug.Log(
+                $"[IAP SYNC] " +
+                $"localBefore:{settingsModel.IsNoAds} | " +
+                $"noAds.exists:{noAds != null} | noAds.receipt:{noAds?.hasReceipt} | " +
+                $"pack.exists:{noAdsPack != null} | pack.receipt:{noAdsPack?.hasReceipt} | " +
+                $"ownsNoAds:{ownsNoAds}"
+            );
+
+            settingsModel.IsNoAds = ownsNoAds;
+            _savedDataService.SaveData(settingsModel);
+            DispatchBannerVisibility();
+            Debug.Log($"[IAP SYNC] localAfter:{settingsModel.IsNoAds}");
+        }
+        
+        private void DispatchBannerVisibility()
+        {
+            _eventDispatcherService.Dispatch(new BannerVisibilityChangedSignal(!_savedDataService.GetModel<SettingsModel>().IsNoAds));
         }
 
         public void OnInitializeFailed(InitializationFailureReason error)
         {
             Debug.LogWarning("IAP initialization failed: " + error);
             IsInitialized = false;
+            DispatchBannerVisibility();
         }
 
         public void OnInitializeFailed(InitializationFailureReason error, string message = null)
         {
             Debug.LogWarning("IAP initialization failed: " + error);
             IsInitialized = false;
+            DispatchBannerVisibility();
         }
 
         public PurchaseProcessingResult ProcessPurchase(PurchaseEventArgs args)
@@ -159,6 +198,7 @@ namespace IAP
                 _pendingPurchaseProductId = null;
             }
             _savedDataService.SaveData(settingsModel);
+            DispatchBannerVisibility();
             return PurchaseProcessingResult.Complete;
         }
 
@@ -196,7 +236,7 @@ namespace IAP
             }
 
             _savedDataService.SaveData(settingsModel);
-
+            DispatchBannerVisibility();
             Debug.Log($"[IAP RESTORE] Final entitlement state = {settingsModel.IsNoAds}");
         }
 
