@@ -13,6 +13,7 @@ using UI.GameModeSelection;
 using UI.MainMenu;
 using UI.Gameplay;
 using UI.Shop;
+using UI.Signals;
 
 public class Installer : MonoBehaviour
 {
@@ -71,6 +72,7 @@ public class Installer : MonoBehaviour
         ServiceLocator.Register<IAdsService>(new AdsService());
         
         var savedDataService = ServiceLocator.GetService<ISavedDataService>();
+        var eventDispatcherService = ServiceLocator.GetService<IEventDispatcherService>();
         
         var uiService = ServiceLocator.GetService<IUIService>();
         if (PlayerPrefs.GetInt(StringConstants.IsTutorialShown) == 0)
@@ -82,8 +84,7 @@ public class Installer : MonoBehaviour
             uiService.ShowPopup<MainMenuPresenter>();
             DOVirtual.DelayedCall(2, () =>
             {
-                if (!savedDataService.GetModel<SettingsModel>().IsNoAds)
-                    YoogoLabManager.ShowBanner();
+                eventDispatcherService.Dispatch(new BannerVisibilityChangedSignal(!savedDataService.GetModel<SettingsModel>().IsNoAds));
             });
         }
     }
